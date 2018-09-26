@@ -10,6 +10,7 @@ output:
 
 ```{r message=FALSE, warning=FALSE, echo=F, eval=TRUE,paged.print = FALSE}
 options(digits = 3)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 # Regression 
@@ -27,7 +28,7 @@ Before we start with regression analysis, we will review the basic concept of co
 
 The correlation coefficient summarizes the strength of the linear relationship between two metric (interval or ratio scaled) variables. Let's consider a simple example. Say you conduct a survey to investigate the relationship between the attitude towards a city and the duration of residency. The "Attitude" variable can take values between 1 (very unfavorable) and 12 (very favorable), and the "duration of residency" is measured in years. Let's further assume for this example that the attitude measurement represents an interval scale (although it is usually not realistic to assume that the scale points on an itemized rating scale have the same distance). To keep it simple, let's further assume that you only asked 12 people. We can create a short data set like this:    
 
-```{r message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE,paged.print = FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
 library(psych)
 attitude <- c(6,9,8,3,10,4,5,2,11,9,10,2)
 duration <- c(10,12,12,4,12,6,8,2,18,9,17,2)
@@ -232,7 +233,7 @@ Correlation coefficients give no indication of the direction of causality. In ou
 * Third-variable problem: there may be other unobserved factors that affect the results.
 * Direction of causality: Correlations say nothing about which variable causes the other to change (reverse causality: attitudes may just as well cause the years of residence variable).
 
-## Regression
+## Linear Regression
 
 Correlations measure relationships between variables (i.e., how much two variables covary). Using regression analysis we can predict the outcome of a dependent variable (Y) from one or more independent variables (X). E.g., how many products will we sell if we increase the advertising expenditures by 1000 Euros? In regression analysis, we fit a model to our data and use it to predict the values of the dependent variable from one predictor variable (bivariate regression) or several predictor variables (multiple regression). The following table shows a comparison of correlation and regression analysis:
 
@@ -310,7 +311,7 @@ We use the hat symbol, <sup>^</sup>, to denote the estimated value for an unknow
 library(dplyr)
 options(scipen = 999)
 rm(regression)
-rm(advertising)
+#rm(advertising)
 regression <- read.table("https://raw.githubusercontent.com/IMSMWU/Teaching/master/MRDA2017/multiple_regression.dat", 
                           sep = "\t", 
                           header = TRUE) #read in data
@@ -472,7 +473,7 @@ The following graph shows the total sum of squares:
 library(dplyr)
 options(scipen = 999)
 rm(regression)
-rm(advertising)
+#rm(advertising)
 regression <- read.table("https://raw.githubusercontent.com/IMSMWU/Teaching/master/MRDA2017/music_sales_regression.dat", 
                           sep = "\t", 
                           header = TRUE) #read in data
@@ -866,11 +867,11 @@ The results show that for ```adspend``` and ```airplay```, a change by one stand
 <iframe width="560" height="315" src="https://www.youtube.com/embed/BMKgcG9me4s" frameborder="0" allowfullscreen></iframe>
 </div>
 
-## Potential problems
+### Potential problems
 
 Once you have built and estimated your model it is important to run diagnostics to ensure that the results are accurate. In the following section we will discuss common problems.
 
-### Outliers
+#### Outliers
 
 Outliers are data points that differ vastly from the trend. They can introduce bias into a model due to the fact that they alter the parameter estimates. Consider the example below. A linear regression was performed twice on the same data set, except during the second estimation the two green points were changed to be outliers by being moved to the positions indicated in red. The solid red line is the regression line based on the unaltered data set, while the dotted line was estimated using the altered data set. As you can see the second regression would lead to  different conclusions than the first. Therefore it is important to identify outliers and further deal with them. 
 
@@ -899,32 +900,33 @@ One quick way to visually detect outliers is by creating a scatterplot (as above
 
 The studentized residuals can be obtained in R with the function ```rstudent()```. We can use this function to create a new variable that contains the studentized residuals e music sales regression from before yields the following residuals:
 
-```{r, warning=FALSE, message=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 regression$stud_resid <- rstudent(multiple_regression)
 head(regression)
 ```
 
 A good way to visually inspect the studentized residuals is to plot them in a scatterplot and roughly check if most of the observations are within the -3, 3 bounds. 
 
-```{r, warning=FALSE, message=FALSE, fig.cap="Plot of the studentized residuals", fig.align="center"}
+```{r echo=TRUE, fig.align="center", fig.cap="Plot of the studentized residuals", message=FALSE, warning=FALSE}
 plot(1:nrow(regression),regression$stud_resid, ylim=c(-3.3,3.3)) #create scatterplot 
 abline(h=c(-3,3),col="red",lty=2) #add reference lines
 ```
 
 To identify potentially influential observations in our data set, we can apply a filter to our data:
 
-```{r, warning = FALSE, message = FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 outliers <- subset(regression,abs(stud_resid)>3)
 outliers
 ```
 
 After a detailed inspection of the potential outliers, you might decide to delete the affected observations from the data set or not. If an outlier has resulted from an error in data collection, then you might simply remove the observation. However, even though data may have extreme values, they might not be influential to determine a regression line. That means, the results wouldn’t be much different if we either include or exclude them from analysis. This means that the decision of whether to exclude an outlier or not is closely related to the question whether this observation is an influential observation, as will be discussed next.  
 
-### Influential observations
+#### Influential observations
 
 Related to the issue of outliers is that of influential observations, meaning observations that exert undue influence on the parameters. It is possible to determine whether or not the results are driven by an influential observation by calculating how far the predicted values for your data would move if the model was fitted without this particular observation. This calculated total distance is called **Cook's distance**. To identify influential observations, we can inspect the respective plots created from the model output. A rule of thumb to determine whether an observation should be classified as influential or not is to look for observation with a Cook's distance > 1 (although opinions vary on this). The following plot can be used to see the Cook's distance associated with each data point:
 
-```{r, warning = FALSE, message = FALSE,fig.align="center", fig.cap = "Cook's distance"}
+```{r echo=TRUE, fig.align="center", fig.cap= "Cook's distance", message=FALSE, warning=FALSE}
+
 plot(multiple_regression,4)
 ```
 
@@ -938,7 +940,7 @@ In this plot, we look for cases outside of a dashed line, which represents **Coo
 
 To see how influential observations can impact your regression, have a look at <a href="https://en.wikipedia.org/wiki/Anscombe%27s_quartet" target="_blank">this example</a>.
 
-### Non-linearity
+#### Non-linearity
 
 An important underlying assumption for OLS is that of linearity, meaning that the relationship between the dependent and the independent variable can be reasonably approximated in linear terms. One quick way to assess whether a linear relationship can be assumed is to inspect the added variable plots that we already came across earlier:  
 
@@ -954,7 +956,7 @@ In our example, it appears that linear relationships can be reasonably assumed. 
 
 These assumptions may not be justifiable in certain contexts and you might have to transform your data (e.g., using log-transformations) in these cases, as we will see below.
 
-### Non-constant error variance
+#### Non-constant error variance
 
 Another important assumption of the linear model is that the error terms have a constant variance (i.e., homoscedasticity). The following plot from the model output shows the residuals (the vertical distance from an observed value to the predicted values) versus the fitted values (the predicted value from the regression model). If all the points fell exactly on the dashed grey line, it would mean that we have a perfect prediction. The residual variance (i.e., the spread of the values on the y-axis) should be similar across the scale of the fitted values on the x-axis. 
 
@@ -966,7 +968,7 @@ In our case, this appears to be the case. You can identify non-constant variance
 
 If OLS is performed despite heteroscedasticity, the estimates of the coefficient will still be correct on average. However, the estimator is _inefficient_, meaning that the standard error is wrong, which will impact the significance tests (i.e., the p-values will be wrong). However, there are also robust regression methods, which you can use to estimate your model despite the presence of heteroscedasticity. 
 
-### Non-normally distributed errors
+#### Non-normally distributed errors
 
 Another assumption of OLS is that the error term is normally distributed. This can be a reasonable assumption for many scenarios, but we still need a way to check if it is actually the case. As we can not directly observe the actual error term, we have to work with the next best thing - the residuals. 
 
@@ -986,13 +988,13 @@ As you can see, we can not reject the H<sub>0</sub> of the normally distributed 
 
 When the assumption of normally distributed errors is not met, this might again be due to a misspecification of your model, in which case it might help to transform your data (e.g., using log-transformations).
 
-### Correlation of errors
+#### Correlation of errors
 
 The assumption of independent errors implies that for any two observations the residual terms should be uncorrelated. This is also known as a _lack of autocorrelation_. In theory, this could be tested with the Durbin-Watson test, which checks whether adjacent residuals are correlated. However, be aware that the test is sensitive to the order of your data. Hence, it only makes sense if there is a natural order in the data (e.g., time-series data) when the presence of dependent errors indicates autocorrelation. **Since there is no natural order in our data, we don't need to apply this test.**.
 
 If you are confronted with data that has a natural order, you can performed the test using the command ```durbinWatsonTest()```, which takes the object that the ```lm()``` function generates as an argument. The test statistic varies between 0 and 4, with values close to 2 being desirable. As a rule of thumb values below 1 and above 3 are causes for concern. 
 
-### Collinearity
+#### Collinearity
 
 Linear dependence of regressors, also known as multicollinearity, is when there is a strong linear relationship between the independent variables. Some correlation will always be present, but severe correlation can make proper estimation impossible. When present, it affects the model in several ways:
 
@@ -1031,7 +1033,7 @@ vif(multiple_regression)
 
 As you can see the values are well below the cutoff, indicating that we don not have to worry about multicollinearity in our example.  
 
-### Omitted Variables
+#### Omitted Variables
 
 If a variable that influences the outcome is left out of the model ("omitted"), a bias in other variables' coefficients might be introduced. Specifically, the other coefficients will be biased if the corresponding variables are correlated with the omitted variable. Intuitively, the variables left in the model "pick up" the effect of the omitted variable to the degree that they are related. Let's illustrate this with an example.
 
@@ -1105,14 +1107,14 @@ cat("Biased Beta:", b1_bias)
 ```
 
 
-## Categorical predictors
+### Categorical predictors
 
 ```{r echo=F, eval=T}
 regression$country <- factor(regression$country, levels = c(0:1), labels = c("local", "international")) #convert grouping variable to factor
 regression$genre <- factor(regression$genre, levels = c(1:3), labels = c("rock", "pop","electronic")) #convert grouping variable to factor
 ```
 
-### Two categories
+#### Two categories
 
 Suppose, you wish to investigate the effect of the variable "country" on sales, which is a categorical variable that can only take two levels (i.e., 0 = local artist, 1 = international artist). Categorical variables with two levels are also called binary predictors. It is straightforward to include these variables in your model as "dummy" variables. Dummy variables are factor variables that can only take two values. For our "country" variable, we can create a new predictor variable that takes the form:
 
@@ -1143,7 +1145,7 @@ summary(multiple_regression_bin) #summary of results
 
 You can see that we now have an additional coefficient in the regression output, which tells us the effect of the binary predictor. The dummy variable can generally be interpreted as the average difference in the dependent variable between the two groups (similar to a t-test). In this case, the coefficient tells you the difference in sales between international and local artists, and whether this difference is significant. Specifically, it means that international artists on average sell 45.67 units more than local artists, and this difference is significant (i.e., p < 0.05).  
 
-### More than two categories
+#### More than two categories
 
 Predictors with more than two categories, like our "genre"" variable, can also be included in your model. However, in this case one dummy variable cannot represent all possible values, since there are three genres (i.e., 1 = Rock, 2 = Pop, 3 = Electronic). Thus, we need to create additional dummy variables. For example, for our "genre" variable, we create two dummy variables as follows:
 
@@ -1441,63 +1443,3 @@ For all other levels of production we insert the pieces produced into the formul
 
 <p><iframe src="https://learn.wu.ac.at/shiny/imsm/sqrag/" style="border: medium none; width: 100%; height: 650px; transform: scale(1.0);"></iframe></p>
 
-## Appendix
-
-In order to understand the coefficients in the multiple regression we can derive them separately. We have already seen that in the univariate case:
-
-$$
-\hat{\beta_1}=\frac{COV_{XY}}{s_x^2}
-$$
-
-We have [also seen that we can isolate the partial effect](#partial-plots) of a single variable in a multiple regression. Specifically, we can calculate the coefficient of the i-th variable as
-
-$$
-\hat{\beta_{i}} = {COV(\tilde{Y_{i}}, \tilde{X_{i}}) \over V(\tilde{X_i})}
-$$
-
-where $\tilde{Y_{i}}$ is the residual from the regression of $Y$ on all variables except for the i-th and $\tilde{X_i}$ is the residual from the regression of $X_i$ on all other variables. Let's illustrate this with an example.
-
-```{r }
-x1 <- rnorm(100, 5, 15)
-x2 <- rnorm(100, 20, 10) + 3*x1
-
-y <- 50 + 2*x1 + 7*x2 + rnorm(100, 0, 5)
-```
-
-We have added some randomness through the ```rnorm``` command so the coefficients are not exactly as we set them but close. Clearly x1 and x2 have partial influence on y.
-
-```{r }
-mod <- lm(y~x1+x2)
-summary(mod)
-```
-
-To see the partial effect of x1 we run regressions for x1 on x2, as well as y on x2 and obtain the residuals $\tilde{x1}$ and $\tilde{x2}$. Notice that x1 is highly correlated with x2. 
-
-```{r }
-regX1 <- lm(x1~x2)  
-summary(regX1)
-tildeX1 <- residuals(regX1)
-regY1 <- lm(y~x2)
-tildeY1 <- residuals(regY1)
-```
-
-We can use the residuals to create the partial plots as seen above.
-
-```{r }
-# This is the same as avPlot
-ggplot(data.frame(y = tildeY1, x = tildeX1), aes(x = x, y = y)) +
-  geom_point(shape = 1) +
-  geom_smooth(method = 'lm', se = FALSE, color = "red") +
-  labs(y = "y | others", x = "x1 | others") + 
-  theme_bw()
-avPlots(mod)
-```
-
-And the regression of the residuals of y on x1 yields the same coefficient as in the original regression (minus the rounding errors). 
-
-```{r}
-# This is the same coefficient as in the original regression 
-summary(lm(tildeY1~tildeX1 - 1)) # -1 since we want no intercept
-print("Coefficient using the partial covariance:")
-cov(tildeY1, tildeX1)/var(tildeX1)
-```

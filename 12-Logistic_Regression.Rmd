@@ -210,15 +210,74 @@ library(logistf)
 summary(logistf(Y~X))
 ```
 
-### Appendix
+## Appendix
 
-#### Maximum likelihood estimation
+In order to understand the coefficients in the multiple regression we can derive them separately. We have already seen that in the univariate case:
+
+$$
+\hat{\beta_1}=\frac{COV_{XY}}{s_x^2}
+$$
+
+We have [also seen that we can isolate the partial effect](#partial-plots) of a single variable in a multiple regression. Specifically, we can calculate the coefficient of the i-th variable as
+
+$$
+\hat{\beta_{i}} = {COV(\tilde{Y_{i}}, \tilde{X_{i}}) \over V(\tilde{X_i})}
+$$
+
+where $\tilde{Y_{i}}$ is the residual from the regression of $Y$ on all variables except for the i-th and $\tilde{X_i}$ is the residual from the regression of $X_i$ on all other variables. Let's illustrate this with an example.
+
+```{r }
+x1 <- rnorm(100, 5, 15)
+x2 <- rnorm(100, 20, 10) + 3*x1
+
+y <- 50 + 2*x1 + 7*x2 + rnorm(100, 0, 5)
+```
+
+We have added some randomness through the ```rnorm``` command so the coefficients are not exactly as we set them but close. Clearly x1 and x2 have partial influence on y.
+
+```{r }
+mod <- lm(y~x1+x2)
+summary(mod)
+```
+
+To see the partial effect of x1 we run regressions for x1 on x2, as well as y on x2 and obtain the residuals $\tilde{x1}$ and $\tilde{x2}$. Notice that x1 is highly correlated with x2. 
+
+```{r }
+regX1 <- lm(x1~x2)  
+summary(regX1)
+tildeX1 <- residuals(regX1)
+regY1 <- lm(y~x2)
+tildeY1 <- residuals(regY1)
+```
+
+We can use the residuals to create the partial plots as seen above.
+
+```{r }
+# This is the same as avPlot
+ggplot(data.frame(y = tildeY1, x = tildeX1), aes(x = x, y = y)) +
+  geom_point(shape = 1) +
+  geom_smooth(method = 'lm', se = FALSE, color = "red") +
+  labs(y = "y | others", x = "x1 | others") + 
+  theme_bw()
+avPlots(mod)
+```
+
+And the regression of the residuals of y on x1 yields the same coefficient as in the original regression (minus the rounding errors). 
+
+```{r}
+# This is the same coefficient as in the original regression 
+summary(lm(tildeY1~tildeX1 - 1)) # -1 since we want no intercept
+print("Coefficient using the partial covariance:")
+cov(tildeY1, tildeX1)/var(tildeX1)
+```
+
+### Maximum likelihood estimation
 
 For non-linear models we cannot turn to linear algebra to solve for the unknown parameters. However, we can use a statistical method called maximum likelihood estimation (MLE). Given observed data and an assumption about their distribution we can estimate for which parameter values the observed data is most likely to occur. We do this by calculating the joint log likelihood of the observations given _a_ choice of parameters (more on that below). Next, we change our parameter values a little bit and see if the joint log likelihood improved. We keep doing that until we cannot find better parameter values anymore (that is we have reached the maximum likelihood). In the following example we have a histogram of a data set which we assume to be normally distributed. You can now try to find the best parameter values by changing the mean and the variance. Recall that the normal distribution is fully described by just those two parameters. In each step the log likelihood is automatically calculated. The maximum likelihood so far is shown as the high score and the line in the lower graph shows the development of the log likelihood for the past couple of tries.  
 
 <iframe src="https://learn.wu.ac.at/shiny/imsm/maxLikelihood/" style="border: none; width: 800px; height: 900px"></iframe>
 
-#### Estimation of the parameters $\beta_i$
+### Estimation of the parameters $\beta_i$
 
 Let's return to the model to figure out how the parameters $\beta_i$ are estimated. In the data we observe the $y_i$, the outcome variable that is either $0$ or $1$, and the $x_{i,j}$, the predictors for each observation. In addition, by using the logit model we have assumed the following functional form.
 
@@ -267,7 +326,7 @@ $$
 \end{align*}
 $$
 
-#### Example
+### Example
 
 Consider an experiment in which we want to find out whether a person will listen to the full song or skip it. Further assume that the genre of the song is the only determining factor of whether somebody is likely to skip it or not. Each individual has rated the genre on a scale from 1 (worst) to 10 (best). Our model looks as follows:
 
@@ -396,7 +455,7 @@ summary(glm(skipped ~ ratingGenre, family = binomial(link = 'logit')))
 
 ```
 
-##### Sum of LN vs Product
+#### Sum of LN vs Product
 
 To illustrate why the natural log (ln) is important for computations with numbers close to zero (such as joint probabilities), we create a vector of fictitious probabilities and multiply them with each other. As we can see, already a small number of values close to 0 will lead to their product being erroneously interpreted as being 0. If we are only interested in comparing magnitude (as in the case of likelihoods) we can safely apply the ln, since it is a monotonically increasing function and will thus not change the ranking. 
 ```{r, message = FALSE, warning = FALSE}
