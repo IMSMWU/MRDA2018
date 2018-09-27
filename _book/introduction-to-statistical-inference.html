@@ -183,6 +183,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.3.1" data-path="introduction-to-statistical-inference.html"><a href="introduction-to-statistical-inference.html#the-t-distribution"><i class="fa fa-check"></i><b>5.3.1</b> The t-distribution</a></li>
 </ul></li>
 <li class="chapter" data-level="5.4" data-path="introduction-to-statistical-inference.html"><a href="introduction-to-statistical-inference.html#statistical-inference-on-a-sample"><i class="fa fa-check"></i><b>5.4</b> Statistical inference on a sample</a></li>
+<li class="chapter" data-level="5.5" data-path="introduction-to-statistical-inference.html"><a href="introduction-to-statistical-inference.html#summary"><i class="fa fa-check"></i><b>5.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="summarizing-data.html"><a href="summarizing-data.html"><i class="fa fa-check"></i><b>6</b> Summarizing data</a><ul>
 <li class="chapter" data-level="6.1" data-path="summarizing-data.html"><a href="summarizing-data.html#summary-statistics"><i class="fa fa-check"></i><b>6.1</b> Summary statistics</a><ul>
@@ -403,7 +404,29 @@ means &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="
 <p><img src="_main_files/figure-html/unnamed-chunk-112-1.png" width="672" /></p>
 <div id="confidence-intervals-for-the-sample-mean" class="section level3">
 <h3><span class="header-section-number">5.2.1</span> Confidence Intervals for the Sample Mean</h3>
-<p>The discussion in the previous section was somewhat theoretical as the illustrations were done with a large amount of samples which we do not have in a realistic setting. However, the results provide us with the basis for statistical infrence given a single large enough sample. (What exactly large enough means depends on the setting but there is an interactive element below in which you can choose the sample size and see how the other values change.) We know that the mean of each sample is slightly different but the density of the sample means is normally distributed around the population mean with standard deviation <span class="math inline">\(\sigma_{\bar x}\)</span>. Given a sample mean we would now like to construct an interval around that mean that likely contains the population mean. We use the results above to draw a conclusion about how far away from the population mean any given sample mean would likely be and then construct an interval such that for a large share (say 95%) of the sample means we could potentially get the population mean is within that interval. Since we know the distribution, the mean and assume to know the population SD for now, we can use the properties of the normal distribution. In the normal distribution roughly <span class="math inline">\(95\%\)</span> of the density is within <span class="math inline">\(2\)</span> standard deviations from the mean. This means that if we take any given sample mean and calculate our confidence interval as <span class="math inline">\(\bar x_1 \pm 2 * \sigma_{\bar x}\)</span> in <span class="math inline">\(95\%\)</span> of the cases the population mean is going to be within this interval. Note that this does <strong>not</strong> mean that for a specific sample there is a <span class="math inline">\(95\%\)</span> chance that the population mean lies within its confidence interval. The statment depends on the large number of samples we do not actually draw in a real setting. You can view the set of all possible confidence intervals similarly to the sides of a coin or a die as discussed in a previous chapter. If we throw a coin many times we are going to observe head roughly half of the times. This does not, however, exclude the possiblity of observing tails for the first 10 throws. Similarly, any specific confidence interval might or might not include the population mean but if we take many samples on average <span class="math inline">\(95\%\)</span> of the confidence intervals are going to include the population mean.</p>
+<p>The discussion in the previous section was somewhat theoretical as the illustrations were done with a large amount of samples which we do not have in a realistic setting. However, the results provide us with the basis for statistical infrence given a single large enough sample. (What exactly large enough means depends on the setting but there is an interactive element below in which you can choose the sample size and see how the other values change.) We know that the mean of each sample is slightly different but the density of the sample means is normally distributed around the population mean with standard deviation <span class="math inline">\(\sigma_{\bar x}\)</span>. Given a sample mean we would now like to construct an interval around that mean that likely contains the population mean. We use the results above to draw a conclusion about how far away from the population mean any given sample mean would likely be and then construct an interval such that for a large share (say 95%) of the sample means we could potentially get, the population mean is within that interval. Since we know the distribution, the mean and assume to know the population SD for now, we can use the properties of the normal distribution. In the normal distribution roughly <span class="math inline">\(95\%\)</span> of the density is within <span class="math inline">\(2\)</span> standard deviations from the mean. This means that if we take any given sample mean and calculate our confidence interval as <span class="math inline">\(\bar x_1 \pm 2 * \sigma_{\bar x}\)</span> in <span class="math inline">\(95\%\)</span> of the cases the population mean is going to be within this interval. This is illustrated in the plot below that shows the mean of the first 100 samples and their confidence intervals.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">12345</span>)
+samples &lt;-<span class="st"> </span><span class="dv">100</span>
+hours &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">25000</span>, <span class="dv">50</span>, <span class="dv">10</span>)
+means &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="ot">NA</span>, <span class="dt">nrow =</span> samples)
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>samples){
+  student_sample &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25000</span>, <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
+  means[i,] &lt;-<span class="st"> </span><span class="kw">mean</span>(hours[student_sample])
+}
+
+means_sd &lt;-<span class="st"> </span><span class="kw">data.frame</span>(means, <span class="dt">lower =</span>  means <span class="op">-</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="kw">sd</span>(hours)<span class="op">/</span><span class="kw">sqrt</span>(<span class="dv">100</span>)), <span class="dt">upper =</span> means <span class="op">+</span><span class="st"> </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="kw">sd</span>(hours)<span class="op">/</span><span class="kw">sqrt</span>(<span class="dv">100</span>)), <span class="dt">y =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>)
+means_sd<span class="op">$</span>diff &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">ifelse</span>(means_sd<span class="op">$</span>lower <span class="op">&gt;</span><span class="st"> </span><span class="kw">mean</span>(hours) <span class="op">|</span><span class="st"> </span>means_sd<span class="op">$</span>upper <span class="op">&lt;</span><span class="st"> </span><span class="kw">mean</span>(hours), <span class="st">&#39;No&#39;</span>, <span class="st">&#39;Yes&#39;</span>))
+
+<span class="kw">ggplot</span>(means_sd, <span class="kw">aes</span>(<span class="dt">y =</span> y)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">100</span>, <span class="dt">by =</span> <span class="dv">1</span>), <span class="dt">expand =</span> <span class="kw">c</span>(<span class="fl">0.005</span>,<span class="fl">0.005</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> means, <span class="dt">color =</span> diff)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_errorbarh</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> lower, <span class="dt">xmax =</span> upper, <span class="dt">color =</span> diff)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="kw">mean</span>(hours)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">guides</span>(<span class="dt">color=</span><span class="kw">guide_legend</span>(<span class="dt">title=</span><span class="st">&quot;True mean in CI&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-113-1.png" width="960" /></p>
+<p>Note that this does <strong>not</strong> mean that for a specific sample there is a <span class="math inline">\(95\%\)</span> chance that the population mean lies within its confidence interval. The statment depends on the large number of samples we do not actually draw in a real setting. You can view the set of all possible confidence intervals similarly to the sides of a coin or a die as discussed in a previous chapter. If we throw a coin many times we are going to observe head roughly half of the times. This does not, however, exclude the possiblity of observing tails for the first 10 throws. Similarly, any specific confidence interval might or might not include the population mean but if we take many samples on average <span class="math inline">\(95\%\)</span> of the confidence intervals are going to include the population mean.</p>
 </div>
 </div>
 <div id="using-what-we-actually-know" class="section level2">
@@ -435,29 +458,30 @@ SE_{\bar x} = {s \over \sqrt{n}}
 <h2><span class="header-section-number">5.4</span> Statistical inference on a sample</h2>
 <p>Let us first take a single sample of WU students’ listening times</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">12345</span>)
+hours &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">25000</span>, <span class="dv">50</span>, <span class="dv">10</span>)
 student_sample &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25000</span>, <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
 student_sample &lt;-<span class="st"> </span>hours[student_sample]
 
 (samp_mean &lt;-<span class="st"> </span><span class="kw">mean</span>(student_sample))</code></pre></div>
-<pre><code>## [1] 50.15037</code></pre>
+<pre><code>## [1] 51.34345</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(samp_sd &lt;-<span class="st"> </span><span class="kw">sd</span>(student_sample))</code></pre></div>
-<pre><code>## [1] 7.443695</code></pre>
+<pre><code>## [1] 10.03348</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(SE &lt;-<span class="st"> </span>samp_sd<span class="op">/</span><span class="kw">sqrt</span>(<span class="dv">100</span>))</code></pre></div>
-<pre><code>## [1] 0.7443695</code></pre>
+<pre><code>## [1] 1.003348</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">data.frame</span>(student_sample)) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">x =</span> student_sample), <span class="dt">fill =</span> <span class="st">&#39;white&#39;</span>, <span class="dt">color =</span> <span class="st">&#39;black&#39;</span>, <span class="dt">bins =</span> <span class="dv">60</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Distribution of values in the sample (n = 100)&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&#39;Listening Time&#39;</span>, <span class="dt">y =</span> <span class="st">&#39;&#39;</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-113-1.png" width="672" /></p>
-<p>We find the sample mean to be 50.15 and the sample standard deviation to be 7.44. Since the sample size is <span class="math inline">\(100\)</span> the SE is 0.7443695. We can now ask whether the sample mean is significantly different from a given hypothesis. This hypothesis is a potential value for the population mean and is called the null hypothesis, denoted <span class="math inline">\(H_0\)</span>. If our sample mean is significantly different from the <span class="math inline">\(H_0\)</span> we reject the null hypothesis and say that the mean is significantly different from our hypothesis. Usually the <span class="math inline">\(H_0\)</span> is the outcome we do <strong>not</strong> want to observe. One common <span class="math inline">\(H_0\)</span> is that there is no effect. If we then observe sufficient evidence against it and our estimate is said to be significant. Implicitly the <span class="math inline">\(H_0\)</span> is often the value <span class="math inline">\(0\)</span> and its rejection would mean the parameter value is significantly different from <span class="math inline">\(0\)</span> (e.g. see OLS estimation in the chapter on linear regression).</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-114-1.png" width="672" /></p>
+<p>We find the sample mean to be 51.34 and the sample standard deviation to be 10.03. Since the sample size is <span class="math inline">\(100\)</span> the SE is 1.0033479. We can now ask whether the sample mean is significantly different from a given hypothesis. This hypothesis is a potential value for the population mean and is called the null hypothesis, denoted <span class="math inline">\(H_0\)</span>. If our sample mean is significantly different from the <span class="math inline">\(H_0\)</span> we reject the null hypothesis and say that the mean is significantly different from our hypothesis. Usually the <span class="math inline">\(H_0\)</span> is the outcome we do <strong>not</strong> want to observe. One common <span class="math inline">\(H_0\)</span> is that there is no effect. If we then observe sufficient evidence against it and our estimate is said to be significant. Implicitly the <span class="math inline">\(H_0\)</span> is often the value <span class="math inline">\(0\)</span> and its rejection would mean the parameter value is significantly different from <span class="math inline">\(0\)</span> (e.g. see OLS estimation in the chapter on linear regression).</p>
 <p>In order to quantify the concept of “sufficient evidence” we look at the theoretical distribution of the sample means given our null hypothesis and the sample SE.</p>
 <p>Let’s hypothesize that WU students, on average, spend 40h per week listening to music. Thus, <span class="math inline">\(\mu_{0} = 40\)</span> is our null hypothesis. Plugging the hypothesis into the formula for the t-distribution yields the so called t-score.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">H0 &lt;-<span class="st"> </span><span class="dv">40</span>
 (t_score &lt;-<span class="st"> </span>(samp_mean <span class="op">-</span><span class="st"> </span>H0) <span class="op">/</span><span class="st"> </span>SE)</code></pre></div>
-<pre><code>## [1] 13.6362</code></pre>
+<pre><code>## [1] 11.3056</code></pre>
 <p><span class="math display">\[
-{\bar X - \mu_0 \over s / \sqrt{n}} = {50.15 - 40 \over 0.74} = 13.64
+{\bar X - \mu_0 \over s / \sqrt{n}} = {51.34 - 40 \over 1.003} = 11.31
 \]</span></p>
 <p>For continuous distributions the probability of observing a specific value is <span class="math inline">\(0\)</span>. We need a range of values to calculate the density that lies in that range. In order to determine the probability of observing the sample given our <span class="math inline">\(H_0\)</span> we look at how much density lies beyond the calculated t-score. In The illustration below that is the area under the curve to the right of the red line.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>, <span class="dt">length.out =</span> <span class="dv">1000</span>)
@@ -468,33 +492,33 @@ dens &lt;-<span class="st"> </span><span class="kw">dt</span>(x, <span class="dv
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&#39;Density&#39;</span>, <span class="dt">x =</span> <span class="st">&#39;t-score&#39;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Theoretical density given null hypothesis 40 and sample t-score&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>() </code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-115-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-116-1.png" width="672" /></p>
 <p>It is quite obvious that this is an extremely low value. The density that lies beyond the t-score is referred to as the p-value and is reported with many statistical tests. Let’s for example test if the mean of the listening hours is less than or equal to our <span class="math inline">\(H_0 = 40\)</span>. We can do this using the t-test. In this case the alternative hypothesis is that the true mean is not equal to <span class="math inline">\(40\)</span> so it could be either greater or less. Therefore, this test is called two-sided.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(student_sample, <span class="dt">mu =</span> H0, <span class="dt">alternative =</span> <span class="st">&#39;two.sided&#39;</span>)</code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
 ## data:  student_sample
-## t = 13.636, df = 99, p-value &lt; 2.2e-16
+## t = 11.306, df = 99, p-value &lt; 2.2e-16
 ## alternative hypothesis: true mean is not equal to 40
 ## 95 percent confidence interval:
-##  48.67338 51.62736
+##  49.35259 53.33431
 ## sample estimates:
 ## mean of x 
-##  50.15037</code></pre>
+##  51.34345</code></pre>
 <p>Alternatively we could ask whether the sample mean is greater than or equal to the <span class="math inline">\(H_0\)</span> by specifying the alternative hypothesis to be <code>'less'</code>. The null hypthesis - alternative hypothesis formulation can be confusing but you can think of the alternative hypothesis as all the cases that are not the null. So if your <span class="math inline">\(H_0\)</span> is that the true mean is greater than or equal to 40 then the alternative is that it is less than 40. Now the reported p-value is <span class="math inline">\(1\)</span>. We are looking at the area to the left of the red line in the plot above since we now want to know how much density lies <em>below</em> our t-score. Note that this does not mean that we accept the <span class="math inline">\(H_0\)</span>. There is simply not enough evidence to reject it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(student_sample, <span class="dt">mu =</span> H0, <span class="dt">alternative =</span> <span class="st">&#39;less&#39;</span>)</code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
 ## data:  student_sample
-## t = 13.636, df = 99, p-value = 1
+## t = 11.306, df = 99, p-value = 1
 ## alternative hypothesis: true mean is less than 40
 ## 95 percent confidence interval:
-##      -Inf 51.38632
+##     -Inf 53.0094
 ## sample estimates:
 ## mean of x 
-##  50.15037</code></pre>
+##  51.34345</code></pre>
 <p>Lets look at a more realistic <span class="math inline">\(H_0 = 50\)</span>. In this example the t-score is close to <span class="math inline">\(0\)</span> and thus the <span class="math inline">\(H_0\)</span> is not rejected.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">H0 &lt;-<span class="st"> </span><span class="dv">50</span>
 <span class="kw">t.test</span>(student_sample, <span class="dt">mu =</span> H0, <span class="dt">alternative =</span> <span class="st">&#39;two.sided&#39;</span>)</code></pre></div>
@@ -502,60 +526,60 @@ dens &lt;-<span class="st"> </span><span class="kw">dt</span>(x, <span class="dv
 ##  One Sample t-test
 ## 
 ## data:  student_sample
-## t = 0.20202, df = 99, p-value = 0.8403
+## t = 1.339, df = 99, p-value = 0.1836
 ## alternative hypothesis: true mean is not equal to 50
 ## 95 percent confidence interval:
-##  48.67338 51.62736
+##  49.35259 53.33431
 ## sample estimates:
 ## mean of x 
-##  50.15037</code></pre>
+##  51.34345</code></pre>
 <p>To show how the p-value is calculated we can use the CDF of the t-distribution. Recall the definition that the CDF at a given value returns the density of the distribution below that value. So for the alternative hypothesis <code>'less'</code> the p-value is just the CDF of the t-distribution with the degrees of freedom equal sample size <span class="math inline">\(- 1\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(t_score &lt;-<span class="st"> </span>(samp_mean <span class="op">-</span><span class="st"> </span>H0) <span class="op">/</span><span class="st"> </span>SE)</code></pre></div>
-<pre><code>## [1] 0.2020157</code></pre>
+<pre><code>## [1] 1.338963</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(student_sample, <span class="dt">mu =</span> H0, <span class="dt">alternative =</span> <span class="st">&#39;less&#39;</span>)</code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
 ## data:  student_sample
-## t = 0.20202, df = 99, p-value = 0.5798
+## t = 1.339, df = 99, p-value = 0.9082
 ## alternative hypothesis: true mean is less than 50
 ## 95 percent confidence interval:
-##      -Inf 51.38632
+##     -Inf 53.0094
 ## sample estimates:
 ## mean of x 
-##  50.15037</code></pre>
+##  51.34345</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pt</span>(t_score, <span class="dv">99</span>)</code></pre></div>
-<pre><code>## [1] 0.5798405</code></pre>
+<pre><code>## [1] 0.9081755</code></pre>
 <p>For the alternative <code>'greater'</code> we want to look at the density above the t-score which is just <span class="math inline">\(1-\)</span> the density below since all densities sum to <span class="math inline">\(1\)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(student_sample, <span class="dt">mu =</span> H0, <span class="dt">alternative =</span> <span class="st">&#39;greater&#39;</span>)</code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
 ## data:  student_sample
-## t = 0.20202, df = 99, p-value = 0.4202
+## t = 1.339, df = 99, p-value = 0.09182
 ## alternative hypothesis: true mean is greater than 50
 ## 95 percent confidence interval:
-##  48.91443      Inf
+##  49.6775     Inf
 ## sample estimates:
 ## mean of x 
-##  50.15037</code></pre>
+##  51.34345</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pt</span>(t_score, <span class="dv">99</span>)</code></pre></div>
-<pre><code>## [1] 0.4201595</code></pre>
+<pre><code>## [1] 0.09182449</code></pre>
 <p>With the two-sided test one has to be a bit more careful because we are looking at densities on both sides of the mean. The alternative hypothesis is that the true mean is either greater than or less than the <span class="math inline">\(H_0\)</span>. For the two-sided test we need to look at the density beyond the t-score (away from <span class="math inline">\(0\)</span>) and double this density. We can simply double the p-value since the t-distribution is symmetric. For a positive t-score we look at the area to the right of the t-score (similar to the <code>'greater'</code> alternative) and double that to account for the “other side”, i.e. the density below the green line in the plot below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(student_sample, <span class="dt">mu =</span> H0, <span class="dt">alternative =</span> <span class="st">&#39;two.sided&#39;</span>)</code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
 ## data:  student_sample
-## t = 0.20202, df = 99, p-value = 0.8403
+## t = 1.339, df = 99, p-value = 0.1836
 ## alternative hypothesis: true mean is not equal to 50
 ## 95 percent confidence interval:
-##  48.67338 51.62736
+##  49.35259 53.33431
 ## sample estimates:
 ## mean of x 
-##  50.15037</code></pre>
+##  51.34345</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pt</span>(t_score, <span class="dv">99</span>))</code></pre></div>
-<pre><code>## [1] 0.840319</code></pre>
+<pre><code>## [1] 0.183649</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">15</span>, <span class="dv">15</span>, <span class="dt">length.out =</span> <span class="dv">1000</span>)
 dens &lt;-<span class="st"> </span><span class="kw">dt</span>(x, <span class="dv">99</span>)
 <span class="kw">ggplot</span>(<span class="kw">data.frame</span>(x, dens), <span class="kw">aes</span>(x, dens)) <span class="op">+</span>
@@ -565,25 +589,29 @@ dens &lt;-<span class="st"> </span><span class="kw">dt</span>(x, <span class="dv
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Theoretical density given null hypothesis 50 and sample t-score&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="op">-</span>t_score, <span class="dt">color =</span> <span class="st">&#39;green&#39;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>() </code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-122-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-123-1.png" width="672" /></p>
 <p>For a negative t-score we simple double the value of the CDF at that point. The t-score is negative if the <span class="math inline">\(H_0\)</span> is greater than the sample mean and positive if it is less than the sample mean.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">H0 &lt;-<span class="st"> </span><span class="dv">51</span> 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">H0 &lt;-<span class="st"> </span><span class="dv">52</span> 
 (t_score &lt;-<span class="st"> </span>(samp_mean <span class="op">-</span><span class="st"> </span>H0) <span class="op">/</span><span class="st"> </span>SE)</code></pre></div>
-<pre><code>## [1] -1.141403</code></pre>
+<pre><code>## [1] -0.6543634</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(student_sample, <span class="dt">mu =</span> H0, <span class="dt">alternative =</span> <span class="st">&#39;two.sided&#39;</span>)</code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
 ## data:  student_sample
-## t = -1.1414, df = 99, p-value = 0.2565
-## alternative hypothesis: true mean is not equal to 51
+## t = -0.65436, df = 99, p-value = 0.5144
+## alternative hypothesis: true mean is not equal to 52
 ## 95 percent confidence interval:
-##  48.67338 51.62736
+##  49.35259 53.33431
 ## sample estimates:
 ## mean of x 
-##  50.15037</code></pre>
+##  51.34345</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">pt</span>(t_score, <span class="dv">99</span>)</code></pre></div>
-<pre><code>## [1] 0.2564556</code></pre>
+<pre><code>## [1] 0.514395</code></pre>
+</div>
+<div id="summary" class="section level2">
+<h2><span class="header-section-number">5.5</span> Summary</h2>
+<p>When conducting research we are (almost) always faced with the problem of not having access to the entire group we are interested in. Therefore we use sample properties that we have derived in this chapter to do statistical inference based on a single sample. We use the parameters of the sample as well as the sample size to calculate the confidence interval of our choice (e.g. <span class="math inline">\(95\%\)</span>). In practice most of this is done for us. With a sample at hand we need to choose the appropriate test and a null hypothesis. In this chapter we have explored a test for the mean of a sample, the t-test and had a look at their p-values. P-values are conditional probabilities of observing the sample at hand given that the <span class="math inline">\(H_0\)</span> is true. We assume the <span class="math inline">\(H_0\)</span> is true and then look at the data. There is a common misconception that the p-value provides some kind of probability for or against the <span class="math inline">\(H_0\)</span> when really we are taking the null hypothesis as given and calculate the probability of observing the data. In this chapter we used a single sample t-test but the procedure of statistical inference is similar for many tests as you will see in the next chapters.</p>
 
 </div>
 </div>

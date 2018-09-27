@@ -183,6 +183,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.3.1" data-path="introduction-to-statistical-inference.html"><a href="introduction-to-statistical-inference.html#the-t-distribution"><i class="fa fa-check"></i><b>5.3.1</b> The t-distribution</a></li>
 </ul></li>
 <li class="chapter" data-level="5.4" data-path="introduction-to-statistical-inference.html"><a href="introduction-to-statistical-inference.html#statistical-inference-on-a-sample"><i class="fa fa-check"></i><b>5.4</b> Statistical inference on a sample</a></li>
+<li class="chapter" data-level="5.5" data-path="introduction-to-statistical-inference.html"><a href="introduction-to-statistical-inference.html#summary"><i class="fa fa-check"></i><b>5.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="summarizing-data.html"><a href="summarizing-data.html"><i class="fa fa-check"></i><b>6</b> Summarizing data</a><ul>
 <li class="chapter" data-level="6.1" data-path="summarizing-data.html"><a href="summarizing-data.html#summary-statistics"><i class="fa fa-check"></i><b>6.1</b> Summary statistics</a><ul>
@@ -587,24 +588,24 @@ table_plot_rel &lt;-<span class="st"> </span>plyr<span class="op">::</span><span
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 bar_chart &lt;-<span class="st"> </span><span class="kw">ggplot</span>(table_plot_rel, <span class="kw">aes</span>(<span class="dt">x =</span> overall_knowledge,<span class="dt">y =</span> Freq))
 bar_chart</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-144"></span>
-<img src="_main_files/figure-html/unnamed-chunk-144-1.png" alt="Bar chart (step 1)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-145"></span>
+<img src="_main_files/figure-html/unnamed-chunk-145-1.png" alt="Bar chart (step 1)" width="672" />
 <p class="caption">
 Figure 6.1: Bar chart (step 1)
 </p>
 </div>
 <p>You can see that the coordinate system is empty. This is because so far, we have told R merely which variables we would like to plot but we haven’t specified which geometric figures (points, bars, lines, etc.) we would like to use. This is done using the <code>geom_xxx</code> function. ggplot includes many different geoms, for a wide range of plots (e.g., geom_line, geom_histogram, geom_boxplot, etc.). A good overview of the various geom functions can be found <a href="https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf" target="_blank">here</a>. In our case, we would like to use a bar chart for which <code>geom_col</code> is appropriate.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bar_chart <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>() </code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-145"></span>
-<img src="_main_files/figure-html/unnamed-chunk-145-1.png" alt="Bar chart (step 2)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-146"></span>
+<img src="_main_files/figure-html/unnamed-chunk-146-1.png" alt="Bar chart (step 2)" width="672" />
 <p class="caption">
 Figure 6.2: Bar chart (step 2)
 </p>
 </div>
 <p>Note that the same could be achieved using <code>geom_bar</code>. However, by default <code>geom_bar</code> counts the number of observations within each category of a variable. This is not required in our case because we have already used the <code>prop.table()</code> function to compute the relative frequencies. The argument <code>stat = &quot;identity&quot;</code> prevents <code>geom_bar</code> from performing counting operations and uses it “as it is”.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bar_chart <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) </code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-146"></span>
-<img src="_main_files/figure-html/unnamed-chunk-146-1.png" alt="Bar chart (alternative specification)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-147"></span>
+<img src="_main_files/figure-html/unnamed-chunk-147-1.png" alt="Bar chart (alternative specification)" width="672" />
 <p class="caption">
 Figure 6.3: Bar chart (alternative specification)
 </p>
@@ -613,8 +614,8 @@ Figure 6.3: Bar chart (alternative specification)
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bar_chart <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Relative frequency&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Overall Knowledge&quot;</span>) </code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-147"></span>
-<img src="_main_files/figure-html/unnamed-chunk-147-1.png" alt="Bar chart (step 3)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-148"></span>
+<img src="_main_files/figure-html/unnamed-chunk-148-1.png" alt="Bar chart (step 3)" width="672" />
 <p class="caption">
 Figure 6.4: Bar chart (step 3)
 </p>
@@ -624,8 +625,8 @@ Figure 6.4: Bar chart (step 3)
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Relative frequency&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Overall Knowledge&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> <span class="kw">sprintf</span>(<span class="st">&quot;%.0f%%&quot;</span>, Freq<span class="op">/</span><span class="kw">sum</span>(Freq) <span class="op">*</span><span class="st"> </span><span class="dv">100</span>)), <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.2</span>) </code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-148"></span>
-<img src="_main_files/figure-html/unnamed-chunk-148-1.png" alt="Bar chart (step 4)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-149"></span>
+<img src="_main_files/figure-html/unnamed-chunk-149-1.png" alt="Bar chart (step 4)" width="672" />
 <p class="caption">
 Figure 6.5: Bar chart (step 4)
 </p>
@@ -636,8 +637,8 @@ Figure 6.5: Bar chart (step 4)
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Overall Knowledge&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> <span class="kw">sprintf</span>(<span class="st">&quot;%.0f%%&quot;</span>, Freq<span class="op">/</span><span class="kw">sum</span>(Freq) <span class="op">*</span><span class="st"> </span><span class="dv">100</span>)), <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.2</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-149"></span>
-<img src="_main_files/figure-html/unnamed-chunk-149-1.png" alt="Bar chart (step 5)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-150"></span>
+<img src="_main_files/figure-html/unnamed-chunk-150-1.png" alt="Bar chart (step 5)" width="672" />
 <p class="caption">
 Figure 6.6: Bar chart (step 5)
 </p>
@@ -648,8 +649,8 @@ Figure 6.6: Bar chart (step 5)
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Overall Knowledge&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> <span class="kw">sprintf</span>(<span class="st">&quot;%.0f%%&quot;</span>, Freq<span class="op">/</span><span class="kw">sum</span>(Freq) <span class="op">*</span><span class="st"> </span><span class="dv">100</span>)), <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.2</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_minimal</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-150"></span>
-<img src="_main_files/figure-html/unnamed-chunk-150-1.png" alt="Bar chart (options 1)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-151"></span>
+<img src="_main_files/figure-html/unnamed-chunk-151-1.png" alt="Bar chart (options 1)" width="672" />
 <p class="caption">
 Figure 6.7: Bar chart (options 1)
 </p>
@@ -660,8 +661,8 @@ bar_chart <span class="op">+</span><span class="st"> </span><span class="kw">geo
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Relative frequency&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Overall Knowledge&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_economist</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-151"></span>
-<img src="_main_files/figure-html/unnamed-chunk-151-1.png" alt="Bar chart (options 2)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-152"></span>
+<img src="_main_files/figure-html/unnamed-chunk-152-1.png" alt="Bar chart (options 2)" width="672" />
 <p class="caption">
 Figure 6.8: Bar chart (options 2)
 </p>
@@ -677,8 +678,8 @@ Figure 6.8: Bar chart (options 2)
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Conditional relative frequency&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Overall Knowledge&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>() </code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-153"></span>
-<img src="_main_files/figure-html/unnamed-chunk-153-1.png" alt="Grouped bar chart (conditional relative frequencies)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-154"></span>
+<img src="_main_files/figure-html/unnamed-chunk-154-1.png" alt="Grouped bar chart (conditional relative frequencies)" width="672" />
 <p class="caption">
 Figure 6.9: Grouped bar chart (conditional relative frequencies)
 </p>
@@ -690,8 +691,8 @@ Figure 6.9: Grouped bar chart (conditional relative frequencies)
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Conditional relative frequency&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Overall Knowledge&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>() </code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-154"></span>
-<img src="_main_files/figure-html/unnamed-chunk-154-1.png" alt="Grouped bar chart (conditional relative frequencies) (2)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-155"></span>
+<img src="_main_files/figure-html/unnamed-chunk-155-1.png" alt="Grouped bar chart (conditional relative frequencies) (2)" width="672" />
 <p class="caption">
 Figure 6.10: Grouped bar chart (conditional relative frequencies) (2)
 </p>
@@ -713,8 +714,8 @@ test_data<span class="op">$</span>Practice_Regression_cat &lt;-<span class="st">
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Practical knowledge&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Theoretical knowledge&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-156"></span>
-<img src="_main_files/figure-html/unnamed-chunk-156-1.png" alt="Covariation between categorical data (1)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-157"></span>
+<img src="_main_files/figure-html/unnamed-chunk-157-1.png" alt="Covariation between categorical data (1)" width="672" />
 <p class="caption">
 Figure 6.11: Covariation between categorical data (1)
 </p>
@@ -727,8 +728,8 @@ Figure 6.11: Covariation between categorical data (1)
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Practical knowledge&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Theoretical knowledge&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-157"></span>
-<img src="_main_files/figure-html/unnamed-chunk-157-1.png" alt="Covariation between categorical data (2)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-158"></span>
+<img src="_main_files/figure-html/unnamed-chunk-158-1.png" alt="Covariation between categorical data (2)" width="672" />
 <p class="caption">
 Figure 6.12: Covariation between categorical data (2)
 </p>
@@ -757,8 +758,8 @@ adv_data<span class="op">$</span>store &lt;-<span class="st"> </span><span class
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">3000</span>, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;darkblue&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Number of sales&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Frequency&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-159"></span>
-<img src="_main_files/figure-html/unnamed-chunk-159-1.png" alt="Histogram" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-160"></span>
+<img src="_main_files/figure-html/unnamed-chunk-160-1.png" alt="Histogram" width="672" />
 <p class="caption">
 Figure 6.13: Histogram
 </p>
@@ -771,8 +772,8 @@ Figure 6.13: Histogram
 <span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Store ID&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-160"></span>
-<img src="_main_files/figure-html/unnamed-chunk-160-1.png" alt="Boxplot by group" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-161"></span>
+<img src="_main_files/figure-html/unnamed-chunk-161-1.png" alt="Boxplot by group" width="672" />
 <p class="caption">
 Figure 6.14: Boxplot by group
 </p>
@@ -788,8 +789,8 @@ Figure 6.14: Boxplot by group
 <span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">colour=</span><span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Store ID&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-161"></span>
-<img src="_main_files/figure-html/unnamed-chunk-161-1.png" alt="Boxplot with augmented data points" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-162"></span>
+<img src="_main_files/figure-html/unnamed-chunk-162-1.png" alt="Boxplot with augmented data points" width="672" />
 <p class="caption">
 Figure 6.15: Boxplot with augmented data points
 </p>
@@ -799,8 +800,8 @@ Figure 6.15: Boxplot with augmented data points
 <span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Total&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-162"></span>
-<img src="_main_files/figure-html/unnamed-chunk-162-1.png" alt="Single Boxplot" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-163"></span>
+<img src="_main_files/figure-html/unnamed-chunk-163-1.png" alt="Single Boxplot" width="672" />
 <p class="caption">
 Figure 6.16: Single Boxplot
 </p>
@@ -815,8 +816,8 @@ Figure 6.16: Single Boxplot
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Store ID&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Average number of sales&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">100000</span>, <span class="dv">130000</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-163"></span>
-<img src="_main_files/figure-html/unnamed-chunk-163-1.png" alt="Plot of means" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-164"></span>
+<img src="_main_files/figure-html/unnamed-chunk-164-1.png" alt="Plot of means" width="672" />
 <p class="caption">
 Figure 6.17: Plot of means
 </p>
@@ -830,8 +831,8 @@ Figure 6.17: Plot of means
 <span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.1</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Advertising expenditures (EUR)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>, <span class="dt">colour =</span> <span class="st">&quot;store&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>() </code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-164"></span>
-<img src="_main_files/figure-html/unnamed-chunk-164-1.png" alt="Scatter plot" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-165"></span>
+<img src="_main_files/figure-html/unnamed-chunk-165-1.png" alt="Scatter plot" width="672" />
 <p class="caption">
 Figure 6.18: Scatter plot
 </p>
@@ -845,8 +846,8 @@ Figure 6.18: Scatter plot
 <span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.1</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Advertising expenditures (EUR)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>, <span class="dt">colour=</span><span class="st">&quot;store&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-165"></span>
-<img src="_main_files/figure-html/unnamed-chunk-165-1.png" alt="Grouped scatter plot" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-166"></span>
+<img src="_main_files/figure-html/unnamed-chunk-166-1.png" alt="Grouped scatter plot" width="672" />
 <p class="caption">
 Figure 6.19: Grouped scatter plot
 </p>
@@ -862,8 +863,8 @@ p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(adv_data, <span c
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Advertising expenditures (EUR)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>, <span class="dt">colour =</span> <span class="st">&quot;store&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>() 
 ggExtra<span class="op">::</span><span class="kw">ggMarginal</span>(p, <span class="dt">type =</span> <span class="st">&quot;histogram&quot;</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-166"></span>
-<img src="_main_files/figure-html/unnamed-chunk-166-1.png" alt="Scatter plot with histogram" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-167"></span>
+<img src="_main_files/figure-html/unnamed-chunk-167-1.png" alt="Scatter plot with histogram" width="672" />
 <p class="caption">
 Figure 6.20: Scatter plot with histogram
 </p>
@@ -896,8 +897,8 @@ ctrydata_at<span class="op">$</span>date &lt;-<span class="st"> </span><span cla
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Year&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Population of Austria&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-168"></span>
-<img src="_main_files/figure-html/unnamed-chunk-168-1.png" alt="Line plot" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-169"></span>
+<img src="_main_files/figure-html/unnamed-chunk-169-1.png" alt="Line plot" width="672" />
 <p class="caption">
 Figure 6.21: Line plot
 </p>
