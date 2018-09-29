@@ -198,6 +198,10 @@ $$
 
 and is called the Standard Error (SE). $s$ itself is a sample estimate of the population parameter $\sigma$. This additional estimation should increase our confidence interval since we introduce new uncertainty. You can see in the interactive element below that the sample SD, on average, provides a good estimate of the population SD. That is the distribution of sample SDs that we get by drawing many samples is centered around the population value. Again, the larger the sample the closer any given sample SD is going to be to the population parameter and we introduce less uncertainty. 
 
+We will not go into detail about the importance of random samples but basically the correctness of your estimate depends crucially on having a sample at hand that actually represents the population. Unfortunatelly we will usually not notice if the sample is non-random. Our statistics are still a good approximation of "a" population parameter, namely the one for the population that we actually sampled but not the one we are interested in. To illustrate this uncheck the "Random Sample" box below. The new sample will be only from the top $50\%$ music listeners (but this generalizes to different types of non-random samples).
+
+<iframe src="https://learn.wu.ac.at/shiny/imsm/clt/" style="border: none; width: 800px; height: 1265px"></iframe>
+
 ### The t-distribution
 
 We have already seen the t-distribution in the chapter on probability distributions. Recall that if we sample from a normal distribution with mean $\mu$ and standard deviation $\sigma$ then
