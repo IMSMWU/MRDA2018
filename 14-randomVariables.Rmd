@@ -126,7 +126,7 @@ To see what this looks like in practice you can simulate dice throws below. The 
 Now that we have seen examples for discrete random variables, we can define them more formally. A random variable is discrete if its [**cumulative distribution function**](#definitions) is a step function as in the plot below. That is, the CDF shifts or jumps from one probability to the next at some point(s). Notice that the black dots indicate that at that specific point the probability is already at the higher step. More formally: the CDF is "right-continuous". That is the case for all CDFs. To illustrate this concept we explore the plot below. We have a discrete random variable as the CDF jumps rather than being one line. We can observe integer values between 0 and 10 whereas the probability of observing less than or equal to 0 is almost 0 and the probability of observing less than or equal to 10 is 1. The function is right continuous: Let's look at the values 4 and 5 for example. The probability of observing 4 or less than 4 is just under 0.4. The probability of observing 5 or less is just over 0.6. For further examples see [tossing coins](#tossing-coins) and [sum of two dice](#sum-of-two-dice)
 
 ```{r setupRandVar, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+#knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
 
 ```{r discrete}
@@ -166,30 +166,29 @@ ggplot(cont, aes(x=x)) +
 
 One example for a continuous random variable is the average profit of a store per week. Let's think of the possible values: Profit could be negative if, for example, the payment to employees exceeds the contribution margin accrued from the products sold. Of course it can also be positive and technically it is not restricted to any range of values (e.g. it could exceed a billion, be below negative 10,000 or *anywhere* in between). Below you can see some (simulated) profit data. Observe that the CDF looks continuous. The red overlay is the CDF of the normal distribution (see chapter on probability distributions) which was used for the simulation. The final plot is a histogram of the data with the normal density (again in red). It shows that profits around 500 are more likely (higher bars) and the further away from 500 we get the less likely it is that a certain profit will be observed in a given week. Recall the definition of the probability density function shows the probability of a given outcome.
 
-```{r, echo = FALSE }
+```{r, echo = FALSE}
 set.seed(0914)
-library(lubridate)
-library(ggplot2)
-library(knitr)
- today <- now()
-  dates <- today - weeks(1:600)
-  weeks <- as.integer(week(dates))
-  years <- as.integer(year(dates))
-  mu_profits <- 500
-  sd_profits <- 200
-  profit <- round(rnorm(length(dates), mu_profits, sd_profits),2)
-  profit_df <- data.frame(cbind("Year" = as.integer(years), "Week" = as.integer(weeks), "Profit" = profit ))
 
-profit_df
+today <- as.Date(Sys.time())
+dates <- today - (1:600)*7
+days <- format(dates, "%d")
+months <- format(dates, "%m")
+years <- format(dates, "%Y")
+mu_profits <- 500
+sd_profits <- 200
+profit <- round(rnorm(length(dates), mu_profits, sd_profits),2)
+profit_df <- data.frame(cbind("Year" = as.integer(years), "Month" = as.integer(months), "Day" = as.integer(days), "Profit" = profit ))
+ 
+head(profit_df)
 
-  
+
 ggplot(profit_df, aes(x = profit))+
   stat_ecdf()+
   stat_function(fun = function(x){pnorm(x, mu_profits, sd_profits)}, color = 'firebrick')+
   theme_bw()+
   labs(x = "Profit", y = "Cumulative Probability", title = "Cumulative distribution function of profits")
 
-  
+
 ggplot(profit_df, aes(x = profit))+
       geom_histogram(aes(y=..density..), bins = 50)+
       stat_function(fun = function(x){dnorm(x, mu_profits, sd_profits)}, color = 'firebrick')+

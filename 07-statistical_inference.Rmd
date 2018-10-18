@@ -483,7 +483,7 @@ print(p)
 
 Two things are worth noting: **(1)** The more (hypothetical) samples we take, the more the sampling distribution approaches a normal distribution. **(2)** The mean of the sampling distribution of the sample mean ($\mu_{\bar x}$) is very similar to the population mean ($\mu$). From this we can see that the mean of a sample is a good estimate of the population mean. 
 
-In summary, it is important to distinguish two types of variation: **(1)** For each individual sample that we may take in real life, the standard deviation ($s$) is used to describe the **natural variation** in the data and the data may follow a non-normal distribution. **(2)** If we would (hypothetically!) repeat the study many times, the sampling distribution of the sample mean follows a normal distribution for large samples sizes (even if data from each individual study are non-normal), and the standard error ($\sigma_{\bar x}$) is used to describe the **variation bewtween study results**. This is an important feature, since many statistical tests assume that the sampling distribution is normally distributed. As we have seen, this does **not** mean that the data from one particular sample needs to follow a normal distribution.
+In summary, it is important to distinguish two types of variation: **(1)** For each individual sample that we may take in real life, the standard deviation ($s$) is used to describe the **natural variation** in the data and the data may follow a non-normal distribution. **(2)** If we would (hypothetically!) repeat the study many times, the sampling distribution of the sample mean follows a normal distribution for large samples sizes (even if data from each individual study are non-normal), and the standard error ($\sigma_{\bar x}$) is used to describe the **variation between study results**. This is an important feature, since many statistical tests assume that the sampling distribution is normally distributed. As we have seen, this does **not** mean that the data from one particular sample needs to follow a normal distribution.
 
 ## Using what we actually know
 
@@ -570,6 +570,7 @@ ggplot2::ggplot(means_sd, aes(y = y)) +
   geom_vline(xintercept = mean(hours)) +
   scale_color_manual(values = c("red", "black")) +
   guides(color=guide_legend(title="True mean in CI")) +
+  ylab("Sample #") +
   theme_bw()
 
 ```
