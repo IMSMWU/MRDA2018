@@ -41,11 +41,11 @@ ggplot(data.frame(hours)) +
   annotate("text", x = mean(hours) -28, y = 1100, label = "Mean - 2 * SD" )
 ```
 
-In this case, we refere to all WU students as **the population**. In general, the population is the entire group we are interested in. This group does not have to necessarily consist of people, but could also be companies, stores, animals, etc.. The parameters of the distribution of population values (in hour case: "hours") are called population parameters. As already mentioned, we do not usually know population parameters but use inferencial statistics to infer them based on our sample from the population, i.e., we measure statistics from a sample (e.g., the sample mean $\bar x$) to estimate population parameters (the population mean $\mu$). Here, we will use the following notation to refer to either the population parameters or the sample statistic: 
+In this case, we refere to all WU students as **the population**. In general, the population is the entire group we are interested in. This group does not have to necessarily consist of people, but could also be companies, stores, animals, etc.. The parameters of the distribution of population values (in our case: "hours") are called population parameters. As already mentioned, we do not usually know population parameters but use inferencial statistics to infer them based on our sample from the population, i.e., we measure statistics from a sample (e.g., the sample mean $\bar x$) to estimate population parameters (the population mean $\mu$). Here, we will use the following notation to refer to either the population parameters or the sample statistic: 
 
 Variable	 | Sample statistic	 | Population parameter
 ------------------------- | ------------------------- | -------------------------
-Size  | N  | n  
+Size  | n  | N  
 Mean  |  $\bar{x} = {1 \over n}\sum_{i=1}^n x_i$ | $\mu = {1 \over N}\sum_{i=1}^N x_i$  |
 Variance  | $s^2 = {1 \over n-1}\sum_{i=1}^n (x_i-\bar{x})^2$  | $\sigma^2 = {1 \over N}\sum_{i=1}^N (x_i-\mu)^2$  
 Standard deviation | $s = \sqrt{s^2}$  | $\sigma = \sqrt{\sigma^2}$  
@@ -65,7 +65,7 @@ ggplot(data.frame(sample_1)) +
   ggtitle(TeX(sprintf("Distribution of listening times ($\\bar{x}$ = %.2f)",round(mean(sample_1),2))))
 ```
 
-Observe that in this first draw the mean ($\bar x =$ `r round(mean(sample_1),2)`) is quite close to the actual mean ($\mu = $ `r round(mean(hours),2)`). It seems like the sample mean is a decent estimate of the population mean. However, we could just be lucky this time and the next sample could turn out to have a different mean. Let us continue by looking at four additional random samples, consisting of 100 students each. The following plot shows the distribution of listening times for the four different samples from the population.  
+Observe that in this first draw the mean ($\bar x =$ `r round(mean(sample_1),2)`) is quite close to the actual mean ($\mu =$ `r round(mean(hours),2)`). It seems like the sample mean is a decent estimate of the population mean. However, we could just be lucky this time and the next sample could turn out to have a different mean. Let us continue by looking at four additional random samples, consisting of 100 students each. The following plot shows the distribution of listening times for the four different samples from the population.  
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.align="center", fig.height = 6, fig.width = 8}
 #student_sample <- sample(1:25000, size = 100, replace = FALSE)
@@ -148,13 +148,13 @@ As you can see, on average the sample mean ("mean of sample means") is extremely
 
 ### Standard error of the mean
 
-Due to the variation in the sample means shown in our simulation, it is never possible to say exactly what the population mean is based on a single sample. However, even with a single sample we can infer a range of values within which the population mean is likely contained. In order to do so, notice that the sample means are approximately normally distributed. Another interesting fact is that the mean of sample means (i.e., `r round(mean(means),2)`) is roughly equal to the population mean (i.e., `r round(mean(hours),2)`). This tells us already that generally the sample mean is a good approximation of the population mean. However, in order to make statements about the expected range of possible values, we would need to know the standard deviation of the sampling distribution. The formal representation of the standard deviation of the sample means is
+Due to the variation in the sample means shown in our simulation, it is never possible to say exactly what the population mean is, based on a single sample. However, even with a single sample we can infer a range of values within which the population mean is likely contained. In order to do so, notice that the sample means are approximately normally distributed. Another interesting fact is that the mean of sample means (i.e., `r round(mean(means),2)`) is roughly equal to the population mean (i.e., `r round(mean(hours),2)`). This tells us already that generally the sample mean is a good approximation of the population mean. However, in order to make statements about the expected range of possible values, we would need to know the standard deviation of the sampling distribution. The formal representation of the standard deviation of the sample means is
 
 $$
 \sigma_{\bar x} = {\sigma \over \sqrt{n}}
 $$
 
-where $\sigma$ is the population SD and $n$ is the sample size. $\sigma_{\bar{x}}$ is referred to as the **Standard Error** of the mean and it expresses the variation in sample means we should expect given the number of observations in our sample and the population SD. That is, it provides a measure of how precisely we can estimate the populationmean from the sample mean.   
+where $\sigma$ is the population SD and $n$ is the sample size. $\sigma_{\bar{x}}$ is referred to as the **Standard Error** of the mean and it expresses the variation in sample means we should expect given the number of observations in our sample and the population SD. That is, it provides a measure of how precisely we can estimate the population mean from the sample mean.   
 
 #### Sample size
 
@@ -332,7 +332,7 @@ print(p)
 
 ```
 
-In the first plot (panel A), we assume a much smaller population standard deviation (i.g., $\sigma$ = 1 instead of $sigma$ = 10). Notice how the smaller (larger) the population standard deviation, the less (more) uncertainty there is when estimating the population mean from a sample (i.e., the possible values are more closely centered around the mean). So when the population SD is large, the sample mean can expected to be very different the next time we take a sample. When the population SD is small, we can expect the sample means to be more similar.
+In the first plot (panel A), we assume a much smaller population standard deviation (i.g., $\sigma$ = 1 instead of $\sigma$ = 10). Notice how the smaller (larger) the population standard deviation, the less (more) uncertainty there is when estimating the population mean from a sample (i.e., the possible values are more closely centered around the mean). So when the population SD is large, the sample mean can expected to be very different the next time we take a sample. When the population SD is small, we can expect the sample means to be more similar.
 
 ## The Central Limit Theorem
 
@@ -340,7 +340,7 @@ The attentive reader might have noticed that the population above was generated 
 
 The central limit theorem states that if **(1)** the population distribution has a mean (there are examples of distributions that don't have a mean , but we will ignore these here), and **(2)** we take a large enough sample, then the sampling distribution of the sample mean is approximately normally distributed. What exactly "large enough" means depends on the setting, but the interactive element at the end of this chapter illustrates how the sample size influences how accurately we can estimate the population parameters from the sample statistics.
 
-To illustrate this, let's repeat the analysis above with a population from a gamma distribution. In the previous example, we assumed a normal distribution so it was more likely for a given student to spend around 50 hours per week listening to music. The following example depicts the case in which most students have a similar music listening time while thate are a few students who rarely listen to music and some music enthusiasts who have a much higher listening time. Here is a histogram of the listening times in the population:
+To illustrate this, let's repeat the analysis above with a population from a gamma distribution. In the previous example, we assumed a normal distribution so it was more likely for a given student to spend around 50 hours per week listening to music. The following example depicts the case in which most students have a similar music listening time while there are a few students who rarely listen to music and some music enthusiasts who have a much higher listening time. Here is a histogram of the listening times in the population:
 
 ```{r message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, fig.align="center", fig.height = 4, fig.width = 6}
 set.seed(321)
@@ -501,7 +501,7 @@ We will not go into detail about the importance of random samples but basically 
 
 ### Confidence Intervals for the Sample Mean
 
-When we try to estimate parameters of populations (e.g., the population mean $\mu$) from a sample, the average value from a sample (e.g., the sample mean $\bar x$) only provides an estimate of what the real population parameter is. The next time you collect a sample of the same size, you could get a different average. This is sampling variation and it is completely fine to get a slightly different sample mean every time we take a sample as we have see above. However, this inherent uncertainty about the true population parameter means that coming up with an exact estimate (i.e., a **point estimate**) for a particular population parameter is really difficult. That is why it is often informative to construct a range around that statistic (i.e., an **interval estimate**) that likely contains the population parameter with a certain level of confidence. That is, we construct an interval such that for a large share (say 95%) of the sample means we could potentially get, the population mean is within that interval.
+When we try to estimate parameters of populations (e.g., the population mean $\mu$) from a sample, the average value from a sample (e.g., the sample mean $\bar x$) only provides an estimate of what the real population parameter is. The next time you collect a sample of the same size, you could get a different average. This is sampling variation and it is completely fine to get a slightly different sample mean every time we take a sample as we have seen above. However, this inherent uncertainty about the true population parameter means that coming up with an exact estimate (i.e., a **point estimate**) for a particular population parameter is really difficult. That is why it is often informative to construct a range around that statistic (i.e., an **interval estimate**) that likely contains the population parameter with a certain level of confidence. That is, we construct an interval such that for a large share (say 95%) of the sample means we could potentially get, the population mean is within that interval.
 
 Let us consider one random sample of 100 students from our population above. 
 

@@ -307,7 +307,7 @@ n &lt;-<span class="st"> </span><span class="dv">50</span> <span class="co">#sam
 standard_error &lt;-<span class="st"> </span>sigma<span class="op">/</span><span class="kw">sqrt</span>(n) <span class="co">#standard error</span>
 standard_error</code></pre></div>
 <pre><code>## [1] 2.001639</code></pre>
-<p>Since we know from the central limit theorem that the sampling distribution is normal for large enough samples, we can now visualize the expected sampling distribution <strong>if our null hypothesis was in fact true</strong> (i.e., if the was no difference between the true population mean and the hypothesized mean of 10).</p>
+<p>Since we know from the central limit theorem that the sampling distribution is normal for large enough samples, we can now visualize the expected sampling distribution <strong>if our null hypothesis was in fact true</strong> (i.e., if there was no difference between the true population mean and the hypothesized mean of 10).</p>
 <p><img src="_main_files/figure-html/unnamed-chunk-167-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>We also know that 95% of the probability is within 1.96 standard deviations from the mean. Values higher than that are rather unlikely, if our hypothesis about the population mean was indeed true. This is shown by the shaded area, also known as the “rejection region”. To test our hypothesis that the population mean is equal to <span class="math inline">\(10\)</span>, let us take a random sample from the population.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">12567</span>)
@@ -456,7 +456,7 @@ H_1: \mu &gt; \mu_0
 </div>
 <div id="one-sample-t-test" class="section level2">
 <h2><span class="header-section-number">5.2</span> One sample t-test</h2>
-<p>The example we used in the introduction was an example of the <strong>one sample t-test</strong> and we computed all statistics by hand to explain the underlying intuition. When you conduct hypothesis tests using R, you do not need to calculate these statistics by hand, since there are build-in routines to conduct the steps for you. Let us use the same example again to see how you would conduct hypothesis tests in R.</p>
+<p>The example we used in the introduction was an example of the <strong>one sample t-test</strong> and we computed all statistics by hand to explain the underlying intuition. When you conduct hypothesis tests using R, you do not need to calculate these statistics by hand, since there are built-in routines to conduct the steps for you. Let us use the same example again to see how you would conduct hypothesis tests in R.</p>
 <p><strong>1. Formulate null and alternative hypotheses</strong></p>
 <p>The null hypothesis states that there is no difference between the true population mean <span class="math inline">\(\mu\)</span> and the hypothesized value (i.e., <span class="math inline">\(10\)</span>), while the alternative hypothesis states the opposite:</p>
 <p><span class="math display">\[
@@ -484,7 +484,7 @@ H_1: \mu \neq 10
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Distribution of values in the sample&quot;</span>,<span class="dt">x =</span> <span class="st">&quot;Hours&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Frequency&quot;</span>) </code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-180-1.png" width="672" /></p>
 <p><strong>5. Conduct significance test</strong></p>
-<p>In the beginning of the chapter, we saw, how you could conduct significance test by hand. However, R has built-in routines that you can use to conduct the analyses. The <code>t.test()</code> function can be used to conduct the test. To test if the listening time among WU students was 10, you can use the following code:</p>
+<p>In the beginning of the chapter, we saw, how you could conduct significance tests by hand. However, R has built-in routines that you can use to conduct the analyses. The <code>t.test()</code> function can be used to conduct the test. To test if the listening time among WU students was 10, you can use the following code:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">H_<span class="dv">0</span> &lt;-<span class="st"> </span><span class="dv">10</span>
 <span class="kw">t.test</span>(student_sample, <span class="dt">mu =</span> H_<span class="dv">0</span>, <span class="dt">alternative =</span> <span class="st">&#39;two.sided&#39;</span>)</code></pre></div>
 <pre><code>## 
@@ -640,7 +640,7 @@ H_0: \mu_1=\mu_2\\
 H_1: \mu_1 \ne \mu_2
 \]</span></p>
 <p><strong>2. Select an appropriate test</strong></p>
-<p>Since we have a ratio scaled variable (i.e., listening times) and two independent groups, where the mean of one sample is independent of the group of the second sample (i.e., the goups contain different units), the independent-means t-test is appropriate.</p>
+<p>Since we have a ratio scaled variable (i.e., listening times) and two independent groups, where the mean of one sample is independent of the group of the second sample (i.e., the groups contain different units), the independent-means t-test is appropriate.</p>
 <p><strong>3. Choose the level of significance</strong></p>
 <p>We choose the conventional 5% significance level.</p>
 <p><strong>4. Descriptive statistics and data visualization</strong></p>
@@ -702,7 +702,7 @@ H_1: \mu_1 \ne \mu_2
 <div id="dependent-means-t-test" class="section level3">
 <h3><span class="header-section-number">5.3.2</span> Dependent-means t-test</h3>
 <p>While the independent-means t-test is used when different units (e.g., participants, products) were assigned to the different condition, the <strong>dependent-means t-test</strong> is used when there are two experimental conditions and the same units (e.g., participants, products) were observed in both experimental conditions.</p>
-<p>Imagine, for example, a slightly different experimental setup for the above experiment. Imagine that we do not assign different users to the groups, but that a sample of 100 users gets to use the music streaming service with the new feature for one month and we compare the music listening times of these users during the month of the experiment witht he listening time in the previous month. Let us generate data for this example:</p>
+<p>Imagine, for example, a slightly different experimental setup for the above experiment. Imagine that we do not assign different users to the groups, but that a sample of 100 users gets to use the music streaming service with the new feature for one month and we compare the music listening times of these users during the month of the experiment with the listening time in the previous month. Let us generate data for this example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">321</span>)
 hours_population_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">25000</span>, <span class="dt">shape =</span> <span class="dv">2</span>, <span class="dt">scale =</span> <span class="dv">10</span>)
 <span class="kw">set.seed</span>(<span class="dv">12567</span>)
@@ -720,7 +720,7 @@ hours_a_b_paired &lt;-<span class="st"> </span><span class="kw">data.frame</span
 {"columns":[{"label":["hours_a"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["hours_b"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"15","2":"18"},{"1":"18","2":"14"},{"1":"27","2":"33"},{"1":"14","2":"42"},{"1":"29","2":"38"},{"1":"23","2":"27"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p>Not that the data set has almost the same structure as before only that we know have two variables representing the listning times of each user in the month before the experiment and during the month of the experiment when the new feature was tested.</p>
+<p>Note that the data set has almost the same structure as before only that we know have two variables representing the listening times of each user in the month before the experiment and during the month of the experiment when the new feature was tested.</p>
 <div id="theory-1" class="section level4">
 <h4><span class="header-section-number">5.3.2.1</span> Theory</h4>
 <p>In this case, we want to test the hypothesis that there is no difference in mean the mean listening times between the two months. This can be expressed as follows:</p>
@@ -962,7 +962,7 @@ hours_a_b_paired_long &lt;-<span class="st"> </span><span class="kw">melt</span>
 <ul>
 <li>If the probability of the effect occurring by chance is large (greater than .05), the alternative hypothesis is rejected. However, this does not mean that the null hypothesis is true.</li>
 <li>Although an effect might not be large enough to be anything other than a chance finding, it doesn’t mean that the effect is zero.</li>
-<li>In fact, two random samples will always have slightly different means that would deemed to be statistically significant if the samples were large enough.</li>
+<li>In fact, two random samples will always have slightly different means that would be deemed to be statistically significant if the samples were large enough.</li>
 </ul>
 <p>Thus, you should not base your research conclusion on p-values alone!</p>
 <p>It is also crucial to <strong>determine the sample size before you run the experiment</strong> or before you start your analysis. Why? Consider the following example:</p>

@@ -66,7 +66,7 @@ standard_error <- sigma/sqrt(n) #standard error
 standard_error
 ```
 
-Since we know from the central limit theorem that the sampling distribution is normal for large enough samples, we can now visualize the expected sampling distribution **if our null hypothesis was in fact true** (i.e., if the was no difference between the true population mean and the hypothesized mean of 10). 
+Since we know from the central limit theorem that the sampling distribution is normal for large enough samples, we can now visualize the expected sampling distribution **if our null hypothesis was in fact true** (i.e., if there was no difference between the true population mean and the hypothesized mean of 10). 
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.align="center", fig.height = 4, fig.width = 8}
 library(latex2exp)
@@ -438,7 +438,7 @@ In the following, we will go through the individual steps using examples for dif
 
 ## One sample t-test
 
-The example we used in the introduction was an example of the **one sample t-test** and we computed all statistics by hand to explain the underlying intuition. When you conduct hypothesis tests using R, you do not need to calculate these statistics by hand, since there are build-in routines to conduct the steps for you. Let us use the same example again to see how you would conduct hypothesis tests in R.  
+The example we used in the introduction was an example of the **one sample t-test** and we computed all statistics by hand to explain the underlying intuition. When you conduct hypothesis tests using R, you do not need to calculate these statistics by hand, since there are built-in routines to conduct the steps for you. Let us use the same example again to see how you would conduct hypothesis tests in R.  
 
 **1. Formulate null and alternative hypotheses**
 
@@ -477,7 +477,7 @@ ggplot(data.frame(student_sample)) +
 
 **5. Conduct significance test**
 
-In the beginning of the chapter, we saw, how you could conduct significance test by hand. However, R has built-in routines that you can use to conduct the analyses. The ```t.test()``` function can be used to conduct the test. To test if the listening time among WU students was 10, you can use the following code:
+In the beginning of the chapter, we saw, how you could conduct significance tests by hand. However, R has built-in routines that you can use to conduct the analyses. The ```t.test()``` function can be used to conduct the test. To test if the listening time among WU students was 10, you can use the following code:
 
 ```{r}
 H_0 <- 10
@@ -654,7 +654,7 @@ $$
 
 **2. Select an appropriate test**
 
-Since we have a ratio scaled variable (i.e., listening times) and two independent groups, where the mean of one sample is independent of the group of the second sample (i.e., the goups contain different units), the independent-means t-test is appropriate. 
+Since we have a ratio scaled variable (i.e., listening times) and two independent groups, where the mean of one sample is independent of the group of the second sample (i.e., the groups contain different units), the independent-means t-test is appropriate. 
 
 **3. Choose the level of significance**
 
@@ -710,7 +710,7 @@ The results showed that listening times were higher in the experimental group (M
 
 While the independent-means t-test is used when different units (e.g., participants, products) were assigned to the different condition, the **dependent-means t-test** is used when there are two experimental conditions and the same units (e.g., participants, products) were observed in both experimental conditions.
 
-Imagine, for example, a slightly different experimental setup for the above experiment. Imagine that we do not assign different users to the groups, but that a sample of 100 users gets to use the music streaming service with the new feature for one month and we compare the music listening times of these users during the month of the experiment witht he listening time in the previous month. Let us generate data for this example: 
+Imagine, for example, a slightly different experimental setup for the above experiment. Imagine that we do not assign different users to the groups, but that a sample of 100 users gets to use the music streaming service with the new feature for one month and we compare the music listening times of these users during the month of the experiment with the listening time in the previous month. Let us generate data for this example: 
 
 ```{r, message = FALSE, warning=FALSE}
 set.seed(321)
@@ -727,7 +727,7 @@ hours_a_b_paired <- data.frame(hours_a = round(sample_1_hours,0),hours_b = round
 head(hours_a_b_paired)
 ```
 
-Not that the data set has almost the same structure as before only that we know have two variables representing the listning times of each user in the month before the experiment and during the month of the experiment when the new feature was tested.
+Note that the data set has almost the same structure as before only that we know have two variables representing the listening times of each user in the month before the experiment and during the month of the experiment when the new feature was tested.
 
 #### Theory
 
@@ -946,7 +946,7 @@ From my experience, students tend to place a lot of weight on p-values when inte
 
 * If the probability of the effect occurring by chance is large (greater than .05), the alternative hypothesis is rejected. However, this does not mean that the null hypothesis is true.
 * Although an effect might not be large enough to be anything other than a chance finding, it doesn't mean that the effect is zero.
-* In fact, two random samples will always have slightly different means that would deemed to be statistically significant if the samples were large enough.   
+* In fact, two random samples will always have slightly different means that would be deemed to be statistically significant if the samples were large enough.   
 
 Thus, you should not base your research conclusion on p-values alone!
 
