@@ -370,7 +370,7 @@ This statistic follows the F distribution with (m = c – 1) and (n = N – c) d
 ```{r echo = F, message=FALSE, warning=FALSE, eval=T, fig.align="center", fig.cap = "The F distribution"}
 library(ggplot2)
 a <- seq(0,4, 2)
-ggplot(data.frame(x=c(0,4)), aes(x))+
+plt <- ggplot(data.frame(x=c(0,4)), aes(x))+
   stat_function(fun = df, args = list(2,2), aes(colour = paste0("m = 2",", n = 2"))) +
   stat_function(fun = df, args = list(2,5), aes(colour = paste0("m = 2",", n = 5")))+
   stat_function(fun = df, args = list(2,10), aes(colour = paste0("m = 2",", n = 10")))+
@@ -383,6 +383,7 @@ ggplot(data.frame(x=c(0,4)), aes(x))+
   stat_function(fun = df, args = list(20,20), aes(colour = paste0("m = 20",", n = 20")))+
   ylim(min=0, max=1) +
   labs(colour = 'Degrees of Freedom', x = 'Value', y = 'Density') + theme_bw()
+plt
 ```
 
 The outcome of the test is one of the following:
