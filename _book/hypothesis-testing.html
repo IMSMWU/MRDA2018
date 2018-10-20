@@ -187,7 +187,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.4.1" data-path="hypothesis-testing.html"><a href="hypothesis-testing.html#introduction-1"><i class="fa fa-check"></i><b>5.4.1</b> Introduction</a></li>
 <li class="chapter" data-level="5.4.2" data-path="hypothesis-testing.html"><a href="hypothesis-testing.html#decomposing-variance"><i class="fa fa-check"></i><b>5.4.2</b> Decomposing variance</a></li>
 <li class="chapter" data-level="5.4.3" data-path="hypothesis-testing.html"><a href="hypothesis-testing.html#one-way-anova"><i class="fa fa-check"></i><b>5.4.3</b> One-way ANOVA</a></li>
-<li class="chapter" data-level="5.4.4" data-path="hypothesis-testing.html"><a href="hypothesis-testing.html#n-way-anova"><i class="fa fa-check"></i><b>5.4.4</b> N-way ANOVA</a></li>
 </ul></li>
 <li class="chapter" data-level="5.5" data-path="hypothesis-testing.html"><a href="hypothesis-testing.html#non-parametric-tests"><i class="fa fa-check"></i><b>5.5</b> Non-parametric tests</a><ul>
 <li class="chapter" data-level="5.5.1" data-path="hypothesis-testing.html"><a href="hypothesis-testing.html#mann-whitney-u-test-a.k.a.-wilcoxon-rank-sum-test"><i class="fa fa-check"></i><b>5.5.1</b> Mann-Whitney U Test (a.k.a. Wilcoxon rank-sum test)</a></li>
@@ -992,94 +991,90 @@ Figure 5.1: p-hacking (red indicates false positives)
 <li>A metric dependent variable (i.e., measured using an interval or ratio scale)</li>
 <li>One or more non-metric (categorical) independent variables (also called factors)</li>
 </ul>
-<p>A treatment is a particular combination of factor levels, or categories. One-way ANOVA is used when there is only one categorical variable (factor). In this case, a treatment is the same as a factor level. N-way ANOVA is used with two or more factors.</p>
-<p>Let’s use an example to see how ANOVA works. Assume that you are a marketing manager at an online fashion store, and you wish to analyze the effect of online promotion on sales. You conduct an experiment and select a sample of 30 comparable products to be included in the experiment. Then you randomly assign the products to one of three groups: (1) = high promotion level, (2) = medium promotion level, (3) = low promotion level, and record the sales over one day. This means that you have 10 products assigned to each treatment.</p>
-<p>As always, we load and inspect the data first:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">online_store_promo &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/IMSMWU/Teaching/master/MRDA2017/online_store_promo.dat&quot;</span>, 
-                          <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, 
-                          <span class="dt">header =</span> <span class="ot">TRUE</span>) <span class="co">#read in data</span>
-online_store_promo<span class="op">$</span>Promotion &lt;-<span class="st"> </span><span class="kw">factor</span>(online_store_promo<span class="op">$</span>Promotion, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;high&quot;</span>, <span class="st">&quot;medium&quot;</span>,<span class="st">&quot;low&quot;</span>)) <span class="co">#convert grouping variable to factor</span>
-<span class="kw">str</span>(online_store_promo) <span class="co">#inspect data</span></code></pre></div>
-<pre><code>## &#39;data.frame&#39;:    30 obs. of  4 variables:
-##  $ Obs       : int  1 2 3 4 5 6 7 8 9 10 ...
-##  $ Promotion : Factor w/ 3 levels &quot;high&quot;,&quot;medium&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ Newsletter: int  1 1 1 1 1 0 0 0 0 0 ...
-##  $ Sales     : int  10 9 10 8 9 8 9 7 7 6 ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(online_store_promo) <span class="co">#inspect data</span></code></pre></div>
-<pre><code>##    Obs Promotion Newsletter Sales
-## 1    1      high          1    10
-## 2    2      high          1     9
-## 3    3      high          1    10
-## 4    4      high          1     8
-## 5    5      high          1     9
-## 6    6      high          0     8
-## 7    7      high          0     9
-## 8    8      high          0     7
-## 9    9      high          0     7
-## 10  10      high          0     6
-## 11   1    medium          1     8
-## 12   2    medium          1     8
-## 13   3    medium          1     7
-## 14   4    medium          1     9
-## 15   5    medium          1     6
-## 16   6    medium          0     4
-## 17   7    medium          0     5
-## 18   8    medium          0     5
-## 19   9    medium          0     6
-## 20  10    medium          0     4
-## 21   1       low          1     5
-## 22   2       low          1     7
-## 23   3       low          1     6
-## 24   4       low          1     4
-## 25   5       low          1     5
-## 26   6       low          0     2
-## 27   7       low          0     3
-## 28   8       low          0     2
-## 29   9       low          0     1
-## 30  10       low          0     2</code></pre>
+<p>A treatment is a particular combination of factor levels, or categories. One-way ANOVA is used when there is only one categorical variable (factor). In this case, a treatment is the same as a factor level. N-way ANOVA is used with two or more factors. Note that we are only going to talk about a single independent variable in the context of ANOVA. If you have multiple independent variables please refere to the chapter on <strong>Regression</strong>.</p>
+<p>Let’s use an example to see how ANOVA works. Similar to the previous example it is also imaginable that the music streaming service experiments with a recommendation system for user created playlists. We now have three groups, the control group “A” with the current system, treatment group “B” who have access to playlists created by other users but are not shown recommendations and treatment group “C” who are shown recommendations for user created playlists.<br />
+As always, we load and inspect the data first:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">321</span>)
+hours_population_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">25000</span>, <span class="dv">15</span>, <span class="dv">5</span>)
+<span class="kw">set.seed</span>(<span class="dv">125671</span>)
+sample_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25000</span>, <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
+sample_<span class="dv">1</span>_hours &lt;-<span class="st"> </span>hours_population_<span class="dv">1</span>[sample_<span class="dv">1</span>]
+sample_<span class="dv">1</span>_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">hours =</span> <span class="kw">round</span>(sample_<span class="dv">1</span>_hours,<span class="dv">0</span>), <span class="dt">group =</span> <span class="st">&quot;A&quot;</span>)
+sample_<span class="dv">1</span>_df<span class="op">$</span>index &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">100</span>
+<span class="kw">set.seed</span>(<span class="dv">321</span>)
+hours_population_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">25000</span>, <span class="dv">25</span>, <span class="dv">6</span>)
+<span class="kw">set.seed</span>(<span class="dv">125672</span>)
+sample_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25000</span>, <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
+sample_<span class="dv">2</span>_hours &lt;-<span class="st"> </span>hours_population_<span class="dv">2</span>[sample_<span class="dv">2</span>]
+sample_<span class="dv">2</span>_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">hours =</span> <span class="kw">round</span>(sample_<span class="dv">2</span>_hours,<span class="dv">0</span>), <span class="dt">group =</span> <span class="st">&quot;B&quot;</span>)
+sample_<span class="dv">2</span>_df<span class="op">$</span>index &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">100</span>
+<span class="kw">set.seed</span>(<span class="dv">321</span>)
+hours_population_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">25000</span>, <span class="dv">35</span>, <span class="dv">6</span>)
+<span class="kw">set.seed</span>(<span class="dv">125678</span>)
+sample_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25000</span>, <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
+sample_<span class="dv">3</span>_hours &lt;-<span class="st"> </span>hours_population_<span class="dv">3</span>[sample_<span class="dv">3</span>]
+sample_<span class="dv">3</span>_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">hours =</span> <span class="kw">round</span>(sample_<span class="dv">3</span>_hours,<span class="dv">0</span>), <span class="dt">group =</span> <span class="st">&quot;C&quot;</span>)
+sample_<span class="dv">3</span>_df<span class="op">$</span>index &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">100</span>
+hours_abc &lt;-<span class="st"> </span><span class="kw">rbind</span>(sample_<span class="dv">1</span>_df, sample_<span class="dv">2</span>_df, sample_<span class="dv">3</span>_df)
+<span class="kw">head</span>(hours_abc)</code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["hours"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["group"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["index"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"13","2":"A","3":"1"},{"1":"14","2":"A","3":"2"},{"1":"16","2":"A","3":"3"},{"1":"17","2":"A","3":"4"},{"1":"9","2":"A","3":"5"},{"1":"13","2":"A","3":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tail</span>(hours_abc)</code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["hours"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["group"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["index"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"32","2":"C","3":"95"},{"1":"37","2":"C","3":"96"},{"1":"34","2":"C","3":"97"},{"1":"37","2":"C","3":"98"},{"1":"30","2":"C","3":"99"},{"1":"28","2":"C","3":"100"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p>The null hypothesis, typically, is that all means are equal (non-directional hypothesis). Hence, in our case:</p>
 <p><span class="math display">\[H_0: \mu_1 = \mu_2 = \mu_3\]</span></p>
 <p>The alternative hypothesis is simply that the means are not all equal, i.e.,</p>
 <p><span class="math display">\[H_1: \textrm{Means are not all equal}\]</span></p>
 <p>If you wanted to put this in mathematical notation, you could also write:</p>
 <p><span class="math display">\[H_1: \exists {i,j}: {\mu_i \ne \mu_j} \]</span></p>
-<p>To get a first impression if there are any differences in sales across the experimental groups, we use the <code>describeBy(...)</code> function from the <code>psych</code> package:</p>
+<p>To get a first impression if there are any differences in listening times across the experimental groups, we use the <code>describeBy(...)</code> function from the <code>psych</code> package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(psych)
-<span class="kw">describeBy</span>(online_store_promo<span class="op">$</span>Sales, online_store_promo<span class="op">$</span>Promotion) <span class="co">#inspect data</span></code></pre></div>
+<span class="kw">describeBy</span>(hours_abc<span class="op">$</span>hours, hours_abc<span class="op">$</span>group) <span class="co">#inspect data</span></code></pre></div>
 <pre><code>## 
 ##  Descriptive statistics by group 
-## group: high
-##    vars  n mean   sd median trimmed  mad min max range  skew kurtosis   se
-## X1    1 10  8.3 1.34    8.5    8.38 1.48   6  10     4 -0.24     -1.4 0.42
+## group: A
+##    vars   n  mean   sd median trimmed  mad min max range skew kurtosis
+## X1    1 100 15.47 5.45     15   15.22 4.45   2  36    34 0.64     1.34
+##      se
+## X1 0.55
 ## -------------------------------------------------------- 
-## group: medium
-##    vars  n mean   sd median trimmed  mad min max range skew kurtosis   se
-## X1    1 10  6.2 1.75      6    6.12 2.22   4   9     5 0.17    -1.58 0.55
+## group: B
+##    vars   n  mean   sd median trimmed  mad min max range  skew kurtosis
+## X1    1 100 24.88 6.02     25   24.89 5.93   8  40    32 -0.09     0.04
+##     se
+## X1 0.6
 ## -------------------------------------------------------- 
-## group: low
-##    vars  n mean sd median trimmed  mad min max range skew kurtosis   se
-## X1    1 10  3.7  2    3.5    3.62 2.22   1   7     6 0.22    -1.57 0.63</code></pre>
+## group: C
+##    vars   n  mean sd median trimmed  mad min max range  skew kurtosis  se
+## X1    1 100 33.66  6   33.5    33.9 5.93  18  44    26 -0.25    -0.63 0.6</code></pre>
 <p>In addition, you should visualize the data using appropriate plots:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Plot of means</span>
 <span class="kw">library</span>(plyr)
 <span class="kw">library</span>(ggplot2)
-<span class="kw">ggplot</span>(online_store_promo, <span class="kw">aes</span>(Promotion, Sales)) <span class="op">+</span><span class="st"> </span>
+<span class="kw">ggplot</span>(hours_abc, <span class="kw">aes</span>(group, hours)) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, <span class="dt">geom =</span> <span class="st">&quot;bar&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;White&quot;</span>, <span class="dt">colour =</span> <span class="st">&quot;Black&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> mean_cl_normal, <span class="dt">geom =</span> <span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Experimental group (promotion level)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Sales (thsd. units)&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Experimental group &quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Listening time&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-209"></span>
-<img src="_main_files/figure-html/unnamed-chunk-209-1.png" alt="Plot of means" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-210"></span>
+<img src="_main_files/figure-html/unnamed-chunk-210-1.png" alt="Plot of means" width="672" />
 <p class="caption">
 Figure 5.2: Plot of means
 </p>
 </div>
 <p>Note that ANOVA is an omnibus test, which means that we test for an overall difference between groups. Hence, the test will only tell you if the group means are different, but it won’t tell you exactly which groups are different from another.</p>
-<p>So why don’t we then just conduct a series of t-tests for all combinations of groups (i.e., high vs. low, low vs. medium, medium vs. high)? The reason is that if we assume each test to be independent, then there is a 5% probability of falsely rejecting the null hypothesis (Type I error) for each test. In our case:</p>
+<p>So why don’t we then just conduct a series of t-tests for all combinations of groups (i.e., A vs. B, A vs. C, B vs. C)? The reason is that if we assume each test to be independent, then there is a 5% probability of falsely rejecting the null hypothesis (Type I error) for each test. In our case:</p>
 <ul>
-<li>High vs. low (α = 0.05)</li>
-<li>High vs. medium (α = 0.05)</li>
-<li>Medium vs. low (α = 0.05)</li>
+<li>A vs. B (α = 0.05)</li>
+<li>A vs. C (α = 0.05)</li>
+<li>B vs. C (α = 0.05)</li>
 </ul>
 <p>This means that the overall probability of making a Type I error is 1-(0.95<sup>3</sup>) = 0.143, since the probability of no Type I error is 0.95 for each of the three tests. Consequently, the Type I error probability would be 14.3%, which is above the conventional standard of 5%. This is also known as the family-wise or experiment-wise error.</p>
 </div>
@@ -1096,31 +1091,31 @@ Figure 5.2: Plot of means
 <img src="https://github.com/IMSMWU/Teaching/raw/master/MRDA2017/sum_of_squares.JPG" alt="Decomposing variance" />
 <p class="caption">Decomposing variance</p>
 </div>
-<p>The total variation is determined by the variation between the categories (due to our experimental manipulation) and the within-category variation that is due to extraneous factors (e.g., differences between the products that are included in each group):</p>
+<p>The total variation is determined by the variation between the categories (due to our experimental manipulation) and the within-category variation that is due to extraneous factors (e.g., promotion of artists on a social network):</p>
 <p><span class="math display">\[SS_T= SS_M+SS_R\]</span></p>
 <p>To get a better feeling how this relates to our data set, we can look at the data in a slightly different way. Specifically, we can use the <code>dcast(...)</code> function from the <code>reshape2</code> package to convert the data to wide format:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(reshape2)
-<span class="kw">dcast</span>(online_store_promo, Obs <span class="op">~</span><span class="st"> </span>Promotion, <span class="dt">value.var =</span> <span class="st">&quot;Sales&quot;</span>)</code></pre></div>
+<span class="kw">dcast</span>(hours_abc, index <span class="op">~</span><span class="st"> </span>group, <span class="dt">value.var =</span> <span class="st">&quot;hours&quot;</span>)</code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Obs"],"name":[1],"type":["int"],"align":["right"]},{"label":["high"],"name":[2],"type":["int"],"align":["right"]},{"label":["medium"],"name":[3],"type":["int"],"align":["right"]},{"label":["low"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"1","2":"10","3":"8","4":"5"},{"1":"2","2":"9","3":"8","4":"7"},{"1":"3","2":"10","3":"7","4":"6"},{"1":"4","2":"8","3":"9","4":"4"},{"1":"5","2":"9","3":"6","4":"5"},{"1":"6","2":"8","3":"4","4":"2"},{"1":"7","2":"9","3":"5","4":"3"},{"1":"8","2":"7","3":"5","4":"2"},{"1":"9","2":"7","3":"6","4":"1"},{"1":"10","2":"6","3":"4","4":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["index"],"name":[1],"type":["int"],"align":["right"]},{"label":["A"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["B"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["C"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"13","3":"21","4":"30"},{"1":"2","2":"14","3":"18","4":"37"},{"1":"3","2":"16","3":"27","4":"43"},{"1":"4","2":"17","3":"30","4":"31"},{"1":"5","2":"9","3":"27","4":"35"},{"1":"6","2":"13","3":"20","4":"42"},{"1":"7","2":"16","3":"24","4":"37"},{"1":"8","2":"13","3":"28","4":"43"},{"1":"9","2":"12","3":"27","4":"29"},{"1":"10","2":"22","3":"25","4":"38"},{"1":"11","2":"19","3":"15","4":"42"},{"1":"12","2":"26","3":"25","4":"32"},{"1":"13","2":"36","3":"34","4":"26"},{"1":"14","2":"21","3":"19","4":"32"},{"1":"15","2":"16","3":"24","4":"35"},{"1":"16","2":"14","3":"28","4":"33"},{"1":"17","2":"18","3":"27","4":"43"},{"1":"18","2":"18","3":"28","4":"23"},{"1":"19","2":"13","3":"26","4":"44"},{"1":"20","2":"23","3":"23","4":"30"},{"1":"21","2":"18","3":"29","4":"32"},{"1":"22","2":"16","3":"27","4":"29"},{"1":"23","2":"17","3":"25","4":"41"},{"1":"24","2":"13","3":"26","4":"31"},{"1":"25","2":"18","3":"22","4":"41"},{"1":"26","2":"13","3":"11","4":"27"},{"1":"27","2":"17","3":"35","4":"37"},{"1":"28","2":"9","3":"26","4":"37"},{"1":"29","2":"18","3":"20","4":"30"},{"1":"30","2":"20","3":"28","4":"39"},{"1":"31","2":"14","3":"21","4":"27"},{"1":"32","2":"10","3":"25","4":"32"},{"1":"33","2":"11","3":"38","4":"40"},{"1":"34","2":"19","3":"24","4":"35"},{"1":"35","2":"11","3":"29","4":"25"},{"1":"36","2":"13","3":"23","4":"32"},{"1":"37","2":"17","3":"24","4":"39"},{"1":"38","2":"11","3":"36","4":"31"},{"1":"39","2":"18","3":"31","4":"31"},{"1":"40","2":"17","3":"27","4":"23"},{"1":"41","2":"13","3":"33","4":"39"},{"1":"42","2":"23","3":"22","4":"27"},{"1":"43","2":"18","3":"28","4":"36"},{"1":"44","2":"21","3":"23","4":"40"},{"1":"45","2":"8","3":"18","4":"37"},{"1":"46","2":"13","3":"22","4":"28"},{"1":"47","2":"18","3":"40","4":"32"},{"1":"48","2":"12","3":"22","4":"36"},{"1":"49","2":"13","3":"24","4":"25"},{"1":"50","2":"12","3":"30","4":"32"},{"1":"51","2":"16","3":"21","4":"36"},{"1":"52","2":"16","3":"26","4":"33"},{"1":"53","2":"17","3":"20","4":"33"},{"1":"54","2":"21","3":"34","4":"28"},{"1":"55","2":"11","3":"26","4":"28"},{"1":"56","2":"15","3":"30","4":"37"},{"1":"57","2":"23","3":"29","4":"34"},{"1":"58","2":"8","3":"30","4":"22"},{"1":"59","2":"12","3":"16","4":"35"},{"1":"60","2":"10","3":"22","4":"41"},{"1":"61","2":"14","3":"24","4":"29"},{"1":"62","2":"14","3":"18","4":"41"},{"1":"63","2":"31","3":"31","4":"39"},{"1":"64","2":"12","3":"17","4":"24"},{"1":"65","2":"9","3":"27","4":"29"},{"1":"66","2":"22","3":"34","4":"33"},{"1":"67","2":"14","3":"12","4":"34"},{"1":"68","2":"20","3":"30","4":"37"},{"1":"69","2":"14","3":"17","4":"30"},{"1":"70","2":"7","3":"25","4":"35"},{"1":"71","2":"17","3":"36","4":"18"},{"1":"72","2":"19","3":"13","4":"21"},{"1":"73","2":"26","3":"20","4":"39"},{"1":"74","2":"12","3":"22","4":"30"},{"1":"75","2":"24","3":"32","4":"42"},{"1":"76","2":"11","3":"15","4":"33"},{"1":"77","2":"13","3":"28","4":"43"},{"1":"78","2":"9","3":"36","4":"41"},{"1":"79","2":"17","3":"21","4":"36"},{"1":"80","2":"15","3":"20","4":"35"},{"1":"81","2":"21","3":"31","4":"34"},{"1":"82","2":"14","3":"20","4":"43"},{"1":"83","2":"8","3":"31","4":"29"},{"1":"84","2":"15","3":"26","4":"37"},{"1":"85","2":"21","3":"21","4":"27"},{"1":"86","2":"13","3":"17","4":"22"},{"1":"87","2":"11","3":"32","4":"33"},{"1":"88","2":"25","3":"21","4":"43"},{"1":"89","2":"17","3":"8","4":"40"},{"1":"90","2":"8","3":"27","4":"23"},{"1":"91","2":"16","3":"21","4":"42"},{"1":"92","2":"5","3":"29","4":"31"},{"1":"93","2":"6","3":"25","4":"42"},{"1":"94","2":"15","3":"28","4":"30"},{"1":"95","2":"16","3":"20","4":"32"},{"1":"96","2":"21","3":"23","4":"37"},{"1":"97","2":"13","3":"25","4":"34"},{"1":"98","2":"8","3":"27","4":"37"},{"1":"99","2":"23","3":"22","4":"30"},{"1":"100","2":"2","3":"17","4":"28"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p>In this example, X<sub>1</sub> from the generalized data matrix above would refer to the factor level “high”, X<sub>2</sub> to the level “medium”, and X<sub>3</sub> to the level “low”. Y<sub>11</sub> refers to the first data point in the first row (i.e., “10”), Y<sub>12</sub> to the second data point in the first row (i.e., “8”), etc.. The grand mean (<span class="math inline">\(\overline{Y}\)</span>) and the category means (<span class="math inline">\(\overline{Y}_c\)</span>) can be easily computed:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(online_store_promo<span class="op">$</span>Sales) <span class="co">#grand mean</span></code></pre></div>
-<pre><code>## [1] 6.066667</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">by</span>(online_store_promo<span class="op">$</span>Sales,online_store_promo<span class="op">$</span>Promotion,mean) <span class="co">#category mean</span></code></pre></div>
-<pre><code>## online_store_promo$Promotion: high
-## [1] 8.3
+<p>In this example, X<sub>1</sub> from the generalized data matrix above would refer to the factor level “A”, X<sub>2</sub> to the level “B”, and X<sub>3</sub> to the level “C”. Y<sub>11</sub> refers to the first data point in the first row (i.e., “13”), Y<sub>12</sub> to the second data point in the first row (i.e., “21”), etc.. The grand mean (<span class="math inline">\(\overline{Y}\)</span>) and the category means (<span class="math inline">\(\overline{Y}_c\)</span>) can be easily computed:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(hours_abc<span class="op">$</span>hours) <span class="co">#grand mean</span></code></pre></div>
+<pre><code>## [1] 24.67</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">by</span>(hours_abc<span class="op">$</span>hours, hours_abc<span class="op">$</span>group, mean) <span class="co">#category mean</span></code></pre></div>
+<pre><code>## hours_abc$group: A
+## [1] 15.47
 ## -------------------------------------------------------- 
-## online_store_promo$Promotion: medium
-## [1] 6.2
+## hours_abc$group: B
+## [1] 24.88
 ## -------------------------------------------------------- 
-## online_store_promo$Promotion: low
-## [1] 3.7</code></pre>
+## hours_abc$group: C
+## [1] 33.66</code></pre>
 <p>To see how each variance component can be derived, let’s look at the data again. The following graph shows the individual observations by experimental group:</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-212"></span>
-<img src="_main_files/figure-html/unnamed-chunk-212-1.png" alt="Sum of Squares" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-213"></span>
+<img src="_main_files/figure-html/unnamed-chunk-213-1.png" alt="Sum of Squares" width="672" />
 <p class="caption">
 Figure 5.3: Sum of Squares
 </p>
@@ -1128,8 +1123,8 @@ Figure 5.3: Sum of Squares
 <div id="total-sum-of-squares" class="section level4">
 <h4><span class="header-section-number">5.4.2.1</span> Total sum of squares</h4>
 <p>To compute the total variation in the data, we consider the difference between each observation and the grand mean. The grand mean is the mean over all observations in the data set. The vertical lines in the following plot measure how far each observation is away from the grand mean:</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-213"></span>
-<img src="_main_files/figure-html/unnamed-chunk-213-1.png" alt="Total Sum of Squares" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-214"></span>
+<img src="_main_files/figure-html/unnamed-chunk-214-1.png" alt="Total Sum of Squares" width="672" />
 <p class="caption">
 Figure 5.4: Total Sum of Squares
 </p>
@@ -1141,29 +1136,29 @@ SS_T= \sum_{i=1}^{N} (Y_i-\bar{Y})^2
 <p>This means that we need to subtract the grand mean from each individual data point, square the difference, and sum up over all the squared differences. Thus, in our example, the total sum of squares can be calculated as:</p>
 <p><span class="math display">\[ 
 \begin{align}
-SS_T =&amp;(10−6.067)^2 + (9−6.067)^2 + … + (7−6.067)^2\\
-      &amp;+(8−6.067)^2 + (8−6.067)^2 + … + (4−6.067)^2\\
-      &amp;+(5−6.067)^2 + (7−6.067)^2 + … + (2−6.067)^2\\ 
-      &amp;= 185.867
+SS_T =&amp;(13−24.67)^2 + (14−24.67)^2 + … + (2−24.67)^2\\
+      &amp;+(21−24.67)^2 + (18-24.67)^2 + … + (17−24.67)^2\\
+      &amp;+(30−24.67)^2 + (37−24.67)^2 + … + (28−24.67)^2\\ 
+      &amp;=26646.33
 \end{align}
 \]</span></p>
 <p>You could also compute this in R using:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SST &lt;-<span class="st"> </span><span class="kw">sum</span>((online_store_promo<span class="op">$</span>Sales <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(online_store_promo<span class="op">$</span>Sales))<span class="op">^</span><span class="dv">2</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SST &lt;-<span class="st"> </span><span class="kw">sum</span>((hours_abc<span class="op">$</span>hours <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(hours_abc<span class="op">$</span>hours))<span class="op">^</span><span class="dv">2</span>)
 SST</code></pre></div>
-<pre><code>## [1] 185.8667</code></pre>
-<p>For the subsequent analyses, it is important to understand the concept behind the <b>degrees of freedom</b>. Remember that in order to estimate a population value from a sample, we need to hold something in the population constant. In ANOVA, the df are generally one less than the number of values used to calculate the SS. For example, when we estimate the population mean from a sample, we assume that the sample mean is equal to the population mean. Then, in order to estimate the population mean from the sample, all but one scores are free to vary and the remaining score needs to be the value that keeps the population mean constant. In our example, we used all 30 observations to calculate the sum of square, so the total degrees of freedom (df<sub>T</sub>) are:</p>
+<pre><code>## [1] 26646.33</code></pre>
+<p>For the subsequent analyses, it is important to understand the concept behind the <b>degrees of freedom</b>. Remember that in order to estimate a population value from a sample, we need to hold something in the population constant. In ANOVA, the df are generally one less than the number of values used to calculate the SS. For example, when we estimate the population mean from a sample, we assume that the sample mean is equal to the population mean. Then, in order to estimate the population mean from the sample, all but one scores are free to vary and the remaining score needs to be the value that keeps the population mean constant. In our example, we used all 300 observations to calculate the sum of square, so the total degrees of freedom (df<sub>T</sub>) are:</p>
 <span class="math display" id="eq:dfT">\[\begin{equation} 
 \begin{split}
-df_T = N-1=30-1=29
+df_T = N-1=300-1=299
 \end{split}
 \tag{5.1}
 \end{equation}\]</span>
 </div>
 <div id="model-sum-of-squares" class="section level4">
 <h4><span class="header-section-number">5.4.2.2</span> Model sum of squares</h4>
-<p>Now we know that there are 185.867 units of total variation in our data. Next, we compute how much of the total variation can be explained by the differences between groups (i.e., our experimental manipulation). To compute the explained variation in the data, we consider the difference between the values predicted by our model for each observation (i.e., the group mean) and the grand mean. The group mean refers to the mean value within the experimental group. The vertical lines in the following plot measure how far the predicted value for each observation (i.e., the group mean) is away from the grand mean:</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-215"></span>
-<img src="_main_files/figure-html/unnamed-chunk-215-1.png" alt="Model Sum of Squares" width="672" />
+<p>Now we know that there are 26646.33 units of total variation in our data. Next, we compute how much of the total variation can be explained by the differences between groups (i.e., our experimental manipulation). To compute the explained variation in the data, we consider the difference between the values predicted by our model for each observation (i.e., the group mean) and the grand mean. The group mean refers to the mean value within the experimental group. The vertical lines in the following plot measure how far the predicted value for each observation (i.e., the group mean) is away from the grand mean:</p>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-216"></span>
+<img src="_main_files/figure-html/unnamed-chunk-216-1.png" alt="Model Sum of Squares" width="672" />
 <p class="caption">
 Figure 5.5: Model Sum of Squares
 </p>
@@ -1175,14 +1170,14 @@ SS_M= \sum_{j=1}^{c} n_j(\bar{Y}_j-\bar{Y})^2
 <p>where c denotes the number of categories (experimental groups). This means that we need to subtract the grand mean from each group mean, square the difference, and sum up over all the squared differences. Thus, in our example, the model sum of squares can be calculated as:</p>
 <p><span class="math display">\[ 
 \begin{align}
-SS_M &amp;= 10*(8.3−6.067)^2 + 10*(6.2−6.067)^2 + 10*(3.7−6.067)^2 \\
-     &amp;= 106.067
+SS_M &amp;= 100*(15.47−24.67)^2 + 100*(24.88−24.67)^2 + 100*(33.66−24.67)^2 \\
+     &amp;= 16550.42
 \end{align}
 \]</span></p>
 <p>You could also compute this manually in R using:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SSM &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="dv">10</span><span class="op">*</span>(<span class="kw">by</span>(online_store_promo<span class="op">$</span>Sales, online_store_promo<span class="op">$</span>Promotion, mean) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(online_store_promo<span class="op">$</span>Sales))<span class="op">^</span><span class="dv">2</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SSM &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="dv">100</span><span class="op">*</span>(<span class="kw">by</span>(hours_abc<span class="op">$</span>hours, hours_abc<span class="op">$</span>group, mean) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(hours_abc<span class="op">$</span>hours))<span class="op">^</span><span class="dv">2</span>)
 SSM</code></pre></div>
-<pre><code>## [1] 106.0667</code></pre>
+<pre><code>## [1] 16550.42</code></pre>
 <p>In this case, we used the three group means to calculate the sum of squares, so the model degrees of freedom (df<sub>M</sub>) are:</p>
 <p><span class="math display">\[
 df_M= c-1=3-1=2
@@ -1191,8 +1186,8 @@ df_M= c-1=3-1=2
 <div id="residual-sum-of-squares" class="section level4">
 <h4><span class="header-section-number">5.4.2.3</span> Residual sum of squares</h4>
 <p>Lastly, we calculate the amount of variation that cannot be explained by our model. In ANOVA, this is the sum of squared distances between what the model predicts for each data point (i.e., the group means) and the observed values. In other words, this refers to the amount of variation that is caused by extraneous factors, such as differences between product characteristics of the products in the different experimental groups. The vertical lines in the following plot measure how far each observation is away from the group mean:</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-217"></span>
-<img src="_main_files/figure-html/unnamed-chunk-217-1.png" alt="Residual Sum of Squares" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-218"></span>
+<img src="_main_files/figure-html/unnamed-chunk-218-1.png" alt="Residual Sum of Squares" width="672" />
 <p class="caption">
 Figure 5.6: Residual Sum of Squares
 </p>
@@ -1204,34 +1199,34 @@ SS_R= \sum_{j=1}^{c} \sum_{i=1}^{n} ({Y}_{ij}-\bar{Y}_{j})^2
 <p>This means that we need to subtract the group mean from each individual observation, square the difference, and sum up over all the squared differences. Thus, in our example, the model sum of squares can be calculated as:</p>
 <p><span class="math display">\[ 
 \begin{align}
-SS_R =&amp; (10−8.3)^2 + (9−8.3)^2 + … + (6−8.3)^2 \\
-     +&amp;(8−6.2)^2 + (8−6.2)^2 + … + (4−6.2)^2 \\
-     +&amp; (5−3.7)^2 + (7−3.7)^2 + … + (2−3.7)^2 \\
-     =&amp; 79.8
+SS_R =&amp; (13−15.47)^2 + (14−15.47)^2 + … + (2−15.47)^2 \\
+     +&amp;(21−24.88)^2 + (18−24.88)^2 + … + (17−24.88)^2 \\
+     +&amp; (30−33.66)^2 + (37−33.66)^2 + … + (28−33.66)^2 \\
+     =&amp;  10095.91
 \end{align}
 \]</span></p>
 <p>You could also compute this in R using:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SSR &lt;-<span class="st"> </span><span class="kw">sum</span>((online_store_promo<span class="op">$</span>Sales <span class="op">-</span><span class="st"> </span><span class="kw">rep</span>(<span class="kw">by</span>(online_store_promo<span class="op">$</span>Sales, online_store_promo<span class="op">$</span>Promotion, mean), <span class="dt">each =</span> <span class="dv">10</span>))<span class="op">^</span><span class="dv">2</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SSR &lt;-<span class="st"> </span><span class="kw">sum</span>((hours_abc<span class="op">$</span>hours <span class="op">-</span><span class="st"> </span><span class="kw">rep</span>(<span class="kw">by</span>(hours_abc<span class="op">$</span>hours, hours_abc<span class="op">$</span>group, mean), <span class="dt">each =</span> <span class="dv">100</span>))<span class="op">^</span><span class="dv">2</span>)
 SSR</code></pre></div>
-<pre><code>## [1] 79.8</code></pre>
+<pre><code>## [1] 10095.91</code></pre>
 <p>In this case, we used the 10 values for each of the SS for each group, so the residual degrees of freedom (df<sub>R</sub>) are:</p>
 <p><span class="math display">\[
 \begin{align}
 df_R=&amp; (n_1-1)+(n_2-1)+(n_3-1) \\
-    =&amp;(10-1)+(10-1)+(10-1)=27
+    =&amp;(100-1)+(100-1)+(100-1)=297
 \end{align}
 \]</span></p>
 </div>
 <div id="effect-strength" class="section level4">
 <h4><span class="header-section-number">5.4.2.4</span> Effect strength</h4>
-<p>Once you have computed the different sum of squares, you can investigate the effect strength. Eta<sup>2</sup> is a measure of the variation in Y that is explained by X:</p>
+<p>Once you have computed the different sum of squares, you can investigate the effect strength. <span class="math inline">\(\eta^2\)</span> is a measure of the variation in Y that is explained by X:</p>
 <p><span class="math display">\[
-\eta^2= \frac{SS_M}{SS_T}=\frac{106.067}{185.876}=0.571
+\eta^2= \frac{SS_M}{SS_T}=\frac{16550.42}{26646.33}=0.621
 \]</span></p>
 <p>To compute this in R:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eta &lt;-<span class="st"> </span>SSM<span class="op">/</span>SST
 eta</code></pre></div>
-<pre><code>## [1] 0.57066</code></pre>
+<pre><code>## [1] 0.6211144</code></pre>
 <p>The statistic can only take values between 0 and 1. It is equal to 0 when all the category means are equal, indicating that X has no effect on Y. In contrast, it has a value of 1 when there is no variability within each category of X but there is some variability between categories.</p>
 </div>
 <div id="test-of-significance" class="section level4">
@@ -1250,23 +1245,23 @@ eta</code></pre></div>
 <p>However, since these are summed values, their magnitude is influenced by the number of scores that were summed. For example, to calculate SS<sub>M</sub> we only used the sum of 3 values (the group means), while we used 30 and 27 values to calculate SS<sub>T</sub> and SS<sub>R</sub>, respectively. Thus, we calculate the average sum of squares (“mean square”) to compare the average amount of systematic vs. unsystematic variation by dividing the SS values by the degrees of freedom associated with the respective statistic.</p>
 <p>Mean square due to X:</p>
 <p><span class="math display">\[
-MS_M= \frac{SS_M}{df_M}=\frac{SS_M}{c-1}=\frac{106.067}{(3-1)}
+MS_M= \frac{SS_M}{df_M}=\frac{SS_M}{c-1}=\frac{16550.42}{(3-1)}
 \]</span></p>
 <p>Mean square due to error:</p>
 <p><span class="math display">\[
-MS_R= \frac{SS_R}{df_R}=\frac{SS_R}{N-c}=\frac{79.8}{(30-3)}
+MS_R= \frac{SS_R}{df_R}=\frac{SS_R}{N-c}=\frac{10095.91}{(300-3)}
 \]</span></p>
 <p>Now, we compare the amount of variability explained by the model (experiment), to the error in the model (variation due to extraneous variables). If the model explains more variability than it can’t explain, then the experimental manipulation has had a significant effect on the outcome (DV). The F-radio can be derived as follows:</p>
 <p><span class="math display">\[
-F= \frac{MS_M}{MS_R}=\frac{SS_R}{N-c}=\frac{\frac{106.067}{(3-1)}}{\frac{79.8}{(30-3)}}=17.944
+F= \frac{MS_M}{MS_R}=\frac{SS_R}{N-c}=\frac{\frac{16550.42}{(3-1)}}{\frac{10095.91}{(300-3)}}=243.44
 \]</span></p>
 <p>You can easily compute this in R:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f_ratio &lt;-<span class="st"> </span>(SSM<span class="op">/</span><span class="dv">2</span>)<span class="op">/</span>(SSR<span class="op">/</span><span class="dv">27</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f_ratio &lt;-<span class="st"> </span>(SSM<span class="op">/</span><span class="dv">2</span>)<span class="op">/</span>(SSR<span class="op">/</span><span class="dv">297</span>)
 f_ratio</code></pre></div>
-<pre><code>## [1] 17.94361</code></pre>
+<pre><code>## [1] 243.4389</code></pre>
 <p>This statistic follows the F distribution with (m = c – 1) and (n = N – c) degrees of freedom. This means that, like the <span class="math inline">\(\chi^2\)</span> distribution, the shape of the F-distribution depends on the degrees of freedom. In this case, the shape depends on the degrees of freedom associated with the numerator and denominator used to compute the F-ratio. The following figure shows the shape of the F-distribution for different degrees of freedom:</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-221"></span>
-<img src="_main_files/figure-html/unnamed-chunk-221-1.png" alt="The F distribution" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-222"></span>
+<img src="_main_files/figure-html/unnamed-chunk-222-1.png" alt="The F distribution" width="672" />
 <p class="caption">
 Figure 5.7: The F distribution
 </p>
@@ -1276,24 +1271,24 @@ Figure 5.7: The F distribution
 <li>If the null hypothesis of equal category means is not rejected, then the independent variable does not have a significant effect on the dependent variable</li>
 <li>If the null hypothesis is rejected, then the effect of the independent variable is significant</li>
 </ul>
-<p>For 2 and 27 degrees of freedom, the critical value of F is 3.35 for α=0.05. As usual, you can either look up these values in a table or use the appropriate function in R:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f_crit &lt;-<span class="st"> </span><span class="kw">qf</span>(.<span class="dv">95</span>, <span class="dt">df1 =</span> <span class="dv">2</span>, <span class="dt">df2 =</span> <span class="dv">27</span>) <span class="co">#critical value</span>
+<p>For 2 and 297 degrees of freedom, the critical value of F is 3.026 for α=0.05. As usual, you can either look up these values in a table or use the appropriate function in R:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f_crit &lt;-<span class="st"> </span><span class="kw">qf</span>(.<span class="dv">95</span>, <span class="dt">df1 =</span> <span class="dv">2</span>, <span class="dt">df2 =</span> <span class="dv">297</span>) <span class="co">#critical value</span>
 f_crit </code></pre></div>
-<pre><code>## [1] 3.354131</code></pre>
+<pre><code>## [1] 3.026153</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f_ratio <span class="op">&gt;</span><span class="st"> </span>f_crit <span class="co">#test if calculated test statistic is larger than critical value</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>The output tells us that the calculated test statistic exceeds the critical value. We can also show the test result visually:</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-223"></span>
-<img src="_main_files/figure-html/unnamed-chunk-223-1.png" alt="Visual depiction of the test result" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-224"></span>
+<img src="_main_files/figure-html/unnamed-chunk-224-1.png" alt="Visual depiction of the test result" width="672" />
 <p class="caption">
 Figure 5.8: Visual depiction of the test result
 </p>
 </div>
-<p>Thus, we conclude that because F<sub>CAL</sub> = 17.944 &gt; F<sub>CR</sub> = 3.35, H<sub>0</sub> is rejected!</p>
+<p>Thus, we conclude that because F<sub>CAL</sub> = 243.44 &gt; F<sub>CR</sub> = 3.03, H<sub>0</sub> is rejected!</p>
 <p>Interpretation: one or more of the differences between means are statistically significant.</p>
-<p>Reporting: There was a significant effect of promotion on sales levels, F(2,27) = 17.94, p &lt; 0.05, η = 0.571.</p>
+<p>Reporting: There was a significant effect of promotion on sales levels, F(2,297) = 243.44, p &lt; 0.05, <span class="math inline">\(\eta^2\)</span> = 0.62.</p>
 <p>Remember: This doesn’t tell us where the differences between groups lie. To find out which group means exactly differ, we need to use post-hoc procedures (see below).</p>
-<p>You don’t have to compute these statistics manually! Luckily, there is a function for ANOVA in R, which does the above calculations for you as we will see in the next section.</p>
+<p><em>You don’t have to compute these statistics manually!</em> Luckily, there is a function for ANOVA in R, which does the above calculations for you as we will see in the next section.</p>
 </div>
 </div>
 <div id="one-way-anova" class="section level3">
@@ -1303,52 +1298,60 @@ Figure 5.8: Visual depiction of the test result
 <p>As already indicated, one-way ANOVA is used when there is only one categorical variable (factor). Before conducting ANOVA, you need to check if the assumptions of the test are fulfilled. The assumptions of ANOVA are discussed in the following sections.</p>
 <div id="independence-of-observations" class="section level5 unnumbered">
 <h5>Independence of observations</h5>
-<p>The observations in the groups should be independent. Because we randomly assigned the products to the experimental conditions, this assumption can be assumed to be met.</p>
+<p>The observations in the groups should be independent. Because we randomly assigned the listeners to the experimental conditions, this assumption can be assumed to be met.</p>
 </div>
 <div id="distributional-assumptions" class="section level5 unnumbered">
 <h5>Distributional assumptions</h5>
-<p>ANOVA is relatively immune to violations to the normality assumption when sample sizes are large due to the Central Limit Theorem. However, if your sample is small (i.e., n &lt; 30 per group) you may nevertheless want to check the normality of your data, e.g., by using the Shapiro-Wilk test or QQ-Plot. In our example, we only have 10 observations per group, which means that we cannot rely on the Central Limit Theorem and we should test the normality of our data. This can be done using the Shapiro-Wilk Test, which has the Null Hypothesis that the data is normally distributed. Hence, an insignificant test results means that the data can be assumed to be approximately normally distributed:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">shapiro.test</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion <span class="op">==</span><span class="st"> &quot;low&quot;</span>, ]<span class="op">$</span>Sales)</code></pre></div>
-<pre><code>## 
+<p>ANOVA is relatively immune to violations to the normality assumption when sample sizes are large due to the Central Limit Theorem. However, if your sample is small (i.e., n &lt; 30 per group) you may nevertheless want to check the normality of your data, e.g., by using the Shapiro-Wilk test or QQ-Plot. In our example, we have 100 observations in each group which is plenty but let’s create another example with only 10 observations in each group. In the latter case we cannot rely on the Central Limit Theorem and we should test the normality of our data. This can be done using the Shapiro-Wilk Test, which has the Null Hypothesis that the data is normally distributed. Hence, an insignificant test results means that the data can be assumed to be approximately normally distributed:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">321</span>)
+hours_fewobs &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">hours =</span> <span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">5</span>), <span class="kw">rnorm</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="dv">5</span>), <span class="kw">rnorm</span>(<span class="dv">10</span>, <span class="dv">60</span>, <span class="dv">5</span>)),
+                          <span class="dt">group =</span>  <span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&#39;A&#39;</span>, <span class="dv">10</span>), <span class="kw">rep</span>(<span class="st">&#39;B&#39;</span>, <span class="dv">10</span>), <span class="kw">rep</span>(<span class="st">&#39;C&#39;</span>, <span class="dv">10</span>)))
+<span class="kw">by</span>(hours_fewobs<span class="op">$</span>hours, hours_fewobs<span class="op">$</span>group, shapiro.test)</code></pre></div>
+<pre><code>## hours_fewobs$group: A
+## 
 ##  Shapiro-Wilk normality test
 ## 
-## data:  online_store_promo[online_store_promo$Promotion == &quot;low&quot;, ]$Sales
-## W = 0.93497, p-value = 0.4985</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">shapiro.test</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion <span class="op">==</span><span class="st"> &quot;medium&quot;</span>, ]<span class="op">$</span>Sales)</code></pre></div>
-<pre><code>## 
+## data:  dd[x, ]
+## W = 0.91625, p-value = 0.3267
+## 
+## -------------------------------------------------------- 
+## hours_fewobs$group: B
+## 
 ##  Shapiro-Wilk normality test
 ## 
-## data:  online_store_promo[online_store_promo$Promotion == &quot;medium&quot;,     ]$Sales
-## W = 0.93247, p-value = 0.4726</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">shapiro.test</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion <span class="op">==</span><span class="st"> &quot;high&quot;</span>, ]<span class="op">$</span>Sales)</code></pre></div>
-<pre><code>## 
+## data:  dd[x, ]
+## W = 0.91486, p-value = 0.3161
+## 
+## -------------------------------------------------------- 
+## hours_fewobs$group: C
+## 
 ##  Shapiro-Wilk normality test
 ## 
-## data:  online_store_promo[online_store_promo$Promotion == &quot;high&quot;, ]$Sales
-## W = 0.93185, p-value = 0.4664</code></pre>
+## data:  dd[x, ]
+## W = 0.9595, p-value = 0.7801</code></pre>
 <p>Since the test result is insignificant for all groups, we can conclude that the data approximately follow a normal distribution.</p>
 <p>We could also test the distributional assumptions visually using a Q-Q plot (i.e., quantile-quantile plot). This plot can be used to assess if a set of data plausibly came from some theoretical distribution such as the Normal distribution. Since this is just a visual check, it is somewhat subjective. But it may help us to judge if our assumption is plausible, and if not, which data points contribute to the violation. A Q-Q plot is a scatterplot created by plotting two sets of quantiles against one another. If both sets of quantiles came from the same distribution, we should see the points forming a line that’s roughly straight. In other words, Q-Q plots take your sample data, sort it in ascending order, and then plot them versus quantiles calculated from a theoretical distribution. Quantiles are often referred to as “percentiles” and refer to the points in your data below which a certain proportion of your data fall. Recall, for example, the standard Normal distribution with a mean of 0 and a standard deviation of 1. Since the 50th percentile (or 0.5 quantile) is 0, half the data lie below 0. The 95th percentile (or 0.95 quantile), is about 1.64, which means that 95 percent of the data lie below 1.64. The 97.5th quantile is about 1.96, which means that 97.5% of the data lie below 1.96. In the Q-Q plot, the number of quantiles is selected to match the size of your sample data.</p>
 <p>To create the Q-Q plot for the normal distribution, you may use the <code>qqnorm()</code> function, which takes the data to be tested as an argument. Using the <code>qqline()</code> function subsequently on the data creates the line on which the data points should fall based on the theoretical quantiles. If the individual data points deviate a lot from this line, it means that the data is not likely to follow a normal distribution.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qqnorm</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;low&quot;</span>,]<span class="op">$</span>Sales) 
-<span class="kw">qqline</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;low&quot;</span>,]<span class="op">$</span>Sales)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-225"></span>
-<img src="_main_files/figure-html/unnamed-chunk-225-1.png" alt="Q-Q plot 1" width="672" />
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qqnorm</span>(hours_fewobs[hours_fewobs<span class="op">$</span>group<span class="op">==</span><span class="st">&quot;A&quot;</span>,]<span class="op">$</span>hours) 
+<span class="kw">qqline</span>(hours_fewobs[hours_fewobs<span class="op">$</span>group<span class="op">==</span><span class="st">&quot;A&quot;</span>,]<span class="op">$</span>hours)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-226"></span>
+<img src="_main_files/figure-html/unnamed-chunk-226-1.png" alt="Q-Q plot 1" width="672" />
 <p class="caption">
 Figure 5.9: Q-Q plot 1
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qqnorm</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;medium&quot;</span>,]<span class="op">$</span>Sales) 
-<span class="kw">qqline</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;medium&quot;</span>,]<span class="op">$</span>Sales)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-225"></span>
-<img src="_main_files/figure-html/unnamed-chunk-225-2.png" alt="Q-Q plot 2" width="672" />
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qqnorm</span>(hours_fewobs[hours_fewobs<span class="op">$</span>group<span class="op">==</span><span class="st">&quot;B&quot;</span>,]<span class="op">$</span>hours) 
+<span class="kw">qqline</span>(hours_fewobs[hours_fewobs<span class="op">$</span>group<span class="op">==</span><span class="st">&quot;B&quot;</span>,]<span class="op">$</span>hours)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-226"></span>
+<img src="_main_files/figure-html/unnamed-chunk-226-2.png" alt="Q-Q plot 2" width="672" />
 <p class="caption">
 Figure 5.9: Q-Q plot 2
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qqnorm</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;high&quot;</span>,]<span class="op">$</span>Sales) 
-<span class="kw">qqline</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;high&quot;</span>,]<span class="op">$</span>Sales)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-225"></span>
-<img src="_main_files/figure-html/unnamed-chunk-225-3.png" alt="Q-Q plot 3" width="672" />
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qqnorm</span>(hours_fewobs[hours_fewobs<span class="op">$</span>group<span class="op">==</span><span class="st">&quot;C&quot;</span>,]<span class="op">$</span>hours) 
+<span class="kw">qqline</span>(hours_fewobs[hours_fewobs<span class="op">$</span>group<span class="op">==</span><span class="st">&quot;C&quot;</span>,]<span class="op">$</span>hours)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-226"></span>
+<img src="_main_files/figure-html/unnamed-chunk-226-3.png" alt="Q-Q plot 3" width="672" />
 <p class="caption">
 Figure 5.9: Q-Q plot 3
 </p>
@@ -1357,49 +1360,51 @@ Figure 5.9: Q-Q plot 3
 </div>
 <div id="homogeneity-of-variance" class="section level5 unnumbered">
 <h5>Homogeneity of variance</h5>
+<p>Let’s return to our original dataset with 100 observations in each group for the rest of the analysis.</p>
 <p>You can test the homogeneity of variances in R using Levene’s test:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(car)
-<span class="kw">leveneTest</span>(Sales <span class="op">~</span><span class="st"> </span>Promotion, <span class="dt">data =</span> online_store_promo, <span class="dt">center =</span> mean)</code></pre></div>
+<span class="kw">leveneTest</span>(hours <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> hours_abc, <span class="dt">center =</span> mean)</code></pre></div>
 <pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = mean)
-##       Df F value Pr(&gt;F)
-## group  2  1.3532 0.2754
-##       27</code></pre>
+##        Df F value Pr(&gt;F)
+## group   2  1.2173 0.2975
+##       297</code></pre>
 <p>The null hypothesis of the test is that the group variances are equal. Thus, if the test result is significant it means that the variances are not equal. If we cannot reject the null hypothesis (i.e., the group variances are not significantly different), we can proceed with the ANOVA as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">aov &lt;-<span class="st"> </span><span class="kw">aov</span>(Sales <span class="op">~</span><span class="st"> </span>Promotion, <span class="dt">data =</span> online_store_promo)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">aov &lt;-<span class="st"> </span><span class="kw">aov</span>(hours <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> hours_abc)
 <span class="kw">summary</span>(aov)</code></pre></div>
-<pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-## Promotion    2  106.1   53.03   17.94 0.000011 ***
-## Residuals   27   79.8    2.96                     
+<pre><code>##              Df Sum Sq Mean Sq F value              Pr(&gt;F)    
+## group         2  16550    8275   243.4 &lt;0.0000000000000002 ***
+## Residuals   297  10096      34                                
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>You can see that the p-value is smaller than 0.05. This means that, if there really was no difference between the population means (i.e., the Null hypothesis was true), the probability of the observed differences (or larger differences) is less than 5%.</p>
 <p>To compute η<sup>2</sup> from the output, we can extract the relevant sum of squares as follows</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(aov)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Sum Sq&#39;</span>[<span class="dv">1</span>]<span class="op">/</span>(<span class="kw">summary</span>(aov)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Sum Sq&#39;</span>[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">summary</span>(aov)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Sum Sq&#39;</span>[<span class="dv">2</span>])</code></pre></div>
-<pre><code>## [1] 0.57066</code></pre>
-<p>You can see that the results match the results from our manual computation above.</p>
+<pre><code>## [1] 0.6211144</code></pre>
+<p>You can see that the results match the results from our manual computation above (<span class="math inline">\(\eta^2 =\)</span> 0.62).</p>
 <p>The <code>aov()</code> function also automatically generates some plots that you can use to judge if the model assumptions are met. We will inspect two of the plots here.</p>
 <p>We will use the first plot to inspect if the residual variances are equal across the experimental groups:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(aov,<span class="dv">1</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-229-1.png" width="672" /></p>
-<p>Generally, the residual variance (i.e., the range of values on the y-axis) should be the same for different levels of our independent variable. The plot shows, that there are some slight differences. Notably, the range of residuals is highest for the “low” group and lowest for the “high” group. However, the differences are not that large and since the Levene’s test could not reject the Null of equal variances, we conclude that the variances are similar enough in this case.</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-230-1.png" width="672" /></p>
+<p>Generally, the residual variance (i.e., the range of values on the y-axis) should be the same for different levels of our independent variable. The plot shows, that there are some slight differences. Notably, the range of residuals is higher in group “B” than in group “C”. However, the differences are not that large and since the Levene’s test could not reject the Null of equal variances, we conclude that the variances are similar enough in this case.</p>
 <p>The second plot can be used to test the assumption that the residuals are approximately normally distributed. We use a Q-Q plot to test this assumption:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(aov,<span class="dv">2</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-230-1.png" width="672" /></p>
-<p>The plot suggests that the residuals are approximately normally distributed. We could also test this by extracting the residuals from the anova output using the <code>resid()</code> function and using the Shapiro-Wilk test:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-231-1.png" width="672" /></p>
+<p>The plot suggests that, the residuals are approximately normally distributed. We could also test this by extracting the residuals from the anova output using the <code>resid()</code> function and using the Shapiro-Wilk test:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">shapiro.test</span>(<span class="kw">resid</span>(aov))</code></pre></div>
 <pre><code>## 
 ##  Shapiro-Wilk normality test
 ## 
 ## data:  resid(aov)
-## W = 0.96094, p-value = 0.3272</code></pre>
+## W = 0.99638, p-value = 0.7289</code></pre>
 <p>Confirming the impression from the Q-Q plot, we cannot reject the Null that the residuals are approximately normally distributed.</p>
 <p>Note that if Levene’s test would have been significant (i.e., variances are not equal), we would have needed to either resort to non-parametric tests (see below), or compute the Welch’s F-ratio instead:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">oneway.test</span>(Sales <span class="op">~</span><span class="st"> </span>Promotion, <span class="dt">data=</span>online_store_promo)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">oneway.test</span>(hours <span class="op">~</span><span class="st"> </span>group, hours_abc)</code></pre></div>
 <pre><code>## 
 ##  One-way analysis of means (not assuming equal variances)
 ## 
-## data:  Sales and Promotion
-## F = 18.09, num df = 2.00, denom df = 17.47, p-value = 0.00005541</code></pre>
+## data:  hours and group
+## F = 252.16, num df = 2.00, denom df = 197.56, p-value &lt;
+## 0.00000000000000022</code></pre>
 <p>You can see that the results are fairly similar, since the variances turned out to be fairly equal across groups.</p>
 </div>
 </div>
@@ -1423,33 +1428,35 @@ p_{CR}= \frac{\alpha}{k}
 <p>In our example with three groups:</p>
 <p><span class="math display">\[p_{CR}= \frac{0.05}{3}=0.017\]</span></p>
 <p>Thus, the “corrected” critical p-value is now 0.017 instead of 0.05 (i.e., the critical t value is higher). You can implement the Bonferroni procedure in R using:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pairwise.t.test</span>(online_store_promo<span class="op">$</span>Sales, online_store_promo<span class="op">$</span>Promotion, <span class="dt">data =</span> online_store_promo, <span class="dt">p.adjust.method =</span> <span class="st">&quot;bonferroni&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bonferroni &lt;-<span class="st"> </span><span class="kw">pairwise.t.test</span>(hours_abc<span class="op">$</span>hours, hours_abc<span class="op">$</span>group, <span class="dt">data =</span> hours_abc, <span class="dt">p.adjust.method =</span> <span class="st">&quot;bonferroni&quot;</span>)
+bonferroni</code></pre></div>
 <pre><code>## 
 ##  Pairwise comparisons using t tests with pooled SD 
 ## 
-## data:  online_store_promo$Sales and online_store_promo$Promotion 
+## data:  hours_abc$hours and hours_abc$group 
 ## 
-##        high      medium
-## medium 0.0329    -     
-## low    0.0000066 0.0092
+##   A                   B                  
+## B &lt;0.0000000000000002 -                  
+## C &lt;0.0000000000000002 &lt;0.0000000000000002
 ## 
 ## P value adjustment method: bonferroni</code></pre>
 <p>In the output, you will get the corrected p-values for the individual tests. In our example, we can reject H<sub>0</sub> of equal means for all three tests, since p &lt; 0.05 for all combinations of groups.</p>
-<p>Note the difference between the results from the post-hoc test compared to individual t-tests. For example, when we test the “medium” vs. “high” groups, the result from a t-test would be:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_subset &lt;-<span class="st"> </span><span class="kw">subset</span>(online_store_promo,Promotion <span class="op">!=</span><span class="st"> &quot;low&quot;</span>)
-<span class="kw">t.test</span>(Sales <span class="op">~</span><span class="st"> </span>Promotion, <span class="dt">data =</span> data_subset)</code></pre></div>
+<p>Note the difference between the results from the post-hoc test compared to individual t-tests. For example, when we test the “B” vs. “C” groups, the result from a t-test would be:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_subset &lt;-<span class="st"> </span><span class="kw">subset</span>(hours_abc, group <span class="op">!=</span><span class="st"> &quot;A&quot;</span>)
+ttest &lt;-<span class="st"> </span><span class="kw">t.test</span>(hours <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> data_subset, <span class="dt">var.equal=</span> <span class="ot">TRUE</span>)
+ttest</code></pre></div>
 <pre><code>## 
-##  Welch Two Sample t-test
+##  Two Sample t-test
 ## 
-## data:  Sales by Promotion
-## t = 3.0137, df = 16.834, p-value = 0.007888
+## data:  hours by group
+## t = -10.331, df = 198, p-value &lt; 0.00000000000000022
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  0.6287384 3.5712616
+##  -10.45601  -7.10399
 ## sample estimates:
-##   mean in group high mean in group medium 
-##                  8.3                  6.2</code></pre>
-<p>The p-value is lower in the t-test, reflecting the fact that the family-wise error is not corrected (i.e., the test is less conservative).</p>
+## mean in group B mean in group C 
+##           24.88           33.66</code></pre>
+<p>Usually the p-value is lower in the t-test, reflecting the fact that the family-wise error is not corrected (i.e., the test is less conservative). In this case the p-value is extremely small in both cases and thus indistinguishable.</p>
 </div>
 <div id="tukeys-hsd" class="section level5">
 <h5><span class="header-section-number">5.4.3.2.2</span> Tukey’s HSD</h5>
@@ -1470,18 +1477,18 @@ HSD= q\sqrt{\frac{MS_R}{n_c}}
 </ul>
 <p><span class="math display">\[|\bar{Y}_i-\bar{Y}_j | &gt; HSD\]</span></p>
 <p>The value from the studentized range table can be obtained using the <code>qtukey()</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span><span class="kw">qtukey</span>(<span class="fl">0.95</span>, <span class="dt">nm =</span> <span class="dv">3</span>, <span class="dt">df =</span> <span class="dv">27</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">q &lt;-<span class="st"> </span><span class="kw">qtukey</span>(<span class="fl">0.95</span>, <span class="dt">nm =</span> <span class="dv">3</span>, <span class="dt">df =</span> <span class="dv">297</span>)
 q</code></pre></div>
-<pre><code>## [1] 3.506426</code></pre>
+<pre><code>## [1] 3.331215</code></pre>
 <p>Hence:</p>
-<p><span class="math display">\[HSD= 3.506\sqrt{\frac{2.96}{10}}=1.906\]</span></p>
+<p><span class="math display">\[HSD= 3.33\sqrt{\frac{33.99}{100}}=1.94\]</span></p>
 <p>Or, in R:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hsd &lt;-<span class="st"> </span>q <span class="op">*</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">summary</span>(aov)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Mean Sq&#39;</span>[<span class="dv">2</span>]<span class="op">/</span><span class="dv">10</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hsd &lt;-<span class="st"> </span>q <span class="op">*</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">summary</span>(aov)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Mean Sq&#39;</span>[<span class="dv">2</span>]<span class="op">/</span><span class="dv">100</span>)
 hsd</code></pre></div>
-<pre><code>## [1] 1.906269</code></pre>
+<pre><code>## [1] 1.942214</code></pre>
 <p>Since all mean differences between groups are larger than 1.906, we can reject the null hypothesis for all individual tests, confirming the results from the Bonferroni test. To compute Tukey’s HSD, we can use the appropriate function from the <code>multcomp</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(multcomp)
-tukeys &lt;-<span class="st"> </span><span class="kw">glht</span>(aov, <span class="dt">linfct =</span> <span class="kw">mcp</span>(<span class="dt">Promotion =</span> <span class="st">&quot;Tukey&quot;</span>))
+tukeys &lt;-<span class="st"> </span><span class="kw">glht</span>(aov, <span class="dt">linfct =</span> <span class="kw">mcp</span>(<span class="dt">group =</span> <span class="st">&quot;Tukey&quot;</span>))
 <span class="kw">summary</span>(tukeys)</code></pre></div>
 <pre><code>## 
 ##   Simultaneous Tests for General Linear Hypotheses
@@ -1489,13 +1496,13 @@ tukeys &lt;-<span class="st"> </span><span class="kw">glht</span>(aov, <span cla
 ## Multiple Comparisons of Means: Tukey Contrasts
 ## 
 ## 
-## Fit: aov(formula = Sales ~ Promotion, data = online_store_promo)
+## Fit: aov(formula = hours ~ group, data = hours_abc)
 ## 
 ## Linear Hypotheses:
-##                    Estimate Std. Error t value Pr(&gt;|t|)    
-## medium - high == 0  -2.1000     0.7688  -2.731  0.02850 *  
-## low - high == 0     -4.6000     0.7688  -5.983  &lt; 0.001 ***
-## low - medium == 0   -2.5000     0.7688  -3.252  0.00826 ** 
+##            Estimate Std. Error t value            Pr(&gt;|t|)    
+## B - A == 0   9.4100     0.8245   11.41 &lt;0.0000000000000002 ***
+## C - A == 0  18.1900     0.8245   22.06 &lt;0.0000000000000002 ***
+## C - B == 0   8.7800     0.8245   10.65 &lt;0.0000000000000002 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## (Adjusted p values reported -- single-step method)</code></pre>
@@ -1506,214 +1513,76 @@ tukeys &lt;-<span class="st"> </span><span class="kw">glht</span>(aov, <span cla
 ## Multiple Comparisons of Means: Tukey Contrasts
 ## 
 ## 
-## Fit: aov(formula = Sales ~ Promotion, data = online_store_promo)
+## Fit: aov(formula = hours ~ group, data = hours_abc)
 ## 
-## Quantile = 2.4797
+## Quantile = 2.3558
 ## 95% family-wise confidence level
 ##  
 ## 
 ## Linear Hypotheses:
-##                    Estimate lwr     upr    
-## medium - high == 0 -2.1000  -4.0065 -0.1935
-## low - high == 0    -4.6000  -6.5065 -2.6935
-## low - medium == 0  -2.5000  -4.4065 -0.5935</code></pre>
+##            Estimate lwr     upr    
+## B - A == 0  9.4100   7.4676 11.3524
+## C - A == 0 18.1900  16.2476 20.1324
+## C - B == 0  8.7800   6.8376 10.7224</code></pre>
 <p>We may also plot the result for the mean differences incl. their confidence intervals:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(tukeys)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-238"></span>
-<img src="_main_files/figure-html/unnamed-chunk-238-1.png" alt="Tukey's HSD" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-239"></span>
+<img src="_main_files/figure-html/unnamed-chunk-239-1.png" alt="Tukey's HSD" width="672" />
 <p class="caption">
 Figure 5.10: Tukey’s HSD
 </p>
 </div>
 <p>You can see that the CIs do not cross zero, which means that the true difference between group means is unlikely zero.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mean1 &lt;-<span class="st"> </span><span class="kw">mean</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;high&quot;</span>,<span class="st">&quot;Sales&quot;</span>]) <span class="co">#mean group &quot;high&quot;</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mean1 &lt;-<span class="st"> </span><span class="kw">mean</span>(hours_abc[hours_abc<span class="op">$</span>group<span class="op">==</span><span class="st">&quot;A&quot;</span>,<span class="st">&quot;hours&quot;</span>]) <span class="co">#mean group &quot;A&quot;</span>
 mean1</code></pre></div>
-<pre><code>## [1] 8.3</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mean2 &lt;-<span class="st"> </span><span class="kw">mean</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;medium&quot;</span>,<span class="st">&quot;Sales&quot;</span>]) <span class="co">#mean group &quot;medium&quot;</span>
+<pre><code>## [1] 15.47</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mean2 &lt;-<span class="st"> </span><span class="kw">mean</span>(hours_abc[hours_abc<span class="op">$</span>group<span class="op">==</span><span class="st">&quot;B&quot;</span>,<span class="st">&quot;hours&quot;</span>]) <span class="co">#mean group &quot;B&quot;</span>
 mean2</code></pre></div>
-<pre><code>## [1] 6.2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mean3 &lt;-<span class="st"> </span><span class="kw">mean</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;low&quot;</span>,<span class="st">&quot;Sales&quot;</span>]) <span class="co">#mean group &quot;low&quot;</span>
+<pre><code>## [1] 24.88</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mean3 &lt;-<span class="st"> </span><span class="kw">mean</span>(hours_abc[hours_abc<span class="op">$</span>group<span class="op">==</span><span class="st">&quot;C&quot;</span>,<span class="st">&quot;hours&quot;</span>]) <span class="co">#mean group &quot;C&quot;</span>
 mean3</code></pre></div>
-<pre><code>## [1] 3.7</code></pre>
+<pre><code>## [1] 33.66</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#CI high vs. medium</span>
 mean_diff_high_med &lt;-<span class="st"> </span>mean2<span class="op">-</span>mean1
 mean_diff_high_med</code></pre></div>
-<pre><code>## [1] -2.1</code></pre>
+<pre><code>## [1] 9.41</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ci_med_high_lower &lt;-<span class="st"> </span>mean_diff_high_med<span class="op">-</span>hsd
 ci_med_high_upper &lt;-<span class="st"> </span>mean_diff_high_med<span class="op">+</span>hsd
 ci_med_high_lower</code></pre></div>
-<pre><code>## [1] -4.006269</code></pre>
+<pre><code>## [1] 7.467786</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ci_med_high_upper</code></pre></div>
-<pre><code>## [1] -0.1937307</code></pre>
+<pre><code>## [1] 11.35221</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#CI high vs.low</span>
 mean_diff_high_low &lt;-<span class="st"> </span>mean3<span class="op">-</span>mean1
 mean_diff_high_low</code></pre></div>
-<pre><code>## [1] -4.6</code></pre>
+<pre><code>## [1] 18.19</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ci_low_high_lower &lt;-<span class="st"> </span>mean_diff_high_low<span class="op">-</span>hsd
 ci_low_high_upper &lt;-<span class="st"> </span>mean_diff_high_low<span class="op">+</span>hsd
 ci_low_high_lower</code></pre></div>
-<pre><code>## [1] -6.506269</code></pre>
+<pre><code>## [1] 16.24779</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ci_low_high_upper</code></pre></div>
-<pre><code>## [1] -2.693731</code></pre>
+<pre><code>## [1] 20.13221</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#CI medium vs.low</span>
 mean_diff_med_low &lt;-<span class="st"> </span>mean3<span class="op">-</span>mean2
 mean_diff_med_low</code></pre></div>
-<pre><code>## [1] -2.5</code></pre>
+<pre><code>## [1] 8.78</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ci_low_med_lower &lt;-<span class="st"> </span>mean_diff_med_low<span class="op">-</span>hsd
 ci_low_med_upper &lt;-<span class="st"> </span>mean_diff_med_low<span class="op">+</span>hsd
 ci_low_med_lower</code></pre></div>
-<pre><code>## [1] -4.406269</code></pre>
+<pre><code>## [1] 6.837786</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ci_low_med_upper</code></pre></div>
-<pre><code>## [1] -0.5937307</code></pre>
+<pre><code>## [1] 10.72221</code></pre>
 <p>Reporting of post hoc results:</p>
-<p>The post hoc tests based on Bonferroni and Tukey’s HSD revealed that sales were significantly higher when using medium vs. low levels, high vs. medium levels, as well high vs. low levels of promotion.</p>
+<p>The post hoc tests based on Bonferroni and Tukey’s HSD revealed that people listened to music significantly more when:</p>
+<ul>
+<li>they had access to user created playlists vs. those who did not,</li>
+<li>they got recommendations vs. those who did not. This is true for both the control group “A” as well as treatment “B”.</li>
+</ul>
 <p><strong>The following video summarizes how to conduct a one-way ANOVA in R</strong></p>
 <div align="center">
 <iframe width="560" height="315" src="https://www.youtube.com/embed/vl32om-3KpY" frameborder="0" allowfullscreen>
 </iframe>
 </div>
-</div>
-</div>
-</div>
-<div id="n-way-anova" class="section level3">
-<h3><span class="header-section-number">5.4.4</span> N-way ANOVA</h3>
-<p>As stated above, N-way ANOVA is used when you have a metric dependent variable and two or more factors with two or more factor levels. In other words, with N-way ANOVA, you can investigate the effects of more than one factor simultaneously. In addition, you can assess interactions between the factors that occur when the effects of one factor on the dependent variable depend on the level (category) of the other factors. An experiment with two or more independent variables is also called a <strong>factorial design</strong> and N-way ANOVA is therefore also referred to as factorial ANOVA.</p>
-<p>Let’s extend our example from above and assume that there was a second factor considered in the experiment. Besides the different levels of promotion intensity, the 30 products were also randomly assigned to two experimental groups that determined whether the product was featured in a newsletter or not. Hence, there is a second factor “newsletter” with two factor levels (i.e., “yes” and “no”):</p>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Obs"],"name":[1],"type":["int"],"align":["right"]},{"label":["Promotion"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["Newsletter"],"name":[3],"type":["fctr"],"align":["left"]},{"label":["Sales"],"name":[4],"type":["int"],"align":["right"]}],"data":[{"1":"1","2":"high","3":"yes","4":"10"},{"1":"2","2":"high","3":"yes","4":"9"},{"1":"3","2":"high","3":"yes","4":"10"},{"1":"4","2":"high","3":"yes","4":"8"},{"1":"5","2":"high","3":"yes","4":"9"},{"1":"6","2":"high","3":"no","4":"8"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<p>This means that we have a 2x3 factorial design since we have one factor with 3 levels (i.e., online promotion (1) “high”, (2) “medium”, (3) “low”), and one factor with 2 levels (i.e., newsletter (1) “yes”, (2) “no”). In a next step, we create a new grouping variable that specifies the treatment using the <code>paste(...)</code> function. The <code>paste(...)</code> function basically concatenates its arguments and separates them by the string given by <code>sep = &quot;&quot;</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">online_store_promo<span class="op">$</span>Group &lt;-<span class="st"> </span><span class="kw">paste</span>(online_store_promo<span class="op">$</span>Promotion, online_store_promo<span class="op">$</span>Newsletter, <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="co">#create new grouping variable</span>
-online_store_promo </code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Obs"],"name":[1],"type":["int"],"align":["right"]},{"label":["Promotion"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["Newsletter"],"name":[3],"type":["fctr"],"align":["left"]},{"label":["Sales"],"name":[4],"type":["int"],"align":["right"]},{"label":["Group"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"high","3":"yes","4":"10","5":"high_yes"},{"1":"2","2":"high","3":"yes","4":"9","5":"high_yes"},{"1":"3","2":"high","3":"yes","4":"10","5":"high_yes"},{"1":"4","2":"high","3":"yes","4":"8","5":"high_yes"},{"1":"5","2":"high","3":"yes","4":"9","5":"high_yes"},{"1":"6","2":"high","3":"no","4":"8","5":"high_no"},{"1":"7","2":"high","3":"no","4":"9","5":"high_no"},{"1":"8","2":"high","3":"no","4":"7","5":"high_no"},{"1":"9","2":"high","3":"no","4":"7","5":"high_no"},{"1":"10","2":"high","3":"no","4":"6","5":"high_no"},{"1":"1","2":"medium","3":"yes","4":"8","5":"medium_yes"},{"1":"2","2":"medium","3":"yes","4":"8","5":"medium_yes"},{"1":"3","2":"medium","3":"yes","4":"7","5":"medium_yes"},{"1":"4","2":"medium","3":"yes","4":"9","5":"medium_yes"},{"1":"5","2":"medium","3":"yes","4":"6","5":"medium_yes"},{"1":"6","2":"medium","3":"no","4":"4","5":"medium_no"},{"1":"7","2":"medium","3":"no","4":"5","5":"medium_no"},{"1":"8","2":"medium","3":"no","4":"5","5":"medium_no"},{"1":"9","2":"medium","3":"no","4":"6","5":"medium_no"},{"1":"10","2":"medium","3":"no","4":"4","5":"medium_no"},{"1":"1","2":"low","3":"yes","4":"5","5":"low_yes"},{"1":"2","2":"low","3":"yes","4":"7","5":"low_yes"},{"1":"3","2":"low","3":"yes","4":"6","5":"low_yes"},{"1":"4","2":"low","3":"yes","4":"4","5":"low_yes"},{"1":"5","2":"low","3":"yes","4":"5","5":"low_yes"},{"1":"6","2":"low","3":"no","4":"2","5":"low_no"},{"1":"7","2":"low","3":"no","4":"3","5":"low_no"},{"1":"8","2":"low","3":"no","4":"2","5":"low_no"},{"1":"9","2":"low","3":"no","4":"1","5":"low_no"},{"1":"10","2":"low","3":"no","4":"2","5":"low_no"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<p>As you can see, we now have six experimental groups:</p>
-<ol style="list-style-type: decimal">
-<li>= high promotion, newsletter</li>
-<li>= high promotion, no newsletter</li>
-<li>= medium promotion, newsletter</li>
-<li>= medium promotion, no newsletter</li>
-<li>= low promotion, newsletter</li>
-<li>= low promotion, no newsletter</li>
-</ol>
-<p>In our analysis, we now focus on the comparison of the means between the six groups. Let’s inspect the group means:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">by</span>(online_store_promo<span class="op">$</span>Sales, online_store_promo<span class="op">$</span>Group, mean) <span class="co">#category means</span></code></pre></div>
-<pre><code>## online_store_promo$Group: high_no
-## [1] 7.4
-## -------------------------------------------------------- 
-## online_store_promo$Group: high_yes
-## [1] 9.2
-## -------------------------------------------------------- 
-## online_store_promo$Group: low_no
-## [1] 2
-## -------------------------------------------------------- 
-## online_store_promo$Group: low_yes
-## [1] 5.4
-## -------------------------------------------------------- 
-## online_store_promo$Group: medium_no
-## [1] 4.8
-## -------------------------------------------------------- 
-## online_store_promo$Group: medium_yes
-## [1] 7.6</code></pre>
-<p>We can also plot the means for each factor individually and for both factors combined.</p>
-<p>Plot means for first factor “promotion” (same as before):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Plot of means</span>
-<span class="kw">ggplot</span>(online_store_promo, <span class="kw">aes</span>(Promotion, Sales)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, <span class="dt">geom =</span> <span class="st">&quot;bar&quot;</span>, <span class="dt">fill=</span><span class="st">&quot;White&quot;</span>, <span class="dt">colour=</span><span class="st">&quot;Black&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> mean_cl_normal, <span class="dt">geom =</span> <span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Experimental group (promotion level)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-243"></span>
-<img src="_main_files/figure-html/unnamed-chunk-243-1.png" alt="Plot of means (in-store promotion)" width="672" />
-<p class="caption">
-Figure 5.11: Plot of means (in-store promotion)
-</p>
-</div>
-<p>Plot means for second factor “newsletter”:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Plot of means</span>
-<span class="kw">ggplot</span>(online_store_promo, <span class="kw">aes</span>(Newsletter, Sales)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, <span class="dt">geom =</span> <span class="st">&quot;bar&quot;</span>, <span class="dt">fill=</span><span class="st">&quot;White&quot;</span>, <span class="dt">colour=</span><span class="st">&quot;Black&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> mean_cl_normal, <span class="dt">geom =</span> <span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Experimental group (newsletter)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-244"></span>
-<img src="_main_files/figure-html/unnamed-chunk-244-1.png" alt="Plot of means (newsletter)" width="672" />
-<p class="caption">
-Figure 5.12: Plot of means (newsletter)
-</p>
-</div>
-<p>Plot means for both factors together:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(online_store_promo, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">interaction</span>(Newsletter, Promotion), <span class="dt">y =</span> Sales, <span class="dt">fill =</span> Newsletter)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, <span class="dt">geom =</span> <span class="st">&quot;bar&quot;</span>, <span class="dt">position =</span> <span class="kw">position_dodge</span>()) <span class="op">+</span>
-<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> mean_cl_normal, <span class="dt">geom =</span> <span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-245"></span>
-<img src="_main_files/figure-html/unnamed-chunk-245-1.png" alt="Plot of means (interaction)" width="672" />
-<p class="caption">
-Figure 5.13: Plot of means (interaction)
-</p>
-</div>
-<p>So what is different compared to the one-way ANOVA? In the one-way ANOVA, we computed the sum of squares as:</p>
-<span class="math display" id="eq:vardecomp">\[\begin{equation} 
-\begin{split}
-SS_T= SS_M+SS_R
-\end{split}
-\tag{5.3}
-\end{equation}\]</span>
-<p>The main difference is that in an N-way ANOVA the model sum of squares SS<sub>M</sub> consists of different components. In our case:</p>
-<span class="math display" id="eq:SSMn">\[\begin{equation} 
-\begin{split}
-SS_M= SS_{X_1}+SS_{X_2}+SS_{X_1X_2}
-\end{split}
-\tag{5.4}
-\end{equation}\]</span>
-<p>That is, we can further decompose the explained variance into the variance explained by the first factor (X<sub>1</sub>), the variance explained by the second factor (X<sub>2</sub>), and the variance explained by the interaction of these factors (X<sub>1</sub>X<sub>2</sub>). The interaction will tell us if the effect of one factor depends on the level of the second factor and vice versa. Because we now have more information available (the manipulation of the second factor), we would expect the amount of explained variance to increase relative to the amount of unexplained variance.</p>
-<p>To visualize this, we can include this new information in the plot that we used before to inspect the model sum of squares:</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-246"></span>
-<img src="_main_files/figure-html/unnamed-chunk-246-1.png" alt="Sum of Squares (N-way ANOVA)" width="672" />
-<p class="caption">
-Figure 5.14: Sum of Squares (N-way ANOVA)
-</p>
-</div>
-<p>You can see that our model now better represents the data using the additional information (i.e., the distance between the individual observations and the group mean has decreased). Let’s re-run the ANOVA using the additional information. To do this, we use the same commands as before and simply include the additional factor:</p>
-<pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = mean)
-##       Df F value Pr(&gt;F)
-## group  5   0.689 0.6365
-##       24</code></pre>
-<pre><code>##                      Df Sum Sq Mean Sq F value        Pr(&gt;F)    
-## Promotion             2 106.07   53.03   54.86 0.00000000112 ***
-## Newsletter            1  53.33   53.33   55.17 0.00000011439 ***
-## Promotion:Newsletter  2   3.27    1.63    1.69         0.206    
-## Residuals            24  23.20    0.97                          
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>The Levene’s Test indicates that the variances of the groups are not significantly different. Theoretically, you would also need to test the distributional assumptions for each group again, but we skip this step here.</p>
-<p>The ANOVA output shows us that the two main effects are significant, while the interaction is not. This means that online promotions and newsletter features result in higher sales. However, the effect of each factor is independent of the other. Note that in the presence of significant interaction effects, it would make no sense to interpret the main effects! If this would be the case, we would only conclude that the effect of one factor depends on the other factor. If the interaction effect is insignificant (as in our case), you could also conduct post hoc tests for each individual factor. However, you only need to conduct post hoc tests for factors with more than 2 levels (i.e., not for the newsletter factor) since there is no family-wise error for variables with two categories.</p>
-<p>In an N-way ANOVA, the multiple η<sup>2</sup> measures the strength of the joint effect of two factors (also called the overall effect). To compute the multiple η<sup>2</sup>, the revised equation is:</p>
-<p><span class="math display">\[
-\eta^2= \frac{SS_{X_1}+SS_{X_2}+SS_{X_1X_2}}{SS_T}
-\]</span></p>
-<p>From the output, we can extract the relevant sum of squares as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="kw">summary</span>(aov)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Sum Sq&#39;</span>[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">summary</span>(aov)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Sum Sq&#39;</span>[<span class="dv">2</span>] <span class="op">+</span><span class="st"> </span><span class="kw">summary</span>(aov)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Sum Sq&#39;</span>[<span class="dv">3</span>])<span class="op">/</span>(<span class="kw">summary</span>(aov)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Sum Sq&#39;</span>[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">summary</span>(aov)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Sum Sq&#39;</span>[<span class="dv">2</span>] <span class="op">+</span><span class="st"> </span><span class="kw">summary</span>(aov)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Sum Sq&#39;</span>[<span class="dv">3</span>] <span class="op">+</span><span class="st"> </span><span class="kw">summary</span>(aov)[[<span class="dv">1</span>]]<span class="op">$</span><span class="st">&#39;Sum Sq&#39;</span>[<span class="dv">4</span>])</code></pre></div>
-<pre><code>## [1] 0.8751793</code></pre>
-<p>As in the one-way ANOVA, we check the residuals plots generated by R to see if the residuals are approximately normally distributed and whether the residual variance is similar across groups.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(aov,<span class="dv">1</span>) <span class="co">#homogeneity of variances</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-249-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(aov,<span class="dv">2</span>) <span class="co">#normal distribution of residuals</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-249-2.png" width="672" /></p>
-<p>Reporting:</p>
-<ul>
-<li>There was a significant main effect of promotion on sales, F(2,24) = 53.03, p &lt; 0.05.</li>
-<li>The post hoc tests based on Bonferroni and Tukey’s HSD revealed that the sales were significantly higher when using medium vs. low levels, high vs. medium levels, as well high vs. low levels of promotion.</li>
-<li>There was a significant main effect of newsletter features on sales levels, F(1,24) = 53.33, p &lt; 0.05.<br />
-</li>
-<li>The effect of each factor is independent of the other since the interaction effect between the level of promotion and direct mailing was insignificant, F(2,24) = 3.27, p &gt; 0.05.</li>
-</ul>
 
 <pre><code>## &#39;data.frame&#39;:    102 obs. of  3 variables:
 ##  $ product_id: int  1 2 3 4 5 6 7 8 9 10 ...
@@ -1732,6 +1601,8 @@ Figure 5.14: Sum of Squares (N-way ANOVA)
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["product_id"],"name":[1],"type":["int"],"align":["right"]},{"label":["unit_sales_low_price"],"name":[2],"type":["int"],"align":["right"]},{"label":["unit_sales_high_price"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"1","2":"6","3":"9"},{"1":"2","2":"27","3":"12"},{"1":"3","2":"30","3":"30"},{"1":"4","2":"24","3":"18"},{"1":"5","2":"21","3":"20"},{"1":"6","2":"11","3":"15"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1804,10 +1675,10 @@ Figure 5.14: Sum of Squares (N-way ANOVA)
 <span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Experimental group (promotion level)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>() </code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-256"></span>
-<img src="_main_files/figure-html/unnamed-chunk-256-1.png" alt="Boxplot" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-247"></span>
+<img src="_main_files/figure-html/unnamed-chunk-247-1.png" alt="Boxplot" width="672" />
 <p class="caption">
-Figure 5.15: Boxplot
+Figure 5.11: Boxplot
 </p>
 </div>
 <p>To test for differences between groups, we can, for example, apply post hoc tests according to Nemenyi for pairwise multiple comparisons of the ranked data using the appropriate function from the <code>PMCMR</code> package.</p>
@@ -1857,19 +1728,19 @@ rel_freq_table</code></pre></div>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> <span class="kw">paste0</span>(<span class="kw">round</span>(Freq<span class="op">*</span><span class="dv">100</span>,<span class="dv">0</span>),<span class="st">&quot;%&quot;</span>)), <span class="dt">position =</span> <span class="kw">position_stack</span>(<span class="dt">vjust =</span> <span class="fl">0.5</span>), <span class="dt">size =</span> <span class="dv">4</span>) <span class="op">+</span><span class="st"> </span><span class="co">#add percentages</span>
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Proportion of conversions&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;Agent&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># specify axis labels</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-260"></span>
-<img src="_main_files/figure-html/unnamed-chunk-260-1.png" alt="proportion of conversions per agent (stacked bar chart)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-251"></span>
+<img src="_main_files/figure-html/unnamed-chunk-251-1.png" alt="proportion of conversions per agent (stacked bar chart)" width="672" />
 <p class="caption">
-Figure 5.16: proportion of conversions per agent (stacked bar chart)
+Figure 5.12: proportion of conversions per agent (stacked bar chart)
 </p>
 </div>
 <p>… or using the <code>mosaicplot()</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contigency_table &lt;-<span class="st"> </span><span class="kw">table</span>(call_center)
 <span class="kw">mosaicplot</span>(contigency_table, <span class="dt">main =</span> <span class="st">&quot;Proportion of conversions by agent&quot;</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-261"></span>
-<img src="_main_files/figure-html/unnamed-chunk-261-1.png" alt="proportion of conversions per agent (mosaic plot)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-252"></span>
+<img src="_main_files/figure-html/unnamed-chunk-252-1.png" alt="proportion of conversions per agent (mosaic plot)" width="672" />
 <p class="caption">
-Figure 5.17: proportion of conversions per agent (mosaic plot)
+Figure 5.13: proportion of conversions per agent (mosaic plot)
 </p>
 </div>
 <p>Recall that we can use confidence intervals to determine the range of values that the true population parameter will take with a certain level of confidence based on the sample. Similar to the confidence interval for means, we can compute a confidence interval for proportions. The (1-α)% confidence interval for proportions is approximately</p>
@@ -1973,10 +1844,10 @@ cont_table_df</code></pre></div>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> <span class="kw">paste0</span>(<span class="kw">round</span>(Freq<span class="op">*</span><span class="dv">100</span>,<span class="dv">0</span>),<span class="st">&quot;%&quot;</span>)), <span class="dt">position =</span> <span class="kw">position_stack</span>(<span class="dt">vjust =</span> <span class="fl">0.5</span>), <span class="dt">size =</span> <span class="dv">4</span>) <span class="op">+</span><span class="st"> </span><span class="co">#add percentages</span>
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Expensive car ownership (proportion)&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;College degree&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># specify axis labels</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-267"></span>
-<img src="_main_files/figure-html/unnamed-chunk-267-1.png" alt="Expensive car ownership conditional on college education" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-258"></span>
+<img src="_main_files/figure-html/unnamed-chunk-258-1.png" alt="Expensive car ownership conditional on college education" width="672" />
 <p class="caption">
-Figure 5.18: Expensive car ownership conditional on college education
+Figure 5.14: Expensive car ownership conditional on college education
 </p>
 </div>
 <p>Under the null hypothesis, the two variables are independent (i.e., there is no relationship). This means that the frequency in each field will be roughly proportional to the probability of an observation being in that category, calculated under the assumption that they are independent. The difference between that expected quantity and the actual quantity can be used to construct the test statistic. The test statistic is computed as follows:</p>
@@ -2017,10 +1888,10 @@ exp_cell4 &lt;-<span class="st"> </span>(<span class="kw">nrow</span>(cross_tab[
 chisq_cal</code></pre></div>
 <pre><code>## [1] 11.69591</code></pre>
 <p>The test statistic is <span class="math inline">\(\chi^2\)</span> distributed. The chi-square distribution is a non-symmetric distribution. Actually, there are many different chi-square distributions, one for each degree of freedom as show in the following figure.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-273"></span>
-<img src="_main_files/figure-html/unnamed-chunk-273-1.png" alt="The chi-square distribution" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-264"></span>
+<img src="_main_files/figure-html/unnamed-chunk-264-1.png" alt="The chi-square distribution" width="672" />
 <p class="caption">
-Figure 5.19: The chi-square distribution
+Figure 5.15: The chi-square distribution
 </p>
 </div>
 <p>You can see that as the degrees of freedom increase, the chi-square curve approaches a normal distribution. To find the critical value, we need to specify the corresponding degrees of freedom, given by:</p>
@@ -2037,10 +1908,10 @@ chisq_crit</code></pre></div>
 <pre><code>## [1] 3.841459</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chisq_cal <span class="op">&gt;</span><span class="st"> </span>chisq_crit</code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-276"></span>
-<img src="_main_files/figure-html/unnamed-chunk-276-1.png" alt="Visual depiction of the test result" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-267"></span>
+<img src="_main_files/figure-html/unnamed-chunk-267-1.png" alt="Visual depiction of the test result" width="672" />
 <p class="caption">
-Figure 5.20: Visual depiction of the test result
+Figure 5.16: Visual depiction of the test result
 </p>
 </div>
 <p>We could also compute the p-value using the <code>pchisq()</code> function, which tells us the probability of the observed cell frequencies if the null hypothesis was true (i.e., there was no association):</p>
