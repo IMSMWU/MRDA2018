@@ -32,37 +32,19 @@ In the previous section we learned how to compare means using a t-test. The t-te
 * A metric dependent variable (i.e., measured using an interval or ratio scale)
 * One or more non-metric (categorical) independent variables (also called factors) 
 
-A treatment is a particular combination of factor levels, or categories. One-way ANOVA is used when there is only one categorical variable (factor). In this case, a treatment is the same as a factor level. N-way ANOVA is used with two or more factors. Note that we are only going to talk about a single independent variable in the context of ANOVA. If you have multiple independent variables please refere to the chapter on **Regression**.
+A treatment is a particular combination of factor levels, or categories. One-way ANOVA is used when there is only one categorical variable (factor). In this case, a treatment is the same as a factor level. N-way ANOVA is used with two or more factors.
 
-Let's use an example to see how ANOVA works. Similar to the previous example it is also imaginable that the music streaming service experiments with a recommendation system for user created playlists. We now have three groups, the control group "A" with the current system, treatment group "B" who have access to playlists created by other users but are not shown recommendations and treatment group "C" who are shown recommendations for user created playlists.  
+Let's use an example to see how ANOVA works. Assume that you are a marketing manager at an online fashion store, and you wish to analyze the effect of online promotion on sales. You conduct an experiment and select a sample of 30 comparable products to be included in the experiment. Then you randomly assign the products to one of three groups: (1) = high promotion level, (2) = medium promotion level, (3) = low promotion level, and record the sales over one day. This means that you have 10 products assigned to each treatment. 
+
 As always, we load and inspect the data first:
 
 ```{r message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE}
-set.seed(321)
-hours_population_1 <- rnorm(25000, 15, 5)
-set.seed(125671)
-sample_1 <- sample(1:25000, size = 100, replace = FALSE)
-sample_1_hours <- hours_population_1[sample_1]
-sample_1_df <- data.frame(hours = round(sample_1_hours,0), group = "A")
-sample_1_df$index <- 1:100
-set.seed(321)
-hours_population_2 <- rnorm(25000, 25, 6)
-set.seed(125672)
-sample_2 <- sample(1:25000, size = 100, replace = FALSE)
-sample_2_hours <- hours_population_2[sample_2]
-sample_2_df <- data.frame(hours = round(sample_2_hours,0), group = "B")
-sample_2_df$index <- 1:100
-set.seed(321)
-hours_population_3 <- rnorm(25000, 35, 6)
-set.seed(125678)
-sample_3 <- sample(1:25000, size = 100, replace = FALSE)
-sample_3_hours <- hours_population_3[sample_3]
-sample_3_df <- data.frame(hours = round(sample_3_hours,0), group = "C")
-sample_3_df$index <- 1:100
-hours_abc <- rbind(sample_1_df, sample_2_df, sample_3_df)
-head(hours_abc)
-
-tail(hours_abc)
+online_store_promo <- read.table("https://raw.githubusercontent.com/IMSMWU/Teaching/master/MRDA2017/online_store_promo.dat", 
+                          sep = "\t", 
+                          header = TRUE) #read in data
+online_store_promo$Promotion <- factor(online_store_promo$Promotion, levels = c(1:3), labels = c("high", "medium","low")) #convert grouping variable to factor
+str(online_store_promo) #inspect data
+print(online_store_promo) #inspect data
 ```
 
 The null hypothesis, typically, is that all means are equal (non-directional hypothesis). Hence, in our case:
@@ -77,11 +59,11 @@ If you wanted to put this in mathematical notation, you could also write:
 
 $$H_1: \exists {i,j}: {\mu_i \ne \mu_j} $$  
 
-To get a first impression if there are any differences in listening times across the experimental groups, we use the ```describeBy(...)``` function from the ```psych``` package:
+To get a first impression if there are any differences in sales across the experimental groups, we use the ```describeBy(...)``` function from the ```psych``` package:
 
 ```{r message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, paged.print = FALSE}
 library(psych)
-describeBy(hours_abc$hours, hours_abc$group) #inspect data
+describeBy(online_store_promo$Sales, online_store_promo$Promotion) #inspect data
 ```
 
 In addition, you should visualize the data using appropriate plots:
@@ -90,20 +72,20 @@ In addition, you should visualize the data using appropriate plots:
 #Plot of means
 library(plyr)
 library(ggplot2)
-ggplot(hours_abc, aes(group, hours)) + 
+ggplot(online_store_promo, aes(Promotion, Sales)) + 
   stat_summary(fun.y = mean, geom = "bar", fill = "White", colour = "Black") +
   stat_summary(fun.data = mean_cl_normal, geom = "pointrange") + 
-  labs(x = "Experimental group ", y = "Listening time") + 
+  labs(x = "Experimental group (promotion level)", y = "Sales (thsd. units)") + 
   theme_bw()
 ```
 
 Note that ANOVA is an omnibus test, which means that we test for an overall difference between groups. Hence, the test will only tell you if the group means are different, but it won't tell you exactly which groups are different from another.
 
-So why don’t we then just conduct a series of t-tests for all combinations of groups (i.e., A vs. B, A vs. C, B vs. C)? The reason is that if we assume each test to be independent, then there is a 5% probability of falsely rejecting the null hypothesis (Type I error) for each test. In our case:
+So why don’t we then just conduct a series of t-tests for all combinations of groups (i.e., high vs. low, low vs. medium, medium vs. high)? The reason is that if we assume each test to be independent, then there is a 5% probability of falsely rejecting the null hypothesis (Type I error) for each test. In our case:
 
-* A vs. B (&alpha; = 0.05)
-* A vs. C (&alpha; = 0.05)
-* B vs. C (&alpha; = 0.05)
+* High vs. low (&alpha; = 0.05)
+* High vs. medium (&alpha; = 0.05)
+* Medium vs. low (&alpha; = 0.05)
 
 This means that the overall probability of making a Type I error is 1-(0.95<sup>3</sup>) = 0.143, since the probability of no Type I error is 0.95 for each of the three tests. Consequently, the Type I error probability would be 14.3%, which is above the conventional standard of 5%. This is also known as the family-wise or experiment-wise error.
 
@@ -119,7 +101,7 @@ The following figure shows the different variance components using a generalized
 
 ![Decomposing variance](https://github.com/IMSMWU/Teaching/raw/master/MRDA2017/sum_of_squares.JPG)
 
-The total variation is determined by the variation between the categories (due to our experimental manipulation) and the within-category variation that is due to extraneous factors (e.g., promotion of artists on a social network):   
+The total variation is determined by the variation between the categories (due to our experimental manipulation) and the within-category variation that is due to extraneous factors (e.g., differences between the products that are included in each group):   
 
 $$SS_T= SS_M+SS_R$$
 
