@@ -516,15 +516,15 @@ H_1: \mu \neq 10
 hours_population_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">25000</span>, <span class="dt">shape =</span> <span class="dv">2</span>, <span class="dt">scale =</span> <span class="dv">10</span>)
 <span class="kw">set.seed</span>(<span class="dv">12567</span>)
 sample_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25000</span>, <span class="dt">size =</span> <span class="dv">98</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
-sample_<span class="dv">1</span>_hours &lt;-<span class="st"> </span>hours_population_<span class="dv">1</span>[sample_<span class="dv">1</span>]
-sample_<span class="dv">1</span>_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">hours =</span> <span class="kw">round</span>(sample_<span class="dv">1</span>_hours,<span class="dv">0</span>), <span class="dt">group =</span> <span class="st">&quot;A&quot;</span>)
+sample_1_hours &lt;-<span class="st"> </span>hours_population_<span class="dv">1</span>[sample_<span class="dv">1</span>]
+sample_1_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">hours =</span> <span class="kw">round</span>(sample_1_hours,<span class="dv">0</span>), <span class="dt">group =</span> <span class="st">&quot;A&quot;</span>)
 <span class="kw">set.seed</span>(<span class="dv">321</span>)
 hours_population_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">25000</span>, <span class="dt">shape =</span> <span class="fl">2.5</span>, <span class="dt">scale =</span> <span class="dv">11</span>)
 <span class="kw">set.seed</span>(<span class="dv">12567</span>)
 sample_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25000</span>, <span class="dt">size =</span> <span class="dv">112</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
-sample_<span class="dv">2</span>_hours &lt;-<span class="st"> </span>hours_population_<span class="dv">2</span>[sample_<span class="dv">2</span>]
-sample_<span class="dv">2</span>_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">hours =</span> <span class="kw">round</span>(sample_<span class="dv">2</span>_hours,<span class="dv">0</span>), <span class="dt">group =</span> <span class="st">&quot;B&quot;</span>)
-hours_a_b &lt;-<span class="st"> </span><span class="kw">rbind</span>(sample_<span class="dv">1</span>_df,sample_<span class="dv">2</span>_df) 
+sample_2_hours &lt;-<span class="st"> </span>hours_population_<span class="dv">2</span>[sample_<span class="dv">2</span>]
+sample_2_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">hours =</span> <span class="kw">round</span>(sample_2_hours,<span class="dv">0</span>), <span class="dt">group =</span> <span class="st">&quot;B&quot;</span>)
+hours_a_b &lt;-<span class="st"> </span><span class="kw">rbind</span>(sample_1_df,sample_2_df) 
 <span class="kw">head</span>(hours_a_b)</code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
@@ -708,13 +708,13 @@ H_1: \mu_1 \ne \mu_2
 hours_population_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">25000</span>, <span class="dt">shape =</span> <span class="dv">2</span>, <span class="dt">scale =</span> <span class="dv">10</span>)
 <span class="kw">set.seed</span>(<span class="dv">12567</span>)
 sample_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25000</span>, <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
-sample_<span class="dv">1</span>_hours &lt;-<span class="st"> </span>hours_population_<span class="dv">1</span>[sample_<span class="dv">1</span>]
+sample_1_hours &lt;-<span class="st"> </span>hours_population_<span class="dv">1</span>[sample_<span class="dv">1</span>]
 <span class="kw">set.seed</span>(<span class="dv">321</span>)
 hours_population_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">25000</span>, <span class="dt">shape =</span> <span class="fl">2.5</span>, <span class="dt">scale =</span> <span class="dv">11</span>)
 <span class="kw">set.seed</span>(<span class="dv">12567</span>)
 sample_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">25000</span>, <span class="dt">size =</span> <span class="dv">100</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)
-sample_<span class="dv">2</span>_hours &lt;-<span class="st"> </span>hours_population_<span class="dv">2</span>[sample_<span class="dv">2</span>]
-hours_a_b_paired &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">hours_a =</span> <span class="kw">round</span>(sample_<span class="dv">1</span>_hours,<span class="dv">0</span>),<span class="dt">hours_b =</span> <span class="kw">round</span>(sample_<span class="dv">2</span>_hours,<span class="dv">0</span>)) 
+sample_2_hours &lt;-<span class="st"> </span>hours_population_<span class="dv">2</span>[sample_<span class="dv">2</span>]
+hours_a_b_paired &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">hours_a =</span> <span class="kw">round</span>(sample_1_hours,<span class="dv">0</span>),<span class="dt">hours_b =</span> <span class="kw">round</span>(sample_2_hours,<span class="dv">0</span>)) 
 <span class="kw">head</span>(hours_a_b_paired)</code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
@@ -1294,12 +1294,7 @@ F= \frac{MS_M}{MS_R}=\frac{SS_R}{N-c}=\frac{\frac{106.067}{(3-1)}}{\frac{79.8}{(
 f_ratio</code></pre></div>
 <pre><code>## [1] 17.94361</code></pre>
 <p>This statistic follows the F distribution with (m = c – 1) and (n = N – c) degrees of freedom. This means that, like the <span class="math inline">\(\chi^2\)</span> distribution, the shape of the F-distribution depends on the degrees of freedom. In this case, the shape depends on the degrees of freedom associated with the numerator and denominator used to compute the F-ratio. The following figure shows the shape of the F-distribution for different degrees of freedom:</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-221"></span>
-<img src="_main_files/figure-html/unnamed-chunk-221-1.png" alt="The F distribution" width="672" />
-<p class="caption">
-Figure 5.7: The F distribution
-</p>
-</div>
+<p><img src="fdist_anova.png" width="1050" /></p>
 <p>The outcome of the test is one of the following:</p>
 <ul>
 <li>If the null hypothesis of equal category means is not rejected, then the independent variable does not have a significant effect on the dependent variable</li>
@@ -1312,12 +1307,7 @@ f_crit </code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f_ratio <span class="op">&gt;</span><span class="st"> </span>f_crit <span class="co">#test if calculated test statistic is larger than critical value</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>The output tells us that the calculated test statistic exceeds the critical value. We can also show the test result visually:</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-223"></span>
-<img src="_main_files/figure-html/unnamed-chunk-223-1.png" alt="Visual depiction of the test result" width="672" />
-<p class="caption">
-Figure 5.8: Visual depiction of the test result
-</p>
-</div>
+<p><img src="ftest_anova.png" width="1050" /></p>
 <p>Thus, we conclude that because F<sub>CAL</sub> = 17.944 &gt; F<sub>CR</sub> = 3.35, H<sub>0</sub> is rejected!</p>
 <p>Interpretation: one or more of the differences between means are statistically significant.</p>
 <p>Reporting: There was a significant effect of promotion on sales levels, F(2,27) = 17.94, p &lt; 0.05, η = 0.571.</p>
@@ -1360,26 +1350,26 @@ Figure 5.8: Visual depiction of the test result
 <p>To create the Q-Q plot for the normal distribution, you may use the <code>qqnorm()</code> function, which takes the data to be tested as an argument. Using the <code>qqline()</code> function subsequently on the data creates the line on which the data points should fall based on the theoretical quantiles. If the individual data points deviate a lot from this line, it means that the data is not likely to follow a normal distribution.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qqnorm</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;low&quot;</span>,]<span class="op">$</span>Sales) 
 <span class="kw">qqline</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;low&quot;</span>,]<span class="op">$</span>Sales)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-225"></span>
-<img src="_main_files/figure-html/unnamed-chunk-225-1.png" alt="Q-Q plot 1" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-227"></span>
+<img src="_main_files/figure-html/unnamed-chunk-227-1.png" alt="Q-Q plot 1" width="672" />
 <p class="caption">
-Figure 5.9: Q-Q plot 1
+Figure 5.7: Q-Q plot 1
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qqnorm</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;medium&quot;</span>,]<span class="op">$</span>Sales) 
 <span class="kw">qqline</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;medium&quot;</span>,]<span class="op">$</span>Sales)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-225"></span>
-<img src="_main_files/figure-html/unnamed-chunk-225-2.png" alt="Q-Q plot 2" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-227"></span>
+<img src="_main_files/figure-html/unnamed-chunk-227-2.png" alt="Q-Q plot 2" width="672" />
 <p class="caption">
-Figure 5.9: Q-Q plot 2
+Figure 5.7: Q-Q plot 2
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qqnorm</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;high&quot;</span>,]<span class="op">$</span>Sales) 
 <span class="kw">qqline</span>(online_store_promo[online_store_promo<span class="op">$</span>Promotion<span class="op">==</span><span class="st">&quot;high&quot;</span>,]<span class="op">$</span>Sales)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-225"></span>
-<img src="_main_files/figure-html/unnamed-chunk-225-3.png" alt="Q-Q plot 3" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-227"></span>
+<img src="_main_files/figure-html/unnamed-chunk-227-3.png" alt="Q-Q plot 3" width="672" />
 <p class="caption">
-Figure 5.9: Q-Q plot 3
+Figure 5.7: Q-Q plot 3
 </p>
 </div>
 <p>The Q-Q plots suggest an approximately Normal distribution. If the assumption had been violated, you might consider transforming your data or resort to a non-parametric test.</p>
@@ -1409,11 +1399,11 @@ Figure 5.9: Q-Q plot 3
 <p>The <code>aov()</code> function also automatically generates some plots that you can use to judge if the model assumptions are met. We will inspect two of the plots here.</p>
 <p>We will use the first plot to inspect if the residual variances are equal across the experimental groups:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(aov,<span class="dv">1</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-229-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-231-1.png" width="672" /></p>
 <p>Generally, the residual variance (i.e., the range of values on the y-axis) should be the same for different levels of our independent variable. The plot shows, that there are some slight differences. Notably, the range of residuals is highest for the “low” group and lowest for the “high” group. However, the differences are not that large and since the Levene’s test could not reject the Null of equal variances, we conclude that the variances are similar enough in this case.</p>
 <p>The second plot can be used to test the assumption that the residuals are approximately normally distributed. We use a Q-Q plot to test this assumption:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(aov,<span class="dv">2</span>)</code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-230-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-232-1.png" width="672" /></p>
 <p>The plot suggests that the residuals are approximately normally distributed. We could also test this by extracting the residuals from the anova output using the <code>resid()</code> function and using the Shapiro-Wilk test:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">shapiro.test</span>(<span class="kw">resid</span>(aov))</code></pre></div>
 <pre><code>## 
@@ -1563,10 +1553,10 @@ tukeys &lt;-<span class="st"> </span><span class="kw">glht</span>(aov, <span cla
 ## low - medium == 0  -2.5000  -4.4065 -0.5935</code></pre>
 <p>We may also plot the result for the mean differences incl. their confidence intervals:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(tukeys)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-238"></span>
-<img src="_main_files/figure-html/unnamed-chunk-238-1.png" alt="Tukey's HSD" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-240"></span>
+<img src="_main_files/figure-html/unnamed-chunk-240-1.png" alt="Tukey's HSD" width="672" />
 <p class="caption">
-Figure 5.10: Tukey’s HSD
+Figure 5.8: Tukey’s HSD
 </p>
 </div>
 <p>You can see that the CIs do not cross zero, which means that the true difference between group means is unlikely zero.</p>
@@ -1672,10 +1662,10 @@ online_store_promo </code></pre></div>
 <span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> mean_cl_normal, <span class="dt">geom =</span> <span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Experimental group (promotion level)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-243"></span>
-<img src="_main_files/figure-html/unnamed-chunk-243-1.png" alt="Plot of means (in-store promotion)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-245"></span>
+<img src="_main_files/figure-html/unnamed-chunk-245-1.png" alt="Plot of means (in-store promotion)" width="672" />
 <p class="caption">
-Figure 5.11: Plot of means (in-store promotion)
+Figure 5.9: Plot of means (in-store promotion)
 </p>
 </div>
 <p>Plot means for second factor “newsletter”:</p>
@@ -1685,10 +1675,10 @@ Figure 5.11: Plot of means (in-store promotion)
 <span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> mean_cl_normal, <span class="dt">geom =</span> <span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Experimental group (newsletter)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-244"></span>
-<img src="_main_files/figure-html/unnamed-chunk-244-1.png" alt="Plot of means (newsletter)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-246"></span>
+<img src="_main_files/figure-html/unnamed-chunk-246-1.png" alt="Plot of means (newsletter)" width="672" />
 <p class="caption">
-Figure 5.12: Plot of means (newsletter)
+Figure 5.10: Plot of means (newsletter)
 </p>
 </div>
 <p>Plot means for both factors together:</p>
@@ -1696,10 +1686,10 @@ Figure 5.12: Plot of means (newsletter)
 <span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, <span class="dt">geom =</span> <span class="st">&quot;bar&quot;</span>, <span class="dt">position =</span> <span class="kw">position_dodge</span>()) <span class="op">+</span>
 <span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> mean_cl_normal, <span class="dt">geom =</span> <span class="st">&quot;pointrange&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-245"></span>
-<img src="_main_files/figure-html/unnamed-chunk-245-1.png" alt="Plot of means (interaction)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-247"></span>
+<img src="_main_files/figure-html/unnamed-chunk-247-1.png" alt="Plot of means (interaction)" width="672" />
 <p class="caption">
-Figure 5.13: Plot of means (interaction)
+Figure 5.11: Plot of means (interaction)
 </p>
 </div>
 <p>So what is different compared to the one-way ANOVA? In the one-way ANOVA, we computed the sum of squares as:</p>
@@ -1718,10 +1708,10 @@ SS_M= SS_{X_1}+SS_{X_2}+SS_{X_1X_2}
 \end{equation}\]</span>
 <p>That is, we can further decompose the explained variance into the variance explained by the first factor (X<sub>1</sub>), the variance explained by the second factor (X<sub>2</sub>), and the variance explained by the interaction of these factors (X<sub>1</sub>X<sub>2</sub>). The interaction will tell us if the effect of one factor depends on the level of the second factor and vice versa. Because we now have more information available (the manipulation of the second factor), we would expect the amount of explained variance to increase relative to the amount of unexplained variance.</p>
 <p>To visualize this, we can include this new information in the plot that we used before to inspect the model sum of squares:</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-246"></span>
-<img src="_main_files/figure-html/unnamed-chunk-246-1.png" alt="Sum of Squares (N-way ANOVA)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-248"></span>
+<img src="_main_files/figure-html/unnamed-chunk-248-1.png" alt="Sum of Squares (N-way ANOVA)" width="672" />
 <p class="caption">
-Figure 5.14: Sum of Squares (N-way ANOVA)
+Figure 5.12: Sum of Squares (N-way ANOVA)
 </p>
 </div>
 <p>You can see that our model now better represents the data using the additional information (i.e., the distance between the individual observations and the group mean has decreased). Let’s re-run the ANOVA using the additional information. To do this, we use the same commands as before and simply include the additional factor:</p>
@@ -1750,9 +1740,9 @@ Figure 5.14: Sum of Squares (N-way ANOVA)
 <pre><code>## [1] 0.8751793</code></pre>
 <p>As in the one-way ANOVA, we check the residuals plots generated by R to see if the residuals are approximately normally distributed and whether the residual variance is similar across groups.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(aov,<span class="dv">1</span>) <span class="co">#homogeneity of variances</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-249-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-251-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(aov,<span class="dv">2</span>) <span class="co">#normal distribution of residuals</span></code></pre></div>
-<p><img src="_main_files/figure-html/unnamed-chunk-249-2.png" width="672" /></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-251-2.png" width="672" /></p>
 <p>Reporting:</p>
 <ul>
 <li>There was a significant main effect of promotion on sales, F(2,24) = 53.03, p &lt; 0.05.</li>
@@ -1782,10 +1772,10 @@ Figure 5.14: Sum of Squares (N-way ANOVA)
 <span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Experimental group (promotion level)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>() </code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-251"></span>
-<img src="_main_files/figure-html/unnamed-chunk-251-1.png" alt="Boxplot" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-253"></span>
+<img src="_main_files/figure-html/unnamed-chunk-253-1.png" alt="Boxplot" width="672" />
 <p class="caption">
-Figure 5.15: Boxplot
+Figure 5.13: Boxplot
 </p>
 </div>
 <p>To test for differences between groups, we can, for example, apply post hoc tests according to Nemenyi for pairwise multiple comparisons of the ranked data using the appropriate function from the <code>PMCMR</code> package.</p>
@@ -1893,10 +1883,10 @@ Figure 5.15: Boxplot
 <span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Experimental group (promotion level)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of sales&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme_bw</span>() </code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-259"></span>
-<img src="_main_files/figure-html/unnamed-chunk-259-1.png" alt="Boxplot" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-261"></span>
+<img src="_main_files/figure-html/unnamed-chunk-261-1.png" alt="Boxplot" width="672" />
 <p class="caption">
-Figure 5.16: Boxplot
+Figure 5.14: Boxplot
 </p>
 </div>
 <p>To test for differences between groups, we can, for example, apply post hoc tests according to Nemenyi for pairwise multiple comparisons of the ranked data using the appropriate function from the <code>PMCMR</code> package.</p>
@@ -1942,23 +1932,23 @@ rel_freq_table</code></pre></div>
 </div>
 <p>We could also plot the data to visualize the frequencies using ggplot:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(rel_freq_table, <span class="kw">aes</span>(<span class="dt">x =</span> agent, <span class="dt">y =</span> Freq, <span class="dt">fill =</span> conversion)) <span class="op">+</span><span class="st"> </span><span class="co">#plot data</span>
-<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">width =</span> <span class="fl">.7</span>) <span class="op">+</span><span class="st"> </span><span class="co">#position</span>
+<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">width =</span> .<span class="dv">7</span>) <span class="op">+</span><span class="st"> </span><span class="co">#position</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> <span class="kw">paste0</span>(<span class="kw">round</span>(Freq<span class="op">*</span><span class="dv">100</span>,<span class="dv">0</span>),<span class="st">&quot;%&quot;</span>)), <span class="dt">position =</span> <span class="kw">position_stack</span>(<span class="dt">vjust =</span> <span class="fl">0.5</span>), <span class="dt">size =</span> <span class="dv">4</span>) <span class="op">+</span><span class="st"> </span><span class="co">#add percentages</span>
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Proportion of conversions&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;Agent&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># specify axis labels</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-263"></span>
-<img src="_main_files/figure-html/unnamed-chunk-263-1.png" alt="proportion of conversions per agent (stacked bar chart)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-265"></span>
+<img src="_main_files/figure-html/unnamed-chunk-265-1.png" alt="proportion of conversions per agent (stacked bar chart)" width="672" />
 <p class="caption">
-Figure 5.17: proportion of conversions per agent (stacked bar chart)
+Figure 5.15: proportion of conversions per agent (stacked bar chart)
 </p>
 </div>
 <p>… or using the <code>mosaicplot()</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contigency_table &lt;-<span class="st"> </span><span class="kw">table</span>(call_center)
 <span class="kw">mosaicplot</span>(contigency_table, <span class="dt">main =</span> <span class="st">&quot;Proportion of conversions by agent&quot;</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-264"></span>
-<img src="_main_files/figure-html/unnamed-chunk-264-1.png" alt="proportion of conversions per agent (mosaic plot)" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-266"></span>
+<img src="_main_files/figure-html/unnamed-chunk-266-1.png" alt="proportion of conversions per agent (mosaic plot)" width="672" />
 <p class="caption">
-Figure 5.18: proportion of conversions per agent (mosaic plot)
+Figure 5.16: proportion of conversions per agent (mosaic plot)
 </p>
 </div>
 <p>Recall that we can use confidence intervals to determine the range of values that the true population parameter will take with a certain level of confidence based on the sample. Similar to the confidence interval for means, we can compute a confidence interval for proportions. The (1-α)% confidence interval for proportions is approximately</p>
@@ -2058,14 +2048,14 @@ cont_table_df</code></pre></div>
   </script>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(cont_table_df, <span class="kw">aes</span>(<span class="dt">x =</span> College, <span class="dt">y =</span> Freq, <span class="dt">fill =</span> CarOwnership)) <span class="op">+</span><span class="st"> </span><span class="co">#plot data</span>
-<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">width =</span> <span class="fl">.7</span>) <span class="op">+</span><span class="st"> </span><span class="co">#position</span>
+<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">width =</span> .<span class="dv">7</span>) <span class="op">+</span><span class="st"> </span><span class="co">#position</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> <span class="kw">paste0</span>(<span class="kw">round</span>(Freq<span class="op">*</span><span class="dv">100</span>,<span class="dv">0</span>),<span class="st">&quot;%&quot;</span>)), <span class="dt">position =</span> <span class="kw">position_stack</span>(<span class="dt">vjust =</span> <span class="fl">0.5</span>), <span class="dt">size =</span> <span class="dv">4</span>) <span class="op">+</span><span class="st"> </span><span class="co">#add percentages</span>
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Expensive car ownership (proportion)&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;College degree&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># specify axis labels</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-270"></span>
-<img src="_main_files/figure-html/unnamed-chunk-270-1.png" alt="Expensive car ownership conditional on college education" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-272"></span>
+<img src="_main_files/figure-html/unnamed-chunk-272-1.png" alt="Expensive car ownership conditional on college education" width="672" />
 <p class="caption">
-Figure 5.19: Expensive car ownership conditional on college education
+Figure 5.17: Expensive car ownership conditional on college education
 </p>
 </div>
 <p>Under the null hypothesis, the two variables are independent (i.e., there is no relationship). This means that the frequency in each field will be roughly proportional to the probability of an observation being in that category, calculated under the assumption that they are independent. The difference between that expected quantity and the actual quantity can be used to construct the test statistic. The test statistic is computed as follows:</p>
@@ -2106,10 +2096,10 @@ exp_cell4 &lt;-<span class="st"> </span>(<span class="kw">nrow</span>(cross_tab[
 chisq_cal</code></pre></div>
 <pre><code>## [1] 11.69591</code></pre>
 <p>The test statistic is <span class="math inline">\(\chi^2\)</span> distributed. The chi-square distribution is a non-symmetric distribution. Actually, there are many different chi-square distributions, one for each degree of freedom as show in the following figure.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-276"></span>
-<img src="_main_files/figure-html/unnamed-chunk-276-1.png" alt="The chi-square distribution" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-278"></span>
+<img src="_main_files/figure-html/unnamed-chunk-278-1.png" alt="The chi-square distribution" width="672" />
 <p class="caption">
-Figure 5.20: The chi-square distribution
+Figure 5.18: The chi-square distribution
 </p>
 </div>
 <p>You can see that as the degrees of freedom increase, the chi-square curve approaches a normal distribution. To find the critical value, we need to specify the corresponding degrees of freedom, given by:</p>
@@ -2117,7 +2107,7 @@ Figure 5.20: The chi-square distribution
 df=(r-1)*(c-1)
 \]</span></p>
 <p>where <span class="math inline">\(r\)</span> is the number of rows and <span class="math inline">\(c\)</span> is the number of columns in the contingency table. Recall that degrees of freedom are generally the number of values that can vary freely when calculating a statistic. In a 2 by 2 table as in our case, we have 2 variables (or two samples) with 2 levels and in each one we have 1 that vary freely. Hence, in our example the degrees of freedom can be calculated as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st">  </span>(<span class="kw">nrow</span>(cont_table) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span>(<span class="kw">ncol</span>(cont_table) <span class="dv">-1</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st">  </span>(<span class="kw">nrow</span>(cont_table) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span>(<span class="kw">ncol</span>(cont_table) <span class="op">-</span><span class="dv">1</span>)
 df</code></pre></div>
 <pre><code>## [1] 1</code></pre>
 <p>Now, we can derive the critical value given the degrees of freedom and the level of confidence using the <code>qchisq()</code> function and test if the calculated test statistic is larger than the critical value:</p>
@@ -2126,10 +2116,10 @@ chisq_crit</code></pre></div>
 <pre><code>## [1] 3.841459</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chisq_cal <span class="op">&gt;</span><span class="st"> </span>chisq_crit</code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-279"></span>
-<img src="_main_files/figure-html/unnamed-chunk-279-1.png" alt="Visual depiction of the test result" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-281"></span>
+<img src="_main_files/figure-html/unnamed-chunk-281-1.png" alt="Visual depiction of the test result" width="672" />
 <p class="caption">
-Figure 5.21: Visual depiction of the test result
+Figure 5.19: Visual depiction of the test result
 </p>
 </div>
 <p>We could also compute the p-value using the <code>pchisq()</code> function, which tells us the probability of the observed cell frequencies if the null hypothesis was true (i.e., there was no association):</p>

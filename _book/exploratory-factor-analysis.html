@@ -389,8 +389,8 @@ Social_i=b_1X_{1i} + b_2X_{2i} + b_3X_{3i}+ b_4X_{4i}+ b_5X_{5i}+ b_6X_{6i}+\eps
 \end{array}\right]\]</span></p>
 <p>The linear relation between the factors and the factor loadings can also be shown in a graph, where each axis represents a factor and the variables are placed on the coordinates according to the strength of the relationship between the variable and each factor. The greater the loading of variables on a factor, the more that factor explains relationships between those variables. You can also think of the factor loadings as the correlations between a factor and a variable.</p>
 <p><br></p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-382"></span>
-<img src="_main_files/figure-html/unnamed-chunk-382-1.png" alt="Factor loadings" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-384"></span>
+<img src="_main_files/figure-html/unnamed-chunk-384-1.png" alt="Factor loadings" width="672" />
 <p class="caption">
 Figure 7.1: Factor loadings
 </p>
@@ -521,8 +521,8 @@ Social_i=&amp; 0.25*preventCavities_{i} + 0.80*shinyTeeth_{i} + 0.13*strengthenG
 ## 0.3223 0.1622 0.0799</code></pre>
 <p>Another way to make the correlations more salient is to plot the correlation matrix using different colors that indicate the strength of the correlations. This can be done using the <code>corPolot()</code> function from the <code>psych</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">corPlot</span>(correlations,<span class="dt">numbers=</span><span class="ot">TRUE</span>,<span class="dt">upper=</span><span class="ot">FALSE</span>,<span class="dt">diag=</span><span class="ot">FALSE</span>,<span class="dt">main=</span><span class="st">&quot;Correlations between variables&quot;</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-388"></span>
-<img src="_main_files/figure-html/unnamed-chunk-388-1.png" alt="Correlation matrix" width="960" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-390"></span>
+<img src="_main_files/figure-html/unnamed-chunk-390-1.png" alt="Correlation matrix" width="960" />
 <p class="caption">
 Figure 7.2: Correlation matrix
 </p>
@@ -642,29 +642,29 @@ pc1</code></pre></div>
 ## Q22 -0.10  0.08  0.15  0.09  0.01  0.04 -0.06  0.02  0.00  0.01 -0.01
 ## Q23  0.13 -0.01 -0.07 -0.12 -0.06 -0.03  0.05 -0.03  0.01 -0.01 -0.02
 ##      PC23 h2                   u2 com
-## Q01  0.01  1  0.00000000000000078 6.0
-## Q02  0.02  1 -0.00000000000000067 6.1
+## Q01  0.01  1  0.00000000000000067 6.0
+## Q02  0.02  1 -0.00000000000000089 6.1
 ## Q03  0.05  1  0.00000000000000044 4.4
-## Q04  0.02  1 -0.00000000000000089 4.9
+## Q04  0.02  1  0.00000000000000033 4.9
 ## Q05  0.01  1 -0.00000000000000044 5.2
-## Q06 -0.11  1  0.00000000000000056 4.4
-## Q07  0.09  1  0.00000000000000056 4.1
-## Q08 -0.36  1  0.00000000000000011 5.7
-## Q09  0.03  1  0.00000000000000111 5.0
-## Q10 -0.04  1  0.00000000000000056 7.7
-## Q11  0.41  1  0.00000000000000044 4.1
-## Q12 -0.02  1 -0.00000000000000022 3.8
-## Q13 -0.05  1 -0.00000000000000022 4.2
-## Q14  0.05  1 -0.00000000000000044 4.3
-## Q15  0.00  1  0.00000000000000078 5.6
+## Q06 -0.11  1  0.00000000000000011 4.4
+## Q07  0.09  1  0.00000000000000033 4.1
+## Q08 -0.36  1  0.00000000000000022 5.7
+## Q09  0.03  1  0.00000000000000044 5.0
+## Q10 -0.04  1 -0.00000000000000044 7.7
+## Q11  0.41  1 -0.00000000000000022 4.1
+## Q12 -0.02  1 -0.00000000000000044 3.8
+## Q13 -0.05  1 -0.00000000000000067 4.2
+## Q14  0.05  1  0.00000000000000000 4.3
+## Q15  0.00  1  0.00000000000000011 5.6
 ## Q16 -0.01  1 -0.00000000000000111 4.0
-## Q17 -0.01  1  0.00000000000000033 4.3
-## Q18  0.01  1  0.00000000000000011 3.4
-## Q19 -0.02  1  0.00000000000000022 3.5
-## Q20 -0.04  1 -0.00000000000000022 8.7
-## Q21 -0.01  1  0.00000000000000067 4.6
-## Q22  0.01  1 -0.00000000000000044 7.2
-## Q23  0.00  1 -0.00000000000000089 4.2
+## Q17 -0.01  1 -0.00000000000000044 4.3
+## Q18  0.01  1  0.00000000000000067 3.4
+## Q19 -0.02  1  0.00000000000000067 3.5
+## Q20 -0.04  1  0.00000000000000078 8.7
+## Q21 -0.01  1  0.00000000000000022 4.6
+## Q22  0.01  1  0.00000000000000033 7.2
+## Q23  0.00  1  0.00000000000000022 4.2
 ## 
 ##                        PC1  PC2  PC3  PC4  PC5  PC6  PC7  PC8  PC9 PC10
 ## SS loadings           7.29 1.74 1.32 1.23 0.99 0.90 0.81 0.78 0.75 0.72
@@ -696,8 +696,8 @@ pc1</code></pre></div>
 <p>You can also plot the eigenvalues against the number of factors in order of extraction using a so-called <strong>Scree plot</strong>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(pc1<span class="op">$</span>values, <span class="dt">type=</span><span class="st">&quot;b&quot;</span>)
 <span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">1</span>, <span class="dt">lty=</span><span class="dv">2</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-394"></span>
-<img src="_main_files/figure-html/unnamed-chunk-394-1.png" alt="Scree plot" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-396"></span>
+<img src="_main_files/figure-html/unnamed-chunk-396-1.png" alt="Scree plot" width="672" />
 <p class="caption">
 Figure 7.3: Scree plot
 </p>
@@ -921,16 +921,16 @@ large_res &lt;-<span class="st"> </span><span class="kw">abs</span>(residuals) <
 <p>This means that our mean residual is 0.055 and this value should be as low as possible.</p>
 <p>Finally, we need to validate if the residuals are approximately normally distributed, which we do by using a histogram, a Q-Q plot and the Shapiro test.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(residuals)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-401"></span>
-<img src="_main_files/figure-html/unnamed-chunk-401-1.png" alt="Hinstogram of residuals" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-403"></span>
+<img src="_main_files/figure-html/unnamed-chunk-403-1.png" alt="Hinstogram of residuals" width="672" />
 <p class="caption">
 Figure 7.4: Hinstogram of residuals
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qqnorm</span>(residuals) 
 <span class="kw">qqline</span>(residuals)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-402"></span>
-<img src="_main_files/figure-html/unnamed-chunk-402-1.png" alt="Q-Q plot" width="672" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-404"></span>
+<img src="_main_files/figure-html/unnamed-chunk-404-1.png" alt="Q-Q plot" width="672" />
 <p class="caption">
 Figure 7.5: Q-Q plot
 </p>
@@ -1327,10 +1327,10 @@ peer_evaluation &lt;-<span class="st"> </span>raq_data[,<span class="kw">c</span
 ## multi_4 0.04 0.31 0.16 0.40 0.09    0</code></pre>
 <p>Since the scale exhibits a sufficient degree of reliability, we can compute the new variable as the average score on these items. However, before doing this, we need to recode the reverse coded variable in the appropriate way. It is easy to recode the reverse coded item to be in line with the remaining items on the dimension using the <code>recode()</code> function from the <code>car</code> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(car)
-test_data<span class="op">$</span>multi_<span class="dv">4</span>_rec =<span class="st"> </span><span class="kw">recode</span>(test_data<span class="op">$</span>multi_<span class="dv">4</span>, <span class="st">&quot;1=5; 2=4; 3=3; 4=2; 5=1&quot;</span>)</code></pre></div>
+test_data<span class="op">$</span>multi_4_rec =<span class="st"> </span><span class="kw">recode</span>(test_data<span class="op">$</span>multi_<span class="dv">4</span>, <span class="st">&quot;1=5; 2=4; 3=3; 4=2; 5=1&quot;</span>)</code></pre></div>
 <p>Now we can compute the new variable as the average score of the four items:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(car)
-test_data<span class="op">$</span>new_variable =<span class="st"> </span>(test_data<span class="op">$</span>multi_<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>test_data<span class="op">$</span>multi_<span class="dv">2</span> <span class="op">+</span><span class="st"> </span>test_data<span class="op">$</span>multi_<span class="dv">3</span> <span class="op">+</span><span class="st"> </span>test_data<span class="op">$</span>multi_<span class="dv">4</span>_rec) <span class="op">/</span><span class="st"> </span><span class="dv">4</span></code></pre></div>
+test_data<span class="op">$</span>new_variable =<span class="st"> </span>(test_data<span class="op">$</span>multi_<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>test_data<span class="op">$</span>multi_<span class="dv">2</span> <span class="op">+</span><span class="st"> </span>test_data<span class="op">$</span>multi_<span class="dv">3</span> <span class="op">+</span><span class="st"> </span>test_data<span class="op">$</span>multi_4_rec) <span class="op">/</span><span class="st"> </span><span class="dv">4</span></code></pre></div>
 
 </div>
 </div>

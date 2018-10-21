@@ -383,8 +383,13 @@ plt <- ggplot(data.frame(x=c(0,4)), aes(x))+
   stat_function(fun = df, args = list(20,20), aes(colour = paste0("m = 20",", n = 20")))+
   ylim(min=0, max=1) +
   labs(colour = 'Degrees of Freedom', x = 'Value', y = 'Density') + theme_bw()
-plt
+#plt
 ```
+
+```{r echo=FALSE}
+knitr::include_graphics("./fdist_anova.png")
+```
+
 
 The outcome of the test is one of the following:
 
@@ -419,8 +424,13 @@ plot1 <- ggplot(data.frame(x = c(min, max)), aes(x = x)) +
          x = "x", y = "Density") +
   theme(legend.position="none") + 
   theme_bw()
-plot1
+#plot1
 ```
+
+```{r, echo = FALSE}
+knitr::include_graphics("./ftest_anova.png")
+```
+
 
 Thus, we conclude that because F<sub>CAL</sub> = 17.944 > F<sub>CR</sub> = 3.35, H<sub>0</sub> is rejected!
 
