@@ -90,14 +90,14 @@ Sometimes you may come across interesting data on websites that you would like t
 library(rvest)
 url <- "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population"
 population <- read_html(url) 
-population <- html_nodes(population, "table")
+population <- html_nodes(population, "table.wikitable")
 print(population)
 ```
 
 The output shows that there are two tables on the website and the first one appears to contain the relevant information. So let's read the first table using the  ```html_table()``` function. Note that ```population``` is of class "list". A list is a vector that has other R objects (e.g., other vectors, data frames, matrices, etc.) as its elements. If we want to access the data of one of the elements, we have to use two square brackets on each side instead of just one (e.g., ```population[[1]]``` gets us the first table from the list of tables on the website; the argument ```fill = TRUE``` ensures that empty cells are replaced with missing values when reading the table).
 
 ```{r}
-population <- population[[2]] %>% html_table(fill = TRUE)
+population <- population[[1]] %>% html_table(fill = TRUE)
 head(population) #checks if we scraped the desired data
 ```
 

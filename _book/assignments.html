@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Marketing Research Design &amp; Analysis 2018</title>
   <meta name="description" content="An Introduction to Statistics Using R">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
   <meta property="og:title" content="Marketing Research Design &amp; Analysis 2018" />
   <meta property="og:type" content="book" />
@@ -47,13 +47,14 @@
 
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
-<script src="libs/htmlwidgets-0.9/htmlwidgets.js"></script>
-<script src="libs/plotly-binding-4.7.1/plotly.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.8.0/plotly.js"></script>
 <script src="libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
 <script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
-<link href="libs/plotlyjs-1.29.2/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="libs/plotlyjs-1.29.2/plotly-latest.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.39.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.39.2/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -330,8 +331,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">library</span>(reshape2)</code></pre></div>
 <p><strong>Question 1</strong></p>
 <p>To compute the confidence intervals for SD and HD streams we will need three things: 1) the mean <span class="math inline">\(\bar x\)</span>, 2) the standard error (<span class="math inline">\(s \over \sqrt{n}\)</span>), and 3) the critical value for a t-distribution (<span class="math inline">\(t_{crit}\)</span>; we will use a t-distribution, because we are not sure of the variance in the population).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate components of confidence interval</span>
-<span class="co"># formula</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Calculate components of confidence interval formula </span>
 mean_sd &lt;-<span class="st"> </span><span class="kw">mean</span>(movie_data<span class="op">$</span>streams_sd)
 mean_hd &lt;-<span class="st"> </span><span class="kw">mean</span>(movie_data<span class="op">$</span>streams_hd)
 
@@ -342,14 +342,14 @@ n &lt;-<span class="st"> </span><span class="kw">nrow</span>(movie_data)
 se_sd &lt;-<span class="st"> </span>sd_sd<span class="op">/</span><span class="kw">sqrt</span>(n)
 se_hd &lt;-<span class="st"> </span>sd_hd<span class="op">/</span><span class="kw">sqrt</span>(n)
 
-df &lt;-<span class="st"> </span>n <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
+df &lt;-<span class="st"> </span>n<span class="op">-</span><span class="dv">1</span>
 t_crit &lt;-<span class="st"> </span><span class="kw">qt</span>(<span class="fl">0.975</span>, df)</code></pre></div>
 <p>Now the confidence intervals for streams in SD and HD quality can be computed as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Interval for SD moviess</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Interval for SD moviess</span>
 ci_lower_sd &lt;-<span class="st"> </span>mean_sd <span class="op">-</span><span class="st"> </span>t_crit <span class="op">*</span><span class="st"> </span>se_sd
 ci_upper_sd &lt;-<span class="st"> </span>mean_sd <span class="op">+</span><span class="st"> </span>t_crit <span class="op">*</span><span class="st"> </span>se_sd
 
-<span class="co"># Interval for HD movies</span>
+<span class="co">#Interval for HD movies</span>
 ci_lower_hd &lt;-<span class="st"> </span>mean_hd <span class="op">-</span><span class="st"> </span>t_crit <span class="op">*</span><span class="st"> </span>se_hd
 ci_upper_hd &lt;-<span class="st"> </span>mean_hd <span class="op">+</span><span class="st"> </span>t_crit <span class="op">*</span><span class="st"> </span>se_hd</code></pre></div>
 <p>Hence, the CI for SD movies is given by:</p>
@@ -417,11 +417,9 @@ ci_upper_hd &lt;-<span class="st"> </span>mean_hd <span class="op">+</span><span
 <p><span class="math display">\[H_0: \mu_0 = \mu_1 \\ H_1: \mu_0 \neq \mu_1\]</span></p>
 <p>We need to transform the variable online_advertising into a factor variable for some of our analyses:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Transform into factor variable</span>
-movie_data<span class="op">$</span>online_advertising &lt;-<span class="st"> </span><span class="kw">factor</span>(movie_data<span class="op">$</span>online_advertising, 
-    <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;no&quot;</span>, <span class="st">&quot;yes&quot;</span>))</code></pre></div>
+movie_data<span class="op">$</span>online_advertising &lt;-<span class="st"> </span><span class="kw">factor</span>(movie_data<span class="op">$</span>online_advertising, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;no&quot;</span>, <span class="st">&quot;yes&quot;</span>))</code></pre></div>
 <p>A good way to get a feeling for the data is to compute descriptive statistics and create appropriate plots. Since we are testing differences in means, a plot of means would be appropriate.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Descriptive statistics for SD streams, split by</span>
-<span class="co"># online advertising</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Descriptive statistics for SD streams, split by online advertising</span>
 <span class="kw">describeBy</span>(movie_data<span class="op">$</span>streams_sd, movie_data<span class="op">$</span>online_advertising)</code></pre></div>
 <pre><code>## 
 ##  Descriptive statistics by group 
@@ -437,11 +435,10 @@ movie_data<span class="op">$</span>online_advertising &lt;-<span class="st"> </s
 ##    kurtosis   se
 ## X1     0.04 97.8</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot of means</span>
-<span class="kw">ggplot</span>(movie_data, <span class="kw">aes</span>(online_advertising, streams_sd)) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;white&quot;</span>, 
-        <span class="dt">width =</span> <span class="fl">0.7</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_pointrange</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Online Advertising&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of SD streams&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">theme_bw</span>()</code></pre></div>
+<span class="kw">ggplot</span>(movie_data, <span class="kw">aes</span>(online_advertising, streams_sd)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>, 
+    <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">width =</span> <span class="fl">0.7</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_pointrange</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Online Advertising&quot;</span>, 
+    <span class="dt">y =</span> <span class="st">&quot;Number of SD streams&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-448-1.png" width="672" /></p>
 <p>As we can see in both the descriptive statistics and the plot, the mean of the number of streams is higher where online_advertising = “yes”, i.e. for the movies that were included in the marketing campaign. To test whether or not this difference is significant, we need to use a <strong>two sample t-test</strong>. We use an inpependent-means t-test because we have different movies in each group (i.e., the movies in one condition are <em>indpendent</em> of the movies in the other condition). The requirements are clearly met:</p>
 <ul>
@@ -469,8 +466,7 @@ movie_data<span class="op">$</span>online_advertising &lt;-<span class="st"> </s
 <pre><code>## [1] 1.124481</code></pre>
 <p>This maginitude of the effect size (1.12) suggests that the effect of online advertising on the number of SD streams is large.</p>
 <p>The same can be done analogously for HD streams:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Descriptive statistics for HD streams, split by</span>
-<span class="co"># online advertising</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Descriptive statistics for HD streams, split by online advertising</span>
 stats &lt;-<span class="st"> </span><span class="kw">describeBy</span>(movie_data<span class="op">$</span>streams_hd, movie_data<span class="op">$</span>online_advertising)
 <span class="kw">print</span>(stats)</code></pre></div>
 <pre><code>## 
@@ -487,11 +483,10 @@ stats &lt;-<span class="st"> </span><span class="kw">describeBy</span>(movie_dat
 ##    kurtosis    se
 ## X1    -0.73 86.33</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot of means</span>
-<span class="kw">ggplot</span>(movie_data, <span class="kw">aes</span>(online_advertising, streams_hd)) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;white&quot;</span>, 
-        <span class="dt">width =</span> <span class="fl">0.7</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_pointrange</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Online Advertising&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of HD streams&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">theme_bw</span>()</code></pre></div>
+<span class="kw">ggplot</span>(movie_data, <span class="kw">aes</span>(online_advertising, streams_hd)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>, 
+    <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">width =</span> <span class="fl">0.7</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_pointrange</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Online Advertising&quot;</span>, 
+    <span class="dt">y =</span> <span class="st">&quot;Number of HD streams&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-451-1.png" width="672" /></p>
 <p>Again, the summary statistics and the plot seem to indicate that there is a difference in means. Using the same reasoning as before, we can conclude that we need a two sample t-test to determine whether this difference is signficant (note that <em>two sample t-test</em> means the same as <em>independent-means t-test</em>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(streams_hd <span class="op">~</span><span class="st"> </span>online_advertising, <span class="dt">data =</span> movie_data)</code></pre></div>
@@ -527,19 +522,18 @@ psych<span class="op">::</span><span class="kw">describe</span>(movie_data<span 
 ##    kurtosis    se
 ## X1     0.42 53.76</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot of means</span>
-movie_data_long &lt;-<span class="st"> </span><span class="kw">melt</span>(movie_data[, <span class="kw">c</span>(<span class="st">&quot;streams_sd&quot;</span>, 
-    <span class="st">&quot;streams_hd&quot;</span>)])
+movie_data_long &lt;-<span class="st"> </span><span class="kw">melt</span>(movie_data[, <span class="kw">c</span>(<span class="st">&quot;streams_sd&quot;</span>, <span class="st">&quot;streams_hd&quot;</span>)])
 <span class="kw">names</span>(movie_data_long) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;stream&quot;</span>, <span class="st">&quot;number&quot;</span>)
 
-<span class="kw">ggplot</span>(movie_data_long, <span class="kw">aes</span>(stream, number)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>, 
-    <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">width =</span> <span class="fl">0.7</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_pointrange</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Group&quot;</span>, 
-    <span class="dt">y =</span> <span class="st">&quot;Listening time (hours)&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Means and standard errors of streams&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="kw">ggplot</span>(movie_data_long, <span class="kw">aes</span>(stream, number)) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;white&quot;</span>, 
+        <span class="dt">width =</span> <span class="fl">0.7</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_pointrange</span>(<span class="dt">stat =</span> <span class="st">&quot;summary&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Group&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Listening time (hours)&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">ggtitle</span>(<span class="st">&quot;Means and standard errors of streams&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">theme_bw</span>()</code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-455-1.png" width="672" /></p>
 <p>It appears that there is a difference in the means. To test whether it is significant, we again need a t-test. However, this time we need a slightly different version of the t-test because the same movies are observed for HD and SD streams (i.e., the same movies are available in both formats). This means that we need a <strong>dependent means t-test</strong>. This test is also knownas the <strong>paired samples t-test</strong>. The other assumptions are virtually identical to the independent-means t-test. The test can be executed in R by adding <code>paired = TRUE</code> to the code.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(<span class="dt">y =</span> movie_data<span class="op">$</span>streams_sd, <span class="dt">x =</span> movie_data<span class="op">$</span>streams_hd, 
-    <span class="dt">paired =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">t.test</span>(<span class="dt">y =</span> movie_data<span class="op">$</span>streams_sd, <span class="dt">x =</span> movie_data<span class="op">$</span>streams_hd, <span class="dt">paired =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -558,8 +552,7 @@ movie_data_long &lt;-<span class="st"> </span><span class="kw">melt</span>(movie
 <p>A standardized effect size of approx. 0.9 tells us that this effect is large.</p>
 <p><strong>Question 5</strong></p>
 <p>The question of how many movies we would need to include in each sample of our experiment can be answered quite comfortably with a power calculation function in R.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pwr.t.test</span>(<span class="dt">d =</span> <span class="fl">0.3</span>, <span class="dt">sig.level =</span> <span class="fl">0.05</span>, <span class="dt">power =</span> <span class="fl">0.8</span>, 
-    <span class="dt">type =</span> <span class="kw">c</span>(<span class="st">&quot;two.sample&quot;</span>), <span class="dt">alternative =</span> <span class="kw">c</span>(<span class="st">&quot;two.sided&quot;</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pwr.t.test</span>(<span class="dt">d =</span> <span class="fl">0.3</span>, <span class="dt">sig.level =</span> <span class="fl">0.05</span>, <span class="dt">power =</span> <span class="fl">0.8</span>, <span class="dt">type =</span> <span class="kw">c</span>(<span class="st">&quot;two.sample&quot;</span>), <span class="dt">alternative =</span> <span class="kw">c</span>(<span class="st">&quot;two.sided&quot;</span>))</code></pre></div>
 <pre><code>## 
 ##      Two-sample t test power calculation 
 ## 
@@ -833,7 +826,8 @@ dynamic regargeting vs. generig retargeting</p>
 <p>When you are done with your analysis, click on “Knit to HTML” button above the code editor. This will create a HTML document of your results in the folder where the “assignment4.Rmd” file is stored. Open this file in your Internet browser to see if the output is correct. If the output is correct, submit the HTML file via Learn@WU. The file name should be “assignment4_studendID_name.html”.</p>
 <p><strong>Load data</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sales_data &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/IMSMWU/MRDA2018/master/data/assignment4.dat&quot;</span>, 
-    <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)  <span class="co">#read in data</span>
+                          <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>, 
+                          <span class="dt">header =</span> <span class="ot">TRUE</span>) <span class="co">#read in data</span>
 sales_data<span class="op">$</span>market_id &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(sales_data)
 <span class="kw">head</span>(sales_data)</code></pre></div>
 <div data-pagedtable="false">
@@ -869,34 +863,29 @@ psych<span class="op">::</span><span class="kw">describe</span>(sales_data)</cod
 ## market_id      0.00    -1.22 4.44</code></pre>
 <p>Since we have continuous variables, we use scatterplots to investigate the relationship between sales and each of the predictor variables.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-<span class="kw">ggplot</span>(sales_data, <span class="kw">aes</span>(<span class="dt">x =</span> tv_adspend, <span class="dt">y =</span> sales)) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</code></pre></div>
+<span class="kw">ggplot</span>(sales_data, <span class="kw">aes</span>(<span class="dt">x =</span> tv_adspend, <span class="dt">y =</span> sales)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="kw">theme_bw</span>()</code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-479-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(sales_data, <span class="kw">aes</span>(<span class="dt">x =</span> online_adspend, <span class="dt">y =</span> sales)) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(sales_data, <span class="kw">aes</span>(<span class="dt">x =</span> online_adspend, <span class="dt">y =</span> sales)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="kw">theme_bw</span>()</code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-479-2.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(sales_data, <span class="kw">aes</span>(<span class="dt">x =</span> radio_adspend, <span class="dt">y =</span> sales)) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(sales_data, <span class="kw">aes</span>(<span class="dt">x =</span> radio_adspend, <span class="dt">y =</span> sales)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="kw">theme_bw</span>()</code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-479-3.png" width="672" /></p>
 <p>The plots already suggest that there might be a positive linear relationship between sales and TV- and online-advertising. However, there does not appear to be a strong relationship between sales and radio advertising.</p>
 <p><strong>Question 3</strong></p>
 <p>The estimate the model, we will use the <code>lm()</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">linear_model &lt;-<span class="st"> </span><span class="kw">lm</span>(sales <span class="op">~</span><span class="st"> </span>tv_adspend <span class="op">+</span><span class="st"> </span>online_adspend <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span>radio_adspend, <span class="dt">data =</span> sales_data)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">linear_model &lt;-<span class="st"> </span><span class="kw">lm</span>(sales <span class="op">~</span><span class="st"> </span>tv_adspend <span class="op">+</span><span class="st"> </span>online_adspend <span class="op">+</span><span class="st"> </span>radio_adspend, <span class="dt">data =</span> sales_data)</code></pre></div>
 <p>Before we can inspect the results, we need to test if there might be potential problems with our model specification.</p>
 <p><strong>Outliers</strong></p>
 <p>The check for outliers, we extract the studentized residuals from our model and test if there are any absolute values larger than 3.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sales_data<span class="op">$</span>stud_resid &lt;-<span class="st"> </span><span class="kw">rstudent</span>(linear_model)
-<span class="kw">plot</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(sales_data), sales_data<span class="op">$</span>stud_resid, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">3.3</span>, 
-    <span class="fl">3.3</span>))  <span class="co">#create scatterplot </span>
-<span class="kw">abline</span>(<span class="dt">h =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">lty =</span> <span class="dv">2</span>)  <span class="co">#add reference lines</span></code></pre></div>
+<span class="kw">plot</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(sales_data),sales_data<span class="op">$</span>stud_resid, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">3.3</span>,<span class="fl">3.3</span>)) <span class="co">#create scatterplot </span>
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">3</span>,<span class="dv">3</span>),<span class="dt">col=</span><span class="st">&quot;red&quot;</span>,<span class="dt">lty=</span><span class="dv">2</span>) <span class="co">#add reference lines</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-481-1.png" width="672" /></p>
 <p>Since there are no residuals with absolut values larger than 3, we conclude that there are no severe outliers.</p>
 <p><strong>Influencial observations</strong></p>
 <p>To test for influential observations, we use Cook’s Distance. You may use the following two plots to verify if any Cook’s Dinstance values are larger than the cutoff of 1.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(linear_model, <span class="dv">4</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(linear_model,<span class="dv">4</span>)</code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-482-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(linear_model, <span class="dv">5</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(linear_model,<span class="dv">5</span>)</code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-482-2.png" width="672" /></p>
 <p>Since all values are well below the cutoff, we conclude that influencial observations are not a problem in our model.</p>
 <p><strong>Non-linear relationships</strong></p>
@@ -915,7 +904,7 @@ psych<span class="op">::</span><span class="kw">describe</span>(sales_data)</cod
 <p>The spread of residuals at different levels of the predicted outcome does not appear to be very different. Thus, we can conclude that heteroscedasticity is unlikely to be a problem.</p>
 <p><strong>Non-normally distributed errors</strong></p>
 <p>Next, we test if the residuals are approximately normally distributed using the Q-Q plot from the output:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(linear_model, <span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(linear_model,<span class="dv">2</span>)</code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-486-1.png" width="672" /></p>
 <p>The Q-Q plot does not suggest a severe deviation from a normal distribution. This could also be validated using the Shapiro test:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">shapiro.test</span>(<span class="kw">resid</span>(linear_model))</code></pre></div>
@@ -927,8 +916,7 @@ psych<span class="op">::</span><span class="kw">describe</span>(sales_data)</cod
 <p><strong>Multicollinearity</strong></p>
 <p>To test for linear dependence of the regressors, we first test the bivariate correlations for any extremely high correlations (i.e., &gt;0.8).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;Hmisc&quot;</span>)
-<span class="kw">rcorr</span>(<span class="kw">as.matrix</span>(sales_data[, <span class="kw">c</span>(<span class="st">&quot;tv_adspend&quot;</span>, <span class="st">&quot;online_adspend&quot;</span>, 
-    <span class="st">&quot;radio_adspend&quot;</span>)]))</code></pre></div>
+<span class="kw">rcorr</span>(<span class="kw">as.matrix</span>(sales_data[,<span class="kw">c</span>(<span class="st">&quot;tv_adspend&quot;</span>,<span class="st">&quot;online_adspend&quot;</span>,<span class="st">&quot;radio_adspend&quot;</span>)]))</code></pre></div>
 <pre><code>##                tv_adspend online_adspend radio_adspend
 ## tv_adspend           1.00           0.05          0.03
 ## online_adspend       0.05           1.00         -0.07
@@ -943,8 +931,7 @@ psych<span class="op">::</span><span class="kw">describe</span>(sales_data)</cod
 ## online_adspend 0.4127                    0.2790       
 ## radio_adspend  0.6735     0.2790</code></pre>
 <p>The results show that the bivariate correlations are rather low. This can also be shown in a plot:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(sales_data[, <span class="kw">c</span>(<span class="st">&quot;tv_adspend&quot;</span>, <span class="st">&quot;online_adspend&quot;</span>, 
-    <span class="st">&quot;radio_adspend&quot;</span>)])</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(sales_data[,<span class="kw">c</span>(<span class="st">&quot;tv_adspend&quot;</span>,<span class="st">&quot;online_adspend&quot;</span>,<span class="st">&quot;radio_adspend&quot;</span>)])</code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-489-1.png" width="672" /></p>
 <p>In a next step, we compute the variance inflation factor for each predictor variable. The values should be close to 1 and values larger than 4 indicate potential problems with the linear dependence of regressors.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(car)
@@ -1034,10 +1021,10 @@ psych<span class="op">::</span><span class="kw">describe</span>(sales_data)</cod
 <p><strong>Question 5</strong></p>
 <p>Finally, we can predict the outcome for the given marketing mix using the following equation:</p>
 <p><span class="math display">\[\hat{sales}= 0.045*150 + 0.192*26 + 0.007*15 = 14.623\]</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(linear_model)<span class="op">$</span>coefficients[<span class="dv">1</span>, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">summary</span>(linear_model)<span class="op">$</span>coefficients[<span class="dv">2</span>, 
-    <span class="dv">1</span>] <span class="op">*</span><span class="st"> </span><span class="dv">150</span> <span class="op">+</span><span class="st"> </span><span class="kw">summary</span>(linear_model)<span class="op">$</span>coefficients[<span class="dv">3</span>, 
-    <span class="dv">1</span>] <span class="op">*</span><span class="st"> </span><span class="dv">26</span> <span class="op">+</span><span class="st"> </span><span class="kw">summary</span>(linear_model)<span class="op">$</span>coefficients[<span class="dv">4</span>, 
-    <span class="dv">1</span>] <span class="op">*</span><span class="st"> </span><span class="dv">15</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(linear_model)<span class="op">$</span>coefficients[<span class="dv">1</span>,<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summary</span>(linear_model)<span class="op">$</span>coefficients[<span class="dv">2</span>,<span class="dv">1</span>]<span class="op">*</span><span class="dv">150</span> <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summary</span>(linear_model)<span class="op">$</span>coefficients[<span class="dv">3</span>,<span class="dv">1</span>]<span class="op">*</span><span class="dv">26</span> <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summary</span>(linear_model)<span class="op">$</span>coefficients[<span class="dv">4</span>,<span class="dv">1</span>]<span class="op">*</span><span class="dv">15</span></code></pre></div>
 <pre><code>## [1] 15.11236</code></pre>
 
 </div>
@@ -1066,10 +1053,11 @@ gitbook.start({
 "facebook": true,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
 "instapper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -1093,9 +1081,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(script.src))
-      script.src  = script.src.replace(/^https?:/, '');
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
